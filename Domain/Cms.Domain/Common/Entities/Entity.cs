@@ -30,7 +30,10 @@ public abstract class Entity<TId> : IAuditableEntity where TId : struct, ICompar
     /// بار جلو گیری از این مورد برای همه Entityها باید سازنده‌هایی تعریف شود که مقدار ورودی دارند.
     /// برای اینکه بتوان از همین Entityها برای فرایند ذخیره سازی و بازیابی از دیتابیس به کمک ORMها استفاده کرد، ضروری است که سازنده پیش‌فرض با سطح دسترسی بالا مثل Protected یا Private ایجاد شود.
     /// </summary>
-    protected Entity() { }
+    protected Entity()
+    {
+        CreateAt = DateTime.Now;
+    }
 
     protected void Modified()
     {
