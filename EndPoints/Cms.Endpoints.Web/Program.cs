@@ -1,35 +1,60 @@
 using Cmd.Application;
 using Cms.Endpoints.Web;
+using Cms.Infra.Contexts;
+using Cms.Infra.Identity.Entities;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
 
-builder.Services.AddApplication(builder.Configuration);
-builder.Services.AddEndpoints();
+Log.Information("Starting Up");
 
-builder.Host.UseSerilog((ctx, lc) =>
+try
 {
-    lc.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-    .WriteTo.MSSqlServer(connectionString: "Server=YasiAbdn\\ABDN;Database=CmdLog-Db;TrustServerCertificate=True",
-    sinkOptions: new MSSqlServerSinkOptions { TableName = "WebLogTable", AutoCreateSqlTable = true }).Enrich.FromLogContext();
-});
+    var builder = WebApplication.CreateBuilder(args);
 
+    // Add services to the container.
 
+    builder.Services.AddApplication();
 
-var app = builder.Build();
+    builder.Services.AddEndpoints();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    builder.Services.AddIdentity<CustomIdentityUser, IdentityRole>().AddEntityFrameworkStores<CmsDbContext>();
+
+    builder.Host.UseSerilog((ctx, lc) =>
+    {
+        lc.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+        .WriteTo.MSSqlServer(connectionString: "Server=YasiAbdn\\ABDN;Database=CmsLog-Db;Integrated security=true;TrustServerCertificate=True",
+        sinkOptions: new MSSqlServerSinkOptions { TableName = "WebLogTable", AutoCreateSqlTable = true }).Enrich.FromLogContext();
+    });
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
 }
+catch (Exception ex)
+{
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+    Log.Fatal(ex, "UnHandled Exception");
+}
+finally
+{
+    Log.Information("Shut Down Complated");
+    Log.CloseAndFlush();
+}

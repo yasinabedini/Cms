@@ -17,7 +17,7 @@ try
 
     // Add services to the container.
 
-    builder.Services.AddApplication(builder.Configuration);
+    builder.Services.AddApplication();
 
     builder.Services.AddEndpoints();
 
@@ -26,7 +26,7 @@ try
     builder.Host.UseSerilog((ctx, lc) =>
     {
         lc.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        .WriteTo.MSSqlServer(connectionString: "Server=YasiAbdn\\ABDN;Database=CmdLog-Db;TrustServerCertificate=True",
+        .WriteTo.MSSqlServer(connectionString: "Server=YasiAbdn\\ABDN;Database=CmsLog-Db;Integrated security=true;TrustServerCertificate=True",
         sinkOptions: new MSSqlServerSinkOptions { TableName = "AdminLogTable", AutoCreateSqlTable = true }).Enrich.FromLogContext();
     });
 
