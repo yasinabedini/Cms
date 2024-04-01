@@ -28,4 +28,10 @@
 		<ProjectReference Include="..\..\Domain\Cms.Domain\Cms.Domain.csproj" />
 	</ItemGroup>
 
+
+
+	<ItemGroup>
+	  <Folder Include="Models\Language\Config\" />
+	</ItemGroup>
+
 </Project>

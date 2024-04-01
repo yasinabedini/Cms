@@ -1,6 +1,6 @@
 ﻿using Cms.Domain.Common.ValueObjects;
 using Cms.Domain.Models.Language.Entities;
-using Cms.Domain.Models.Page.Entities;
+using Cms.Domain.Models.Sweeper.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,7 +20,7 @@ namespace Cms.Infra.Contexts
 
         public DbSet<Language> Languages { get; set; }
 
-        public DbSet<Page> Pages { get; set; }
+        public DbSet<Sweeper> Sweepers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

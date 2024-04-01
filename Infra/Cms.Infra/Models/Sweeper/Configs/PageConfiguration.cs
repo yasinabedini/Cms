@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cms.Infra.Models.Page.Configs
+namespace Cms.Infra.Models.Sweeper.Configs
 {
-    public class PageConfiguration : IEntityTypeConfiguration<Domain.Models.Page.Entities.Page>
+    public class SweeperConfiguration : IEntityTypeConfiguration<Domain.Models.Sweeper.Entities.Sweeper>
     {
-        public void Configure(EntityTypeBuilder<Domain.Models.Page.Entities.Page> builder)
+        public void Configure(EntityTypeBuilder<Domain.Models.Sweeper.Entities.Sweeper> builder)
         {
             builder.Property(t => t.Title).HasConversion<TitleConversion>();
             builder.Property(t => t.Text).HasConversion<DescriptionConversion>();
