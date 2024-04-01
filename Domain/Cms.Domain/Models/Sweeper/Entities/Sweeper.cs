@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cms.Domain.Models.Page.Entities
+namespace Cms.Domain.Models.Sweeper.Entities
 {
-    public class Page:AggregateRoot
+    public class Sweeper : AggregateRoot
     {
         public Title Title { get;private set; }
         public Description Text { get; private set; }
@@ -20,8 +20,8 @@ namespace Cms.Domain.Models.Page.Entities
 
         public Language.Entities.Language Language { get; set; }
 
-        protected Page() { }
-        private Page(Title title, Description text, string link, string imageName, bool enable, long languageId)
+        protected Sweeper() { }
+        private Sweeper(Title title, Description text, string link, string imageName, bool enable, long languageId)
         {
             Title = title;
             Text = text;
@@ -31,9 +31,15 @@ namespace Cms.Domain.Models.Page.Entities
             LanguageId = languageId;            
         }
 
-        public static Page Create(Title title, Description text, string link, string imageName, bool enable, long languageId)
+        public static Sweeper Create(Title title, Description text, string link, string imageName, bool enable, long languageId)
         {
-            return new Page(title,text, link, imageName, enable, languageId);
+            return new Sweeper(title,text, link, imageName, enable, languageId);
+        }
+
+
+        public void SetId(long id)
+        {
+            Id = id;
         }
     }
 }

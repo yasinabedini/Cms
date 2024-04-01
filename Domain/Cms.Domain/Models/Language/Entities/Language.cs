@@ -34,7 +34,12 @@ namespace Cms.Domain.Models.Language.Entities
         #endregion
 
         #region Methods
-        public void ChnageName(string name)
+        public void SetId(long id)
+        {
+            Id = id;            
+        }
+
+        public void ChangeName(string name)
         {
             Name = name;
             Modified();
