@@ -6,9 +6,14 @@ namespace Cmd.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services,IConfiguration configuration)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddInfrastructure(configuration);
+        var assembly = typeof(DependencyInjection).Assembly;
+
+        services.AddInfrastructure();
+
+        services.AddMediatR(configuration =>
+        configuration.RegisterServicesFromAssemblies(assembly));
 
         return services;
     }
