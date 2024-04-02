@@ -16,6 +16,7 @@ public abstract class Entity<TId> : IAuditableEntity where TId : struct, ICompar
     public DateTime CreateAt { get; set; }
     public DateTime? ModifiedAt { get; set; }
     public bool IsDelete { get; set; }
+    public bool IsEnable { get; set; }
 
     /// <summary>
     /// شناسه Entity
@@ -33,11 +34,35 @@ public abstract class Entity<TId> : IAuditableEntity where TId : struct, ICompar
     protected Entity()
     {
         CreateAt = DateTime.Now;
+        IsEnable = true;
     }
 
     protected void Modified()
     {
         ModifiedAt = DateTime.Now;
+    }
+
+    public void Enable()
+    {
+        if (!IsEnable)
+        {
+            IsEnable = true;
+            Modified();
+        }
+    }
+
+    public void Disable()
+    {
+        if (IsEnable)
+        {
+            IsEnable = false;
+            Modified();
+        }
+    }
+
+    public void SetId(TId id)
+    {
+        Id = id;
     }
 
     #region Equality Check
