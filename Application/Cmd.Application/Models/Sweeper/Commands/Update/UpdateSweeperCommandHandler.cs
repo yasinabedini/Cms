@@ -19,8 +19,10 @@ namespace Cmd.Application.Models.Sweeper.Commands.Update
 
         public Task Handle(UpdateSweeperCommand request, CancellationToken cancellationToken)
         {
-            var sweeper = Cms.Domain.Models.Sweeper.Entities.Sweeper.Create(request.Title, request.Text, request.Link, request.ImageName, request.Enable, request.LanguageId);
+            var sweeper = Cms.Domain.Models.Sweeper.Entities.Sweeper.Create(request.Title, request.Text, request.Link, request.ImageName, request.LanguageId);
             sweeper.SetId(request.Id);
+
+            if (request.IsEnable == false) sweeper.Disable();
 
             _repository.Update(sweeper);
             _repository.Save();

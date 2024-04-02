@@ -20,7 +20,7 @@ public class GetAllSweeperQueryHandler : IQueryHandler<GetAllSweeperQuery, Paged
 
         return Task.FromResult(new PagedData<SweeperViewModel>()
         {
-            QueryResult = sweepers.Select(t => new SweeperViewModel(t.Title.Value, t.Text.Value, t.Link, t.ImageName, t.Enable, t.LanguageId)).ToList(),
+            QueryResult = sweepers.Select(t => new SweeperViewModel(t.Title.Value, t.Text.Value, t.Link, t.ImageName, t.IsEnable, t.LanguageId)).ToList(),
             PageNumber = request.PageNumber,
             PageSize = request.PageSize,
         });

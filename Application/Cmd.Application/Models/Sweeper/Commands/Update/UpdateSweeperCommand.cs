@@ -14,17 +14,17 @@ namespace Cmd.Application.Models.Sweeper.Commands.Update
         public string Text { get; private set; }
         public string Link { get; private set; }
         public string ImageName { get; private set; }
-        public bool Enable { get; private set; }
+        public bool IsEnable { get; private set; }
         public long LanguageId { get; private set; }
 
-        public UpdateSweeperCommand(long id, string title, string text, string link, string imageName, bool enable, long languageId)
+        public UpdateSweeperCommand(long id, string title, string text, string link, string imageName, bool IsEnable, long languageId)
         {
             Id = id;
             Title = title;
             Text = text;
             Link = link;
             ImageName = imageName;
-            Enable = enable;
+            IsEnable = IsEnable;
             LanguageId = languageId;
         }
     }

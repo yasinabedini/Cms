@@ -19,7 +19,7 @@ namespace Cmd.Application.Models.Sweeper.Commands.Create
 
         public Task Handle(CreateSweeperCommand request, CancellationToken cancellationToken)
         {
-            _repository.Add(Cms.Domain.Models.Sweeper.Entities.Sweeper.Create(request.Title, request.Text, request.Link, request.ImageName, request.Enable, request.LanguageId));
+            _repository.Add(Cms.Domain.Models.Sweeper.Entities.Sweeper.Create(request.Title, request.Text, request.Link, request.ImageName, request.LanguageId));
             _repository.Save();
 
            return Task.CompletedTask;

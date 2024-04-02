@@ -21,7 +21,7 @@ namespace Cmd.Application.Models.Sweeper.Queries.GetById
         public Task<SweeperViewModel> Handle(GetSweeperByIdQuery request, CancellationToken cancellationToken)
         {
             var sweeper = _repository.GetById(request.Id);
-            return Task.FromResult(new SweeperViewModel(sweeper.Title.Value, sweeper.Text.Value, sweeper.Link, sweeper.ImageName, sweeper.Enable, sweeper.LanguageId));
+            return Task.FromResult(new SweeperViewModel(sweeper.Title.Value, sweeper.Text.Value, sweeper.Link, sweeper.ImageName,sweeper.IsEnable , sweeper.LanguageId));
         }
     }
 }

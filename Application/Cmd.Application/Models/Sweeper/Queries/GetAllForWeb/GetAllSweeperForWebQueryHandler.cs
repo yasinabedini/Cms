@@ -22,11 +22,11 @@ namespace Cmd.Application.Models.Sweeper.Queries.GetAllForWeb
 
         public Task<PagedData<SweeperViewModel>> Handle(GetAllSweeperForWebQuery request, CancellationToken cancellationToken)
         {
-            var sweepers = _repository.GetList().Where(t=>t.Enable).Skip(request.SkipCount).Take(request.PageSize);
+            var sweepers = _repository.GetList().Where(t=>t.IsEnable).Skip(request.SkipCount).Take(request.PageSize);
 
             return Task.FromResult(new PagedData<SweeperViewModel>()
             {
-                QueryResult = sweepers.Select(t => new SweeperViewModel(t.Title.Value, t.Text.Value, t.Link, t.ImageName, t.Enable, t.LanguageId)).ToList(),
+                QueryResult = sweepers.Select(t => new SweeperViewModel(t.Title.Value, t.Text.Value, t.Link, t.ImageName, t.IsEnable, t.LanguageId)).ToList(),
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
             });

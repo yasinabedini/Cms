@@ -12,6 +12,7 @@ namespace Cmd.Application.Models.Language.Queries.Common
         public string Name { get; private set; }
         public bool Rtl { get; private set; }
         public string Region { get; private set; }
+        public bool IsEnable { get; set; }
 
         public LanguageViewModel(string title, string name, bool rtl, string region)
         {
