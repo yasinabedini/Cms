@@ -1,5 +1,6 @@
 ﻿using Cms.Domain.Common.ValueObjects;
 using Cms.Domain.Models.Language.Entities;
+using Cms.Domain.Models.News.Entities;
 using Cms.Domain.Models.Sweeper.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,9 @@ namespace Cms.Infra.Contexts
         }
 
         public DbSet<Language> Languages { get; set; }
-
         public DbSet<Sweeper> Sweepers { get; set; }
+        public DbSet<News> News { get; set; }
+        public DbSet<NewsType> NewsTypes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
