@@ -1,5 +1,6 @@
 ﻿using Cmd.Application.Common.Commands;
 using Cms.Domain.Common.ValueObjects;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +14,15 @@ namespace Cmd.Application.Models.Sweeper.Commands.Create
         public string Title { get; private set; }
         public string Text { get; private set; }
         public string Link { get; private set; }
-        public string ImageName { get; private set; }
+        public IFormFile Image { get; set; }
         public long LanguageId { get; private set; }
 
-        public CreateSweeperCommand(string title, string text, string link, string imageName, long languageId)
+        public CreateSweeperCommand(string title, string text, string link, IFormFile image, long languageId)
         {
             Title = title;
             Text = text;
             Link = link;
-            ImageName = imageName;
+            Image = image;
             LanguageId = languageId;
         }
     }

@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Img\Sweeper\" />
     <Folder Include="wwwroot\Img\News\" />
   </ItemGroup>
 

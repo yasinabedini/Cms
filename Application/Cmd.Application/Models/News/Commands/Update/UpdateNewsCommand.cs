@@ -1,6 +1,8 @@
 ﻿using Cmd.Application.Common.Commands;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,24 +20,24 @@ namespace Cmd.Application.Models.News.Commands.Update
         public string FirstParagraph { get; private set; }
         public string? SeconodParagraph { get; private set; }
         public string? ThirdParagraph { get; private set; }
-        public string MainImageName { get; private set; }
-        public string? SecondImage { get; private set; }
-        public string? ThirdImage { get; private set; }
+        public IFormFile MainImage { get; private set; }
+        public IFormFile? SecondImage { get; private set; }
+        public IFormFile? ThirdImage { get; private set; }
 
-        public UpdateNewsCommand(long id, string title, long languageId, long newsTypeId, DateTime publishDate, string firstParagraph, string? seconodParagraph, string? thirdParagraph, string mainImageName, string? secondImage, string? thirdImage, string introduction)
+        public UpdateNewsCommand(long id, string title, string introduction, long languageId, long newsTypeId, DateTime publishDate, string firstParagraph, string? seconodParagraph, string? thirdParagraph, IFormFile mainImage, IFormFile? secondImage, IFormFile? thirdImage)
         {
             Id = id;
             Title = title;
+            Introduction = introduction;
             LanguageId = languageId;
             NewsTypeId = newsTypeId;
             PublishDate = publishDate;
             FirstParagraph = firstParagraph;
             SeconodParagraph = seconodParagraph;
             ThirdParagraph = thirdParagraph;
-            MainImageName = mainImageName;
+            MainImage = mainImage;
             SecondImage = secondImage;
             ThirdImage = thirdImage;
-            Introduction = introduction;
         }
     }
 }

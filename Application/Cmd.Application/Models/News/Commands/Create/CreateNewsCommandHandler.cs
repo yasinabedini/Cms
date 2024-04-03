@@ -23,16 +23,18 @@ namespace Cmd.Application.Models.News.Commands.Create
         {
             List<string> imageNames = new List<string>
             {
-                Guid.NewGuid().ToString()+Path.GetExtension(request.MainImage.FileName),
-                Guid.NewGuid().ToString()+Path.GetExtension(request.SecondImage.FileName),
-                Guid.NewGuid().ToString()+Path.GetExtension(request.ThirdImage.FileName),
+                Guid.NewGuid().ToString()+Path.GetExtension(request.MainImage.FileName)
             };
+            
+            if (request.SecondImage is not null) imageNames.Add(Guid.NewGuid().ToString() + Path.GetExtension(request.SecondImage.FileName));
+            if (request.ThirdImage is not null) imageNames.Add(Guid.NewGuid().ToString() + Path.GetExtension(request.ThirdImage.FileName));
 
             FileTools.SaveImage(request.MainImage, imageNames[0], "News", false);
-            FileTools.SaveImage(request.SecondImage, imageNames[1], "News", false);
-            FileTools.SaveImage(request.ThirdImage, imageNames[2], "News", false);
 
-            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title,request.Introduction, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.FirstParagraph, request.SeconodParagraph, request.ThirdParagraph, imageNames[0], imageNames[1], imageNames[2] ));
+            if (request.SecondImage is not null) FileTools.SaveImage(request.SecondImage, imageNames[1], "News", false);
+            if (request.ThirdImage is not null) FileTools.SaveImage(request.ThirdImage, imageNames[2], "News", false);
+
+            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.FirstParagraph, request.SeconodParagraph, request.ThirdParagraph, imageNames[0], imageNames[1], imageNames[2]));
             _repository.Save();
 
             return Task.CompletedTask;

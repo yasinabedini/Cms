@@ -1,4 +1,5 @@
 ﻿using Cmd.Application.Common.Commands;
+using Cmd.Application.Tools;
 using Cms.Domain.Models.Sweeper.Repositories;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,18 @@ namespace Cmd.Application.Models.Sweeper.Commands.Update
 
         public Task Handle(UpdateSweeperCommand request, CancellationToken cancellationToken)
         {
-            var sweeper = Cms.Domain.Models.Sweeper.Entities.Sweeper.Create(request.Title, request.Text, request.Link, request.ImageName, request.LanguageId);
+            string imageName = _repository.GetById(request.Id).ImageName;
+            
+            if (request.Image is not null)
+            {
+                FileTools.DeleteFile("Sweeper", imageName);
+                
+                imageName = Guid.NewGuid().ToString()+Path.GetExtension(request.Image.FileName);
+
+                FileTools.SaveImage(request.Image, imageName,"Sweeper",false);
+            }
+
+            var sweeper = Cms.Domain.Models.Sweeper.Entities.Sweeper.Create(request.Title, request.Text, request.Link, imageName, request.LanguageId);
             sweeper.SetId(request.Id);
 
             if (request.IsEnable == false) sweeper.Disable();
