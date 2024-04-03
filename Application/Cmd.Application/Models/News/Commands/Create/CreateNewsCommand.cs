@@ -13,6 +13,7 @@ namespace Cmd.Application.Models.News.Commands.Create
     public class CreateNewsCommand:ICommand
     {
         public string Title { get; private set; }
+        public string Introduction { get; set; }
         public long LanguageId { get; private set; }
         public long NewsTypeId { get; private set; }
         public DateTime PublishDate { get; private set; }

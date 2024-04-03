@@ -17,7 +17,7 @@ namespace Cms.Domain.Models.Sweeper.Entities
         public string ImageName { get; private set; }        
         public long LanguageId { get; private set; }
 
-        public Language.Entities.Language Language { get; set; }
+        public Language.Entities.Language Language { get;private set; }
 
         protected Sweeper() { }
         private Sweeper(Title title, Description text, string link, string imageName, long languageId)

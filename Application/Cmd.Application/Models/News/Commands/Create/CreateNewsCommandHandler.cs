@@ -32,7 +32,7 @@ namespace Cmd.Application.Models.News.Commands.Create
             FileTools.SaveImage(request.SecondImage, imageNames[1], "News", false);
             FileTools.SaveImage(request.ThirdImage, imageNames[2], "News", false);
 
-            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.FirstParagraph, request.SeconodParagraph, request.ThirdParagraph, imageNames[0], imageNames[1], imageNames[2] ));
+            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title,request.Introduction, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.FirstParagraph, request.SeconodParagraph, request.ThirdParagraph, imageNames[0], imageNames[1], imageNames[2] ));
             _repository.Save();
 
             return Task.CompletedTask;

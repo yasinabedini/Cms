@@ -1,5 +1,6 @@
 ﻿using Cms.Domain.Common.Entities;
 using Cms.Domain.Common.ValueObjects;
+using Cms.Domain.Models.Language.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,24 @@ namespace Cms.Domain.Models.News.Entities
     {
         #region Properties
         public Title Title { get; private set; }
-        public Title Name { get; private set; } 
+        public Title Name { get; private set; }
+        public long LanguageId { get; set; }
+
+        public Language.Entities.Language Language { get; set; }
         #endregion
 
         #region Constructors and Factories
         protected NewsType() { }
-        private NewsType(Title title, Title name)
+        private NewsType(Title title, Title name, long languageId)
         {
             Title = title;
             Name = name;
+            LanguageId = languageId;
         }
 
-        public static NewsType Create(Title title, Title name)
+        public static NewsType Create(Title title, Title name,long languageId)
         {
-            return new NewsType(title, name);
+            return new NewsType(title, name, languageId);
         } 
         #endregion
     }

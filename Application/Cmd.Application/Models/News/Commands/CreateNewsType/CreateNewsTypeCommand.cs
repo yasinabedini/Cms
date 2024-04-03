@@ -11,11 +11,12 @@ namespace Cmd.Application.Models.News.Commands.CreateNewsType
     {
         public string Title { get; set; }
         public string Name { get; set; }
-
-        public CreateNewsTypeCommand(string title, string name)
+        public long LanguageId { get; set; }
+        public CreateNewsTypeCommand(string title, string name, long languageId)
         {
             Title = title;
             Name = name;
+            LanguageId = languageId;
         }
     }
 }

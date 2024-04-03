@@ -11,6 +11,7 @@ namespace Cmd.Application.Models.News.Commands.Update
     {
         public long Id { get; set; }
         public string Title { get; private set; }
+        public string Introduction { get; set; }
         public long LanguageId { get; private set; }
         public long NewsTypeId { get; private set; }
         public DateTime PublishDate { get; private set; }
@@ -21,7 +22,7 @@ namespace Cmd.Application.Models.News.Commands.Update
         public string? SecondImage { get; private set; }
         public string? ThirdImage { get; private set; }
 
-        public UpdateNewsCommand(long id, string title, long languageId, long newsTypeId, DateTime publishDate, string firstParagraph, string? seconodParagraph, string? thirdParagraph, string mainImageName, string? secondImage, string? thirdImage)
+        public UpdateNewsCommand(long id, string title, long languageId, long newsTypeId, DateTime publishDate, string firstParagraph, string? seconodParagraph, string? thirdParagraph, string mainImageName, string? secondImage, string? thirdImage, string introduction)
         {
             Id = id;
             Title = title;
@@ -34,6 +35,7 @@ namespace Cmd.Application.Models.News.Commands.Update
             MainImageName = mainImageName;
             SecondImage = secondImage;
             ThirdImage = thirdImage;
+            Introduction = introduction;
         }
     }
 }

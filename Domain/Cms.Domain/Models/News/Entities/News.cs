@@ -14,10 +14,11 @@ namespace Cms.Domain.Models.News.Entities
     public class News : AggregateRoot
     {
         #region Properties
-        public Title Title { get;private set; }
+        public Title Title { get; private set; }
         public long LanguageId { get; private set; }
         public long NewsTypeId { get; private set; }
         public string PublishDate { get; private set; }
+        public Description Introduction { get;private set; }
         public Paragraph FirstParagraph { get; private set; }
         public Paragraph? SeconodParagraph { get; private set; }
         public Paragraph? ThirdParagraph { get; private set; }
@@ -26,12 +27,12 @@ namespace Cms.Domain.Models.News.Entities
         public Image? ThirdImage { get; private set; }
 
         public Language.Entities.Language Language { get; private set; }
-        public NewsType NewsType { get; private set; } 
+        public NewsType NewsType { get; private set; }
         #endregion
 
         #region Costructors and Factories
         protected News() { }
-        private News(Title title, long languageId, long newsTypeId, string publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
+        private News(Title title, Description introduction, long languageId, long newsTypeId, string publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
         {
             Title = title ?? throw new Exception("Title Should Be has value");
             LanguageId = languageId;
@@ -43,11 +44,13 @@ namespace Cms.Domain.Models.News.Entities
             MainImageName = mainImageName ?? throw new Exception("First Image Should Be has value");
             SecondImage = secondImage;
             ThirdImage = thirdImage;
+            Introduction = introduction;
         }
-        public static News Create(Title title, long languageId, long newsTypeId, string publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
+
+        public static News Create(Title title, Description introduction, long languageId, long newsTypeId, string publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
         {
-            return new News(title, languageId, newsTypeId, publishDate, firstParagraph, seconodParagraph, thirdParagraph, mainImageName, secondImage, thirdImage);
-        } 
+            return new News(title, introduction, languageId, newsTypeId, publishDate, firstParagraph, seconodParagraph, thirdParagraph, mainImageName, secondImage, thirdImage);
+        }
         #endregion
 
 

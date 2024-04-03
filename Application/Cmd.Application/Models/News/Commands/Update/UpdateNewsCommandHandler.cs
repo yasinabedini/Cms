@@ -21,7 +21,7 @@ namespace Cmd.Application.Models.News.Commands.Update
 
         public Task Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
-            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.FirstParagraph, request.SeconodParagraph, request.ThirdParagraph, request.MainImageName, request.SeconodParagraph, request.ThirdParagraph);
+            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title,request.Introduction, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.FirstParagraph, request.SeconodParagraph, request.ThirdParagraph, request.MainImageName, request.SeconodParagraph, request.ThirdParagraph);
             news.SetId(request.Id);
 
             _repository.Update(news);

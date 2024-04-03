@@ -1,4 +1,5 @@
 ﻿using Cmd.Application.Common.Commands;
+using Cms.Domain.Models.Language.Entities;
 using Cms.Domain.Models.News.Repository;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Cmd.Application.Models.News.Commands.CreateNewsType
 
         public Task Handle(CreateNewsTypeCommand request, CancellationToken cancellationToken)
         {
-            _repository.Add(Cms.Domain.Models.News.Entities.NewsType.Create(request.Title, request.Name));
+            _repository.Add(Cms.Domain.Models.News.Entities.NewsType.Create(request.Title, request.Name, request.LanguageId));
             _repository.Save();
 
             return Task.CompletedTask;

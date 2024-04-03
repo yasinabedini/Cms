@@ -1,4 +1,5 @@
 ﻿using Cmd.Application.Common.Commands;
+using Cms.Domain.Models.Language.Entities;
 using Cms.Domain.Models.News.Entities;
 using Cms.Domain.Models.News.Repository;
 using System;
@@ -20,7 +21,7 @@ namespace Cmd.Application.Models.News.Commands.UpdateNewsType
 
         public Task Handle(UpdateNewsTypeCommand request, CancellationToken cancellationToken)
         {
-            var newsType = NewsType.Create(request.Title, request.Name);
+            var newsType = NewsType.Create(request.Title, request.Name, request.LanguageId);
             newsType.SetId(request.Id);
 
             _repository.Update(newsType);
