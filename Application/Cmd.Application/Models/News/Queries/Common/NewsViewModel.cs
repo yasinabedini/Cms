@@ -13,7 +13,7 @@ namespace Cmd.Application.Models.News.Queries.Common
         public string Title { get; private set; }
         public long LanguageId { get; private set; }
         public long NewsTypeId { get; private set; }
-        public DateTime PublishDate { get; private set; }
+        public string PublishDate { get; private set; }
         public string FirstParagraph { get; private set; }
         public string? SeconodParagraph { get; private set; }
         public string? ThirdParagraph { get; private set; }
@@ -21,7 +21,7 @@ namespace Cmd.Application.Models.News.Queries.Common
         public string? SecondImage { get; private set; }
         public string? ThirdImage { get; private set; }
 
-        public NewsViewModel(string title, long languageId, long newsTypeId, DateTime publishDate, string firstParagraph, string? seconodParagraph, string? thirdParagraph, string mainImageName, string? secondImage, string? thirdImage)
+        public NewsViewModel(string title, long languageId, long newsTypeId, string publishDate, string firstParagraph, string? seconodParagraph, string? thirdParagraph, string mainImageName, string? secondImage, string? thirdImage)
         {
             Title = title;
             LanguageId = languageId;

@@ -1,9 +1,8 @@
 ﻿using Cmd.Application.Common.Queries;
 using Cmd.Application.Models.Sweeper.Queries.Common;
-using Cmd.Application.Models.Sweeper.Queries.GetAll;
 using Cms.Domain.Models.Sweeper.Repositories;
 
-namespace Cmd.Application.Models.Sweeper.Queries;
+namespace Cmd.Application.Models.Sweeper.Queries.GetAll;
 
 public class GetAllSweeperQueryHandler : IQueryHandler<GetAllSweeperQuery, PagedData<SweeperViewModel>>
 {
@@ -16,7 +15,7 @@ public class GetAllSweeperQueryHandler : IQueryHandler<GetAllSweeperQuery, Paged
 
     public Task<PagedData<SweeperViewModel>> Handle(GetAllSweeperQuery request, CancellationToken cancellationToken)
     {
-        var sweepers = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t=>t.CreateAt);
+        var sweepers = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t => t.CreateAt);
 
         return Task.FromResult(new PagedData<SweeperViewModel>()
         {

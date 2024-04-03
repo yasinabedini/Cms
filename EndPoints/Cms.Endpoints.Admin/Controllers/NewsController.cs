@@ -37,6 +37,7 @@ namespace Cms.Endpoints.Admin.Controllers
         }
 
         [HttpPost("Create")]
+        [Produces("multipart/form-data")]
         public IActionResult Create(CreateNewsCommand command)
         {
             _sender.Send(command);

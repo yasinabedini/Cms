@@ -17,7 +17,7 @@ namespace Cms.Domain.Models.News.Entities
         public Title Title { get;private set; }
         public long LanguageId { get; private set; }
         public long NewsTypeId { get; private set; }
-        public DateTime PublishDate { get; private set; }
+        public string PublishDate { get; private set; }
         public Paragraph FirstParagraph { get; private set; }
         public Paragraph? SeconodParagraph { get; private set; }
         public Paragraph? ThirdParagraph { get; private set; }
@@ -31,7 +31,7 @@ namespace Cms.Domain.Models.News.Entities
 
         #region Costructors and Factories
         protected News() { }
-        private News(Title title, long languageId, long newsTypeId, DateTime publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
+        private News(Title title, long languageId, long newsTypeId, string publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
         {
             Title = title ?? throw new Exception("Title Should Be has value");
             LanguageId = languageId;
@@ -44,7 +44,7 @@ namespace Cms.Domain.Models.News.Entities
             SecondImage = secondImage;
             ThirdImage = thirdImage;
         }
-        public static News Create(Title title, long languageId, long newsTypeId, DateTime publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
+        public static News Create(Title title, long languageId, long newsTypeId, string publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
         {
             return new News(title, languageId, newsTypeId, publishDate, firstParagraph, seconodParagraph, thirdParagraph, mainImageName, secondImage, thirdImage);
         } 

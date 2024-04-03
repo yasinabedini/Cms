@@ -20,15 +20,17 @@ namespace Cms.Infra;
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
-    {                        
+    {
+        IConfiguration configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+
         services.AddDomain();
 
-        services.AddDbContext<CmsDbContext>(c=>c.UseSqlServer("Server=YasiAbdn\\ABDN;Database=Cms-Db;Integrated Security=true;TrustServerCertificate=True"));
+        services.AddDbContext<CmsDbContext>(c => c.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString")));
 
         services.AddTransient<ISweeperRepository, SweeperRepository>();
         services.AddTransient<ILanguageRepository, LanguageRepository>();
         services.AddTransient<INewsRepository, NewsRepository>();
-        services.AddTransient<INewsTypeRepository,NewsRepository>();
+        services.AddTransient<INewsTypeRepository, NewsRepository>();
 
         return services;
     }

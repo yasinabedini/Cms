@@ -58,13 +58,19 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+    else
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
+    app.UseStaticFiles();
     app.UseHttpsRedirection();
 
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers().RequireAuthorization("myPolicy"); ;
+    app.MapControllers()/*.RequireAuthorization("myPolicy")*/;
 
     app.Run();
 }

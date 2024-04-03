@@ -1,5 +1,4 @@
 ﻿using Cmd.Application.Models.Sweeper.Queries.GetAll;
-using Cmd.Application.Models.Sweeper.Queries.GetAllForWeb;
 using Cmd.Application.Models.Sweeper.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Http;
