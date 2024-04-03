@@ -13,6 +13,11 @@ public class PagedData<T>
 
     public int calculatePageCount()
     {
+        if (PageNumber is 0 || PageSize is 0)
+        {
+            PageNumber = 1;
+            PageSize = 20;
+        }
         int pageCount = TotalCount / PageSize;
         if (pageCount <= 1)
         {

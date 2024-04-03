@@ -1,13 +1,16 @@
 ﻿using Cmd.Application.Convertors;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
+using System.IO.Pipelines;
+using System.Net;
 
 namespace Cmd.Application.Tools;
 
 public static class FileTools
 {
     public static void SaveImage(IFormFile profileImage, string imageName, string whichFolder, bool thumbSave)
-    {
-        string imagePath = imagePath = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\img\\{whichFolder}", imageName);
+    {    
+        string imagePath = imagePath = Path.Combine(Directory.GetCurrentDirectory().Replace("Application\\Cmd.Application\\Tools\\", "EndPoints\\Cms.Endpoints.Site\\"), $"wwwroot\\img\\{whichFolder}\\Thumb", imageName);
 
         using (var stream = new FileStream(imagePath, FileMode.Create))
         {
@@ -16,8 +19,8 @@ public static class FileTools
 
         //save ThumbNail
         if (thumbSave)
-        {
-            string thumbImagePath = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\img\\{whichFolder}\\Thumb", imageName);
+        {                        
+            string thumbImagePath = Path.Combine(Directory.GetCurrentDirectory().Replace("Application\\Cmd.Application\\Tools\\", "EndPoints\\Cms.Endpoints.Site\\"), $"wwwroot\\img\\{whichFolder}\\Thumb", imageName);
             ImageConvertor imageConvertor = new ImageConvertor();
             imageConvertor.Image_resize(imagePath, thumbImagePath, 213);
         }

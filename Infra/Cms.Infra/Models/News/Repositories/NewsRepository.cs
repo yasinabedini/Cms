@@ -38,5 +38,13 @@ namespace Cms.Infra.Models.News.Repositories
         {
             return _context.NewsTypes.ToList();
         }
+
+        void IRepository<NewsType>.Delete(long id)
+        {
+            var newsType = _context.NewsTypes.Find(id);
+            newsType.IsDelete = true;
+
+            Update(newsType);
+        }
     }
 }

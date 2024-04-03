@@ -16,7 +16,7 @@ public class GetAllSweeperQueryHandler : IQueryHandler<GetAllSweeperQuery, Paged
 
     public Task<PagedData<SweeperViewModel>> Handle(GetAllSweeperQuery request, CancellationToken cancellationToken)
     {
-        var sweepers = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize);
+        var sweepers = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t=>t.CreateAt);
 
         return Task.FromResult(new PagedData<SweeperViewModel>()
         {

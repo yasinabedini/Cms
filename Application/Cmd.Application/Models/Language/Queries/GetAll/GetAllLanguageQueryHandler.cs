@@ -20,7 +20,7 @@ namespace Cmd.Application.Models.Language.Queries.GetAll
 
         public Task<PagedData<LanguageViewModel>> Handle(GetAllLanguageQuery request, CancellationToken cancellationToken)
         {
-            var languages = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize);
+            var languages = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t=>t.CreateAt);
 
             return Task.FromResult(new PagedData<LanguageViewModel> { QueryResult = languages.Select(t => new LanguageViewModel(t.Title, t.Name, t.Rtl, t.Region)).ToList(),PageSize = request.PageSize,PageNumber = request.PageNumber});
         }
