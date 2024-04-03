@@ -16,6 +16,25 @@ try
 
     // Add services to the container.
 
+    builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", j =>
+    {
+        j.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
+        j.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateAudience = false,
+            RequireExpirationTime = true
+        };
+    });
+
+    builder.Services.AddAuthorization(c =>
+    {
+        c.AddPolicy("myPolicy", c =>
+        {
+            c.RequireClaim("scope", "api.site");
+        });
+    });
+
+
     builder.Services.AddApplication();
 
     builder.Services.AddEndpoints();
@@ -25,7 +44,7 @@ try
     builder.Host.UseSerilog((ctx, lc) =>
     {
         lc.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        .WriteTo.MSSqlServer(connectionString: "Server=YasiAbdn\\ABDN;Database=CmsLog-Db;Integrated security=true;TrustServerCertificate=True",
+        .WriteTo.MSSqlServer(connectionString: builder.Configuration.GetConnectionString("LogConnectionStrings"),
         sinkOptions: new MSSqlServerSinkOptions { TableName = "WebLogTable", AutoCreateSqlTable = true }).Enrich.FromLogContext();
     });
 
@@ -42,9 +61,10 @@ try
 
     app.UseHttpsRedirection();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers();
+    app.MapControllers().RequireAuthorization("myPolicy"); ;
 
     app.Run();
 }

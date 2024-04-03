@@ -21,18 +21,18 @@ namespace Cms.Endpoints.Admin.Controllers
             _sender = sender;
         }
 
-        [HttpGet("GetById")]
-        public IActionResult GetById(int id,int languageId)
+        [HttpPost("GetById")]
+        public IActionResult GetById(GetSweeperByIdQuery query)
         {
-            var result = _sender.Send(new GetSweeperByIdQuery { Id = id }).Result;
+            var result = _sender.Send(query).Result;
 
             return Ok(result);
         }
 
-        [HttpGet("GetAll")]
-        public IActionResult GetAll(int languageId)
+        [HttpPost("GetAll")]
+        public IActionResult GetAll(GetAllSweeperQuery query)
         {
-            var result = _sender.Send(new GetAllSweeperQuery { LanguageId = languageId, PageNumber = 1, PageSize = 200 });
+            var result = _sender.Send(query);
 
             return Ok(result.Result);
         }

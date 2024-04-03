@@ -18,20 +18,25 @@ namespace Cms.Endpoints.Web.Controllers
             _sender = sender;
         }
 
-        [HttpGet("GetById")]
-        public IActionResult GetById(int id, int languageId)
+        [HttpPost("GetById")]
+        public IActionResult GetById(GetSweeperByIdQuery query)
         {
-            var result = _sender.Send(new GetSweeperByIdQuery { Id = id }).Result;
+            var result = _sender.Send(query).Result;
+
+            if (!result.IsEnable || result is null)
+            {
+                return NotFound();
+            }
 
             return Ok(result);
         }
 
-        [HttpGet("GetAll")]
-        public IActionResult GetAll(int languageId)
+        [HttpPost("GetAll")]
+        public IActionResult GetAll(GetAllSweeperQuery query)
         {
-            var result = _sender.Send(new GetAllSweeperForWebQuery { LanguageId = languageId, PageNumber = 1, PageSize = 200 });
+            var result = _sender.Send(query).Result.QueryResult.Where(t => t.IsEnable);
 
-            return Ok(result.Result);
+            return Ok(result);
         }
     }
 }
