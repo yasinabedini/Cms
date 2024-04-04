@@ -15,19 +15,11 @@ namespace Cms.Infra.Models.News.Configs
     {
         public void Configure(EntityTypeBuilder<Domain.Models.News.Entities.News> builder)
         {
-            builder.Property(t => t.Title).HasConversion<TitleConversion>().IsRequired();
-
-            builder.Property(t => t.FirstParagraph).HasConversion<ParagraphConversion>().IsRequired();
-            builder.Property(t => t.SeconodParagraph).HasConversion<ParagraphConversion>();
-            builder.Property(t => t.ThirdParagraph).HasConversion<ParagraphConversion>();
-
+            builder.Property(t => t.Title).HasConversion<TitleConversion>().IsRequired();                       
             builder.Property(t => t.MainImageName).HasConversion<ImageConversion>().IsRequired();
             builder.Property(t => t.SecondImage).HasConversion<ImageConversion>();
             builder.Property(t => t.ThirdImage).HasConversion<ImageConversion>();
-
-            builder.Property(t => t.Introduction).HasConversion<DescriptionConversion>();
-
-
+            builder.Property(t => t.Introduction).HasConversion<DescriptionConversion>();            
         }
     }
 }

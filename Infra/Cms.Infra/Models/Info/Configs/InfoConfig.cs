@@ -12,10 +12,7 @@ namespace Cms.Infra.Models.Info.Configs
     {
         public void Configure(EntityTypeBuilder<Domain.Models.Info.Entities.Info> builder)
         {
-            var defaultInfo = Domain.Models.Info.Entities.Info.Create("", "", "00-00000000", "aaaa@domain.com", "");
-            defaultInfo.SetId(1);
-
-            builder.HasData(defaultInfo);
+   
         }
     }
 }

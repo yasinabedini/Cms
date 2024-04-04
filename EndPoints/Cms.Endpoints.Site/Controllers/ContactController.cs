@@ -1,5 +1,6 @@
 ﻿using Cmd.Application.Models.Contact.Commands.Create;
-using Cmd.Application.Models.Info.Queries.Get;
+using Cmd.Application.Models.Info.Queries.GetById;
+using Cmd.Application.Models.Info.Queries.GetByLanguageId;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +26,10 @@ namespace Cms.Endpoints.Site.Controllers
             return Ok("Contact Created Successfully");
         }
 
-        [HttpGet("GetInfo")]
-        public IActionResult GetInfo()
+        [HttpPost("GetInfo")]
+        public IActionResult GetInfo(GetInfoByLanguageIdQuery query)
         {
-            var result = _sender.Send(new GetInfoQuery()).Result;
+            var result = _sender.Send(query).Result;
 
             return Ok(result);
         }
