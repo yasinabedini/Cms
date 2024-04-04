@@ -20,13 +20,8 @@ namespace Cmd.Application.Models.Info.Commands.Update
 
         public Task Handle(UpdateInfoCommand request, CancellationToken cancellationToken)
         {
-            var info = _repository.GetList().First();
-
-            info.ChangeAddress(request.Address);
-            info.ChangePhoneNumber(request.PhoneNumber);
-            info.ChangeEmailAddress(request.EmailAddress);
-            info.ChangeWorkTime(request.WorkTime);
-            info.ChangeInstagramAddress(request.InstagramAddress);
+            var info = Cms.Domain.Models.Info.Entities.Info.Create(request.Address, request.WorkTime, request.PhoneNumber, request.EmailAddress, request.InstagramAddress, request.LanguageId);
+            info.SetId(request.Id);
 
             _repository.Update(info);
             _repository.Save();

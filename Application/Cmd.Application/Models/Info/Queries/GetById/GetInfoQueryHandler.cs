@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.Info.Queries.Get
+namespace Cmd.Application.Models.Info.Queries.GetById
 {
-    public class GetInfoQueryHandler : IQueryHandler<GetInfoQuery, InfoViewModel>
+    public class GetInfoQueryHandler : IQueryHandler<GetInfoByIdQuery, InfoViewModel>
     {
         private readonly IInfoRepository _repository;
 
@@ -18,11 +18,11 @@ namespace Cmd.Application.Models.Info.Queries.Get
             _repository = repository;
         }
 
-        public Task<InfoViewModel> Handle(GetInfoQuery request, CancellationToken cancellationToken)
+        public Task<InfoViewModel> Handle(GetInfoByIdQuery request, CancellationToken cancellationToken)
         {
-            var info = _repository.GetList().First();
+            var info = _repository.GetById(request.Id);
 
-            return Task.FromResult(new InfoViewModel(info.Address, info.WorkTime, info.PhoneNumber, info.EmailAddress, info.InstagramAddress));
+            return Task.FromResult(new InfoViewModel(info.Address, info.WorkTime, info.PhoneNumber, info.EmailAddress, info.InstagramAddress,info.LanguageId));
         }
     }
 }

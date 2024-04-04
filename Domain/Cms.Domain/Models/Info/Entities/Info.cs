@@ -20,21 +20,25 @@ namespace Cms.Domain.Models.Info.Entities
         [EmailAddress]
         public string EmailAddress { get; private set; }
         public string InstagramAddress { get; private set; }
+        public long LanguageId { get; set; }
+
+        public Language.Entities.Language Language { get; set; }
         #endregion
 
         #region Costructors And Factories
         protected Info() { }
-        private Info(string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress)
+        private Info(string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress, long languageId)
         {
             Address = address;
             WorkTime = workTime;
             PhoneNumber = phoneNumber;
             EmailAddress = emailAddress;
             InstagramAddress = instagramAddress;
+            LanguageId = languageId;            
         }
-        public static Info Create(string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress)
+        public static Info Create(string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress,long languageId)
         {
-            return new Info(address, workTime, phoneNumber, emailAddress, instagramAddress);
+            return new Info(address, workTime, phoneNumber, emailAddress, instagramAddress,languageId);
         }
         #endregion
 

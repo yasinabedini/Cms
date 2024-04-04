@@ -13,14 +13,16 @@ namespace Cmd.Application.Models.Info.Queries.Common
         public string PhoneNumber { get; private set; }
         public string EmailAddress { get; private set; }
         public string InstagramAddress { get; private set; }
+        public long LanguageId { get; set; }
 
-        public InfoViewModel(string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress)
+        public InfoViewModel(string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress, long languageId)
         {
             Address = address;
             WorkTime = workTime;
             PhoneNumber = phoneNumber;
             EmailAddress = emailAddress;
             InstagramAddress = instagramAddress;
+            LanguageId = languageId;
         }
     }
 }

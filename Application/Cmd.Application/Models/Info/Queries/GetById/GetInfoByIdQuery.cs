@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.Info.Queries.Get
+namespace Cmd.Application.Models.Info.Queries.GetById
 {
-    public class GetInfoQuery:IQuery<InfoViewModel>
+    public class GetInfoByIdQuery : IQuery<InfoViewModel>
     {
-
+        public long Id { get; set; }
     }
 }
