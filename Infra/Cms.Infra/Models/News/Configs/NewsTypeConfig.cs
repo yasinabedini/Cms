@@ -16,7 +16,7 @@ namespace Cms.Infra.Models.News.Configs
         {
             builder.Property(t => t.Title).HasConversion<TitleConversion>().IsRequired();
             builder.Property(t => t.Name).HasConversion<TitleConversion>().IsRequired();
-                                                                      
+
         }
     }
 }

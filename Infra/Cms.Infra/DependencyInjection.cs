@@ -14,6 +14,10 @@ using Cms.Domain.Models.Language.Repositories;
 using Cms.Infra.Models.Language.Repositories;
 using Cms.Domain.Models.News.Repository;
 using Cms.Infra.Models.News.Repositories;
+using Cms.Domain.Models.Contact.Repositories;
+using Cms.Infra.Models.Contacts.Repositories;
+using Cms.Domain.Models.Info.Repositories;
+using Cms.Infra.Models.Info.Reositories;
 
 namespace Cms.Infra;
 
@@ -31,6 +35,8 @@ public static class DependencyInjection
         services.AddTransient<ILanguageRepository, LanguageRepository>();
         services.AddTransient<INewsRepository, NewsRepository>();
         services.AddTransient<INewsTypeRepository, NewsRepository>();
+        services.AddTransient<IContactRepository, ContactRepository>();
+        services.AddTransient<IInfoRepository, InfoRepository>();
 
         return services;
     }

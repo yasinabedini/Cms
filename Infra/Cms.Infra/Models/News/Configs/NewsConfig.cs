@@ -25,6 +25,7 @@ namespace Cms.Infra.Models.News.Configs
             builder.Property(t => t.SecondImage).HasConversion<ImageConversion>();
             builder.Property(t => t.ThirdImage).HasConversion<ImageConversion>();
 
+            builder.Property(t => t.Introduction).HasConversion<DescriptionConversion>();
 
 
         }

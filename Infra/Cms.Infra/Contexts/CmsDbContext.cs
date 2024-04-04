@@ -1,4 +1,6 @@
 ﻿using Cms.Domain.Common.ValueObjects;
+using Cms.Domain.Models.Contact.Entities;
+using Cms.Domain.Models.Info.Entities;
 using Cms.Domain.Models.Language.Entities;
 using Cms.Domain.Models.News.Entities;
 using Cms.Domain.Models.Sweeper.Entities;
@@ -23,6 +25,8 @@ namespace Cms.Infra.Contexts
         public DbSet<Sweeper> Sweepers { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<NewsType> NewsTypes { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Info> Info { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

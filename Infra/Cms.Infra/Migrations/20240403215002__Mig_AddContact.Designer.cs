@@ -4,6 +4,7 @@ using Cms.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cms.Infra.Migrations
 {
     [DbContext(typeof(CmsDbContext))]
-    partial class CmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240403215002__Mig_AddContact")]
+    partial class _Mig_AddContact
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,65 +60,6 @@ namespace Cms.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contacts");
-                });
-
-            modelBuilder.Entity("Cms.Domain.Models.Info.Entities.Info", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstagramAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEnable")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WorkTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Info");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Address = "",
-                            CreateAt = new DateTime(2024, 4, 4, 10, 39, 16, 235, DateTimeKind.Local).AddTicks(8468),
-                            EmailAddress = "aaaa@domain.com",
-                            InstagramAddress = "",
-                            IsDelete = false,
-                            IsEnable = true,
-                            PhoneNumber = "00-00000000",
-                            WorkTime = ""
-                        });
                 });
 
             modelBuilder.Entity("Cms.Domain.Models.Language.Entities.Language", b =>

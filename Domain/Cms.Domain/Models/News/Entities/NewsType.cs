@@ -3,6 +3,7 @@ using Cms.Domain.Common.ValueObjects;
 using Cms.Domain.Models.Language.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,6 @@ namespace Cms.Domain.Models.News.Entities
         public Title Name { get; private set; }
         public long LanguageId { get; set; }
 
-        public Language.Entities.Language Language { get; set; }
         #endregion
 
         #region Constructors and Factories

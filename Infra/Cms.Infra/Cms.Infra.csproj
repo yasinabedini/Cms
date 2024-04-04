@@ -31,7 +31,7 @@
 
 
 	<ItemGroup>
-	  <Folder Include="Models\Language\Config\" />
+	  <Folder Include="Models\Language\Configs\" />
 	</ItemGroup>
 
 </Project>
