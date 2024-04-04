@@ -26,7 +26,24 @@ namespace Cmd.Application.Models.News.Queries.GetAll
                 newsList.Where(t => t.NewsTypeId == request.TypeId);
             }
 
-            return Task.FromResult(new PagedData<NewsViewModel> { QueryResult = newsList.Select(t => new NewsViewModel(t.Title.Value, t.LanguageId, t.NewsTypeId, t.PublishDate, t.FirstParagraph.Value, t.SeconodParagraph.Value, t.ThirdParagraph.Value, t.MainImageName.Value, t.SecondImage.Value, t.ThirdImage.Value)).ToList(), PageNumber = request.PageNumber, PageSize = request.PageSize });
+            return Task.FromResult(
+                new PagedData<NewsViewModel>
+                {
+                    QueryResult = newsList.Select(t => new NewsViewModel(
+                        t.Title.Value,
+                        t.Introduction.Value,
+                        t.LanguageId,
+                        t.NewsTypeId,
+                        t.PublishDate,
+                        t.FirstParagraph.Value,
+                        t.SeconodParagraph is not null ? t.SeconodParagraph.Value : "",
+                        t.ThirdParagraph is not null ? t.ThirdParagraph.Value : "",
+                        t.MainImageName.Value,
+                        t.SecondImage is not null ? t.SecondImage.Value : "",
+                        t.ThirdImage is not null ? t.ThirdImage.Value : "")).ToList(),
+                    PageNumber = request.PageNumber,
+                    PageSize = request.PageSize
+                });
         }
     }
 }
