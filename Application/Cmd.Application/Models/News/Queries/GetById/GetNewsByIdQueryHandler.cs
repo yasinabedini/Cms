@@ -22,7 +22,7 @@ namespace Cmd.Application.Models.News.Queries.GetById
         {
             var news = _repository.GetById(request.Id);
 
-            return Task.FromResult(new NewsViewModel(news.Title.Value, news.Introduction.Value, news.LanguageId, news.NewsTypeId, news.PublishDate, news.FirstParagraph.Value, news.SeconodParagraph is not null ? news.SeconodParagraph.Value : "", news.ThirdParagraph is not null ? news.ThirdParagraph.Value : "", news.MainImageName.Value, news.SecondImage is not null ? news.SecondImage.Value : "", news.ThirdImage is not null ? news.ThirdImage.Value : ""));
+            return Task.FromResult(new NewsViewModel(news.Title.Value, news.Introduction.Value, news.Text, news.LanguageId, news.NewsTypeId, news.PublishDate, news.MainImageName.Value, news.SecondImage is not null ? news.SecondImage.Value : "", news.ThirdImage is not null ? news.ThirdImage.Value : ""));
         }
     }
 }

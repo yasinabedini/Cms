@@ -2,11 +2,7 @@
 using Cmd.Application.Convertors;
 using Cmd.Application.Tools;
 using Cms.Domain.Models.News.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Ganss.Xss;
 
 namespace Cmd.Application.Models.News.Commands.Create
 {
@@ -34,7 +30,10 @@ namespace Cmd.Application.Models.News.Commands.Create
             if (request.SecondImage is not null) FileTools.SaveImage(request.SecondImage, imageNames[1], "News", false);
             if (request.ThirdImage is not null) FileTools.SaveImage(request.ThirdImage, imageNames[2], "News", false);
 
-            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.FirstParagraph, request.SeconodParagraph, request.ThirdParagraph, imageNames[0], imageNames[1], imageNames[2]));
+            var sanitizer = new HtmlSanitizer();
+            string newsContent = sanitizer.Sanitize(request.Text);
+
+            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), imageNames[0], imageNames[1], imageNames[2]));
             _repository.Save();
 
             return Task.CompletedTask;

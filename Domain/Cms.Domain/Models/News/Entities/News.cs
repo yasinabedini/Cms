@@ -19,9 +19,7 @@ namespace Cms.Domain.Models.News.Entities
         public long NewsTypeId { get; private set; }
         public string PublishDate { get; private set; }
         public Description Introduction { get;private set; }
-        public Paragraph FirstParagraph { get; private set; }
-        public Paragraph? SeconodParagraph { get; private set; }
-        public Paragraph? ThirdParagraph { get; private set; }
+        public string Text { get; set; }        
         public Image MainImageName { get; private set; }
         public Image? SecondImage { get; private set; }
         public Image? ThirdImage { get; private set; }
@@ -32,24 +30,23 @@ namespace Cms.Domain.Models.News.Entities
 
         #region Costructors and Factories
         protected News() { }
-        private News(Title title, Description introduction, long languageId, long newsTypeId, string publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
+
+        public News(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage)
         {
-            Title = title ?? throw new Exception("Title Should Be has value");
+            Title = title;
             LanguageId = languageId;
             NewsTypeId = newsTypeId;
             PublishDate = publishDate;
-            FirstParagraph = firstParagraph ?? throw new Exception("First Paragraph Should Be has value");
-            SeconodParagraph = seconodParagraph;
-            ThirdParagraph = thirdParagraph;
-            MainImageName = mainImageName ?? throw new Exception("First Image Should Be has value");
+            Introduction = introduction;
+            Text = text;            
+            MainImageName = mainImageName;
             SecondImage = secondImage;
             ThirdImage = thirdImage;
-            Introduction = introduction;
         }
 
-        public static News Create(Title title, Description introduction, long languageId, long newsTypeId, string publishDate, Paragraph firstParagraph, Paragraph? seconodParagraph, Paragraph? thirdParagraph, Image mainImageName, Image? secondImage, Image? thirdImage)
+        public static News Create(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage)
         {
-            return new News(title, introduction, languageId, newsTypeId, publishDate, firstParagraph, seconodParagraph, thirdParagraph, mainImageName, secondImage, thirdImage);
+            return new News(title, introduction, text, languageId, newsTypeId, publishDate,mainImageName,secondImage, thirdImage);
         }
         #endregion
 

@@ -2,6 +2,7 @@
 using Cmd.Application.Convertors;
 using Cmd.Application.Tools;
 using Cms.Domain.Models.News.Repository;
+using Ganss.Xss;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,8 +61,10 @@ namespace Cmd.Application.Models.News.Commands.Update
                 FileTools.SaveImage(request.ThirdImage, imageNames[2], "News", false);
             }
 
+            var sanitizer = new HtmlSanitizer();
+            string newsContent = sanitizer.Sanitize(request.Text);
 
-            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.FirstParagraph, request.SeconodParagraph, request.ThirdParagraph, imageNames[0], imageNames[1], imageNames[2]);
+            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), imageNames[0], imageNames[1], imageNames[2]);
             news.SetId(request.Id);
 
             _repository.Update(news);

@@ -21,9 +21,15 @@ namespace Cmd.Application.Models.News.Queries.GetAll
         public Task<PagedData<NewsViewModel>> Handle(GetAllNewsQuery request, CancellationToken cancellationToken)
         {
             var newsList = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t => t.CreateAt);
+           
             if (request.TypeId is not 0 || request.TypeId is not null)
             {
                 newsList.Where(t => t.NewsTypeId == request.TypeId);
+            }
+
+            if (request.LanguageId is not 0 || request.LanguageId is not null)
+            {
+                newsList.Where(t => t.LanguageId == request.LanguageId);
             }
 
             return Task.FromResult(
@@ -32,12 +38,10 @@ namespace Cmd.Application.Models.News.Queries.GetAll
                     QueryResult = newsList.Select(t => new NewsViewModel(
                         t.Title.Value,
                         t.Introduction.Value,
+                        t.Text,
                         t.LanguageId,
                         t.NewsTypeId,
-                        t.PublishDate,
-                        t.FirstParagraph.Value,
-                        t.SeconodParagraph is not null ? t.SeconodParagraph.Value : "",
-                        t.ThirdParagraph is not null ? t.ThirdParagraph.Value : "",
+                        t.PublishDate,                                                                        
                         t.MainImageName.Value,
                         t.SecondImage is not null ? t.SecondImage.Value : "",
                         t.ThirdImage is not null ? t.ThirdImage.Value : "")).ToList(),
