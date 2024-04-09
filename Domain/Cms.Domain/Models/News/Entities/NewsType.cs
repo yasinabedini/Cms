@@ -16,21 +16,24 @@ namespace Cms.Domain.Models.News.Entities
         public Title Title { get; private set; }
         public Title Name { get; private set; }
         public long LanguageId { get; set; }
+        public bool IsPage { get; set; }
+
 
         #endregion
 
         #region Constructors and Factories
         protected NewsType() { }
-        private NewsType(Title title, Title name, long languageId)
+        private NewsType(Title title, Title name, long languageId, bool isPage)
         {
             Title = title;
             Name = name;
             LanguageId = languageId;
+            IsPage = isPage;
         }
 
-        public static NewsType Create(Title title, Title name,long languageId)
+        public static NewsType Create(Title title, Title name,long languageId,bool isPage)
         {
-            return new NewsType(title, name, languageId);
+            return new NewsType(title, name, languageId,isPage);
         } 
         #endregion
     }

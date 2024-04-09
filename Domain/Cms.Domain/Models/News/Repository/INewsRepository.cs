@@ -9,5 +9,6 @@ namespace Cms.Domain.Models.News.Repository
 {
     public interface INewsRepository:IRepository<News.Entities.News>
     {
+        List<Entities.News> GetAllWithRelations();
     }
 }

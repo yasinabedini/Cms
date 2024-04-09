@@ -63,6 +63,7 @@ public abstract class Entity<TId> : IAuditableEntity where TId : struct, ICompar
     public void SetId(TId id)
     {
         Id = id;
+        Modified();
     }
 
     #region Equality Check
