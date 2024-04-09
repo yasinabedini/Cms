@@ -31,21 +31,16 @@ namespace FileManager.Controllers
             }
 
             string extension = Path.GetExtension(image.FileName).ToLower();
-            if (extension.EndsWith(".png") || extension.EndsWith(".jpeg") || extension.EndsWith(".jpg"))
-            {
-                string imageName = Guid.NewGuid().ToString() + extension;
-
-                FileTools.SaveImage(image, imageName, folder, false);
-
-                return Ok(imageName);
-            }
-            else
+            if (!extension.EndsWith(".png") && !extension.EndsWith(".jpeg") && !extension.EndsWith(".jpg"))
             {
                 return BadRequest("Invalid Image Format.");
             }
+     
+            string imageName = Guid.NewGuid().ToString() + extension;
 
+            FileTools.SaveImage(image, imageName, folder, false);
 
-
+            return Ok(imageName);
         }
     }
 }
