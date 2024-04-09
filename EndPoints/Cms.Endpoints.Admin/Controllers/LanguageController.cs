@@ -25,7 +25,10 @@ namespace Cms.Endpoints.Admin.Controllers
         public IActionResult GetById(GetLanguageByIdQuery query)
         {
             var result = _sender.Send(query).Result;
-
+            if (result is null)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
 
@@ -46,7 +49,7 @@ namespace Cms.Endpoints.Admin.Controllers
 
             return Ok("Language Created Successfuly.");
         }
-        
+
         [HttpPut("Update")]
         public IActionResult Update(UpdateLanguageCommand command)
         {
@@ -56,9 +59,9 @@ namespace Cms.Endpoints.Admin.Controllers
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(DeleteLanguageCommand command)
+        public IActionResult Delete(int id)
         {
-            _sender.Send(command);
+            _sender.Send(new DeleteLanguageCommand { Id = id });
 
             return Ok("Language Deleted Successfuly.");
         }

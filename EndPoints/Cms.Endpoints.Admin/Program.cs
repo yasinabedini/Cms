@@ -2,9 +2,11 @@ using Cmd.Application;
 using Cms.Endpoints.Admin;
 using Cms.Infra.Contexts;
 using Cms.Infra.Identity.Entities;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
+using static System.Net.Mime.MediaTypeNames;
 
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
@@ -17,34 +19,22 @@ try
 
     // Add services to the container.
 
-    builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", j =>
-    {
-        j.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
-        j.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-            ValidateAudience = false,
-            RequireExpirationTime = true            
-        };
-    });
+    builder.Services.AddAuthentication();
 
-    builder.Services.AddAuthorization(c =>
-    {
-        c.AddPolicy("myPolicy", c =>
-        {
-            c.RequireClaim("scope", "api.admin");
-        });
-    });
-
+    builder.Services.AddAuthorization();
+    
     builder.Services.AddApplication();
 
     builder.Services.AddEndpoints();
+
+
 
     builder.Services.AddIdentity<CustomIdentityUser, IdentityRole>().AddEntityFrameworkStores<CmsDbContext>();
 
     builder.Host.UseSerilog((ctx, lc) =>
     {
         lc.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        .WriteTo.MSSqlServer(connectionString:builder.Configuration.GetConnectionString("LogConnectionStrings"),
+        .WriteTo.MSSqlServer(connectionString: builder.Configuration.GetConnectionString("LogConnectionStrings"),
         sinkOptions: new MSSqlServerSinkOptions { TableName = "AdminLogTable", AutoCreateSqlTable = true }).Enrich.FromLogContext();
     });
 
@@ -60,21 +50,53 @@ try
     }
     else
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        if (bool.Parse(builder.Configuration["SwaggerInProduction"]))
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
     }
-    
+
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler(exceptionHandlerApp =>
+        {
+            exceptionHandlerApp.Run(async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+                // using static System.Net.Mime.MediaTypeNames;
+                context.Response.ContentType = Text.Plain;
+
+                await context.Response.WriteAsync("An exception was thrown.");
+
+                var exceptionHandlerPathFeature =
+                    context.Features.Get<IExceptionHandlerPathFeature>();
+
+                if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
+                {
+                    await context.Response.WriteAsync(" The file was not found.");
+                }
+
+                if (exceptionHandlerPathFeature?.Path == "/")
+                {
+                    await context.Response.WriteAsync(" Page: Home.");
+                }
+            });
+        });
+    }
     app.UseHttpsRedirection();
 
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers()/*.RequireAuthorization("myPolicy")*/;
+    app.MapControllers();
 
     app.Run();
 }
 catch (Exception ex)
 {
+
 
     Log.Fatal(ex, "UnHandled Exception");
 }

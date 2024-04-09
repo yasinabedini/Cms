@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cms.Endpoints.Admin
+namespace Cms.Endpoints.Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

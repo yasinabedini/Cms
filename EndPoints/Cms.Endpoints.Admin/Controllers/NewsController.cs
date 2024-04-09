@@ -32,7 +32,10 @@ namespace Cms.Endpoints.Admin.Controllers
         public IActionResult GetById(GetNewsByIdQuery query)
         {
             var result = _sender.Send(query).Result;
-
+            if (result is null)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
 

@@ -34,7 +34,10 @@ namespace Cms.Endpoints.Admin.Controllers
         public IActionResult GetById(GetContactByIdQuery query)
         {
             var result = _sender.Send(query).Result;
-
+            if (result is null)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
 
