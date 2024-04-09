@@ -1,10 +1,12 @@
 using Cmd.Application;
-using Cms.Endpoints.Web;
+using Cms.Endpoints.Site;
 using Cms.Infra.Contexts;
 using Cms.Infra.Identity.Entities;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
+using static System.Net.Mime.MediaTypeNames;
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
 
@@ -52,6 +54,36 @@ try
 
     var app = builder.Build();
 
+
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler(exceptionHandlerApp =>
+        {
+            exceptionHandlerApp.Run(async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+                // using static System.Net.Mime.MediaTypeNames;
+                context.Response.ContentType = Text.Plain;
+
+                await context.Response.WriteAsync("An exception was thrown.");
+
+                var exceptionHandlerPathFeature =
+                    context.Features.Get<IExceptionHandlerPathFeature>();
+
+                if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
+                {
+                    await context.Response.WriteAsync(" The file was not found.");
+                }
+
+                if (exceptionHandlerPathFeature?.Path == "/")
+                {
+                    await context.Response.WriteAsync(" Page: Home.");
+                }
+            });
+        });
+    }
+
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -74,6 +106,7 @@ try
 
     app.Run();
 }
+
 catch (Exception ex)
 {
 

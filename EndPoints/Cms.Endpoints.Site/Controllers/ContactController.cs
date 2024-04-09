@@ -29,9 +29,12 @@ namespace Cms.Endpoints.Site.Controllers
         [HttpPost("GetInfo")]
         public IActionResult GetInfo(GetInfoByLanguageIdQuery query)
         {
-            var result = _sender.Send(query).Result;
-
-            return Ok(result);
+            var result = _sender.Send(query);
+            if (result is null)
+            {
+                return NotFound();
+            }
+            return Ok(result.Result);
         }
     }
 }

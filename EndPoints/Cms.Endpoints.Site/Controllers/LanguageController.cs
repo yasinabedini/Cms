@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cms.Endpoints.Web.Controllers
+namespace Cms.Endpoints.Site.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -31,7 +31,7 @@ namespace Cms.Endpoints.Web.Controllers
         {
             var result = _sender.Send(query).Result;
 
-            if (!result.IsEnable||result is null)
+            if (!result.IsEnable || result is null)
             {
                 return NotFound();
             }
