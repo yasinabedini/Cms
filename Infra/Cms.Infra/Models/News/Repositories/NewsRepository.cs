@@ -3,6 +3,7 @@ using Cms.Domain.Models.News.Entities;
 using Cms.Domain.Models.News.Repository;
 using Cms.Infra.Common.Repository;
 using Cms.Infra.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,11 @@ namespace Cms.Infra.Models.News.Repositories
             newsType.IsDelete = true;
 
             Update(newsType);
+        }
+
+        public List<Domain.Models.News.Entities.News> GetAllWithRelations()
+        {
+            return _context.News.Include(t => t.NewsType).ToList();
         }
     }
 }

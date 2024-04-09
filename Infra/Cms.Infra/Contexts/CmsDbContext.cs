@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Cms.Infra.Contexts
 {
-    public class CmsDbContext : IdentityDbContext
+    public class CmsDbContext : DbContext
     {
         public CmsDbContext(DbContextOptions options) : base(options)
         {
