@@ -22,7 +22,7 @@ namespace Cmd.Application.Models.News.Queries.GetAllNewsType
         {
             var newsTypes = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize);
 
-            return Task.FromResult(new PagedData<NewsTypeViewModel> { QueryResult = newsTypes.Select(t => new NewsTypeViewModel(t.Title.Value, t.Name.Value)).ToList(), PageNumber = request.PageNumber, PageSize = request.PageSize });
+            return Task.FromResult(new PagedData<NewsTypeViewModel> { QueryResult = newsTypes.Select(t => new NewsTypeViewModel(t.Title.Value, t.Name.Value,t.IsPage)).ToList(), PageNumber = request.PageNumber, PageSize = request.PageSize });
         }
     }
 }

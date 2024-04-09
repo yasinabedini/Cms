@@ -19,6 +19,7 @@ namespace Cmd.Application.Models.News.Queries.Common
         public string MainImageName { get; private set; }
         public string? SecondImage { get; private set; }
         public string? ThirdImage { get; private set; }
+        public NewsTypeViewModel NewsType { get; set; }
 
         public NewsViewModel(string title,string introduction, string text,long languageId, long newsTypeId, string publishDate,  string mainImageName, string? secondImage, string? thirdImage)
         {

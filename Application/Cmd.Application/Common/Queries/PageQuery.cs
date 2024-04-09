@@ -9,11 +9,11 @@ public class PageQuery<TData> : IPageQuery<TData>
     /// <summary>
     /// شماره صفحه ای که باید اطلاعات از آن بارگذاری شود
     /// </summary>
-    public int PageNumber { get; set; } = 1;
+    public int PageNumber { get; set; } 
     /// <summary>
     /// تعداد رکورد‌های هر صفحه 
     /// </summary>
-    public int PageSize { get; set; } = 10;
+    public int PageSize { get; set; } 
     /// <summary>
     /// تعداد رکورد‌هایی که باید از ابتدای نتیجه رد شود تا به رکوردهای مورد نظر برسیم
     /// </summary>

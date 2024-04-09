@@ -13,12 +13,14 @@ namespace Cmd.Application.Models.News.Commands.UpdateNewsType
         public string Title { get; set; }
         public string Name { get; set; }
         public long LanguageId { get; set; }
-        public UpdateNewsTypeCommand(long id, string title, string name, long languageId)
+        public bool IsPage { get; set; }
+        public UpdateNewsTypeCommand(long id, string title, string name, long languageId, bool isPage)
         {
             Id = id;
             Title = title;
             Name = name;
             LanguageId = languageId;
+            IsPage = isPage;
         }
     }
 }

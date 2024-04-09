@@ -21,7 +21,7 @@ namespace Cmd.Application.Models.News.Commands.UpdateNewsType
 
         public Task Handle(UpdateNewsTypeCommand request, CancellationToken cancellationToken)
         {
-            var newsType = NewsType.Create(request.Title, request.Name, request.LanguageId);
+            var newsType = NewsType.Create(request.Title, request.Name, request.LanguageId,request.IsPage);
             newsType.SetId(request.Id);
 
             _repository.Update(newsType);

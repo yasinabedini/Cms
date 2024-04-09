@@ -20,7 +20,7 @@ namespace Cmd.Application.Models.Info.Queries.GetAll
 
         public Task<PagedData<InfoViewModel>> Handle(GetAllInfoQuery request, CancellationToken cancellationToken)
         {
-            var infoList = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize).ToList();
+            var infoList = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t=>t.CreateAt).ToList();
 
             return Task.FromResult(new PagedData<InfoViewModel> { QueryResult = infoList.Select(t => new InfoViewModel(t.Address, t.WorkTime, t.PhoneNumber, t.EmailAddress, t.InstagramAddress, t.LanguageId)).ToList(), PageNumber = request.PageNumber, PageSize = request.PageSize });
         }

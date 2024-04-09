@@ -23,6 +23,7 @@ namespace Cmd.Application.Models.Info.Queries.GetByLanguageId
         {
             var info = _repository.GetList().FirstOrDefault(t => t.LanguageId == request.LanguageId);
 
+            if (info is null) return null;
             return Task.FromResult(new InfoViewModel(info.Address, info.WorkTime, info.PhoneNumber, info.EmailAddress, info.InstagramAddress, info.LanguageId));
         }
     }

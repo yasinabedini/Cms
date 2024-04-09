@@ -22,7 +22,6 @@ namespace Cmd.Application.Models.Contact.Queries.GetById
         public Task<ContactViewModel> Handle(GetContactByIdQuery request, CancellationToken cancellationToken)
         {
             var contact = _repository.GetById(request.Id);
-
             return Task.FromResult(new ContactViewModel(contact.Name, contact.Email, contact.Text.Value));
         }
     }

@@ -20,7 +20,7 @@ namespace Cmd.Application.Models.News.Commands.CreateNewsType
 
         public Task Handle(CreateNewsTypeCommand request, CancellationToken cancellationToken)
         {
-            _repository.Add(Cms.Domain.Models.News.Entities.NewsType.Create(request.Title, request.Name, request.LanguageId));
+            _repository.Add(Cms.Domain.Models.News.Entities.NewsType.Create(request.Title, request.Name, request.LanguageId,request.IsPage));
             _repository.Save();
 
             return Task.CompletedTask;
