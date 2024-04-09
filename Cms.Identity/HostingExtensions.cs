@@ -1,6 +1,7 @@
 using Cms.Identity.Data;
 using Cms.Identity.Models;
 using Duende.IdentityServer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -20,21 +21,23 @@ namespace Cms.Identity
                 .AddEntityFrameworkStores<IdentityServerDbContext>()
                 .AddDefaultTokenProviders();
 
-            builder.Services
-                .AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-
-                    // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
-                    options.EmitStaticAudienceClaim = true;
-                })
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
-                .AddAspNetIdentity<ApplicationUser>();
+            builder.Services.AddIdentityServer(t=>t.)
+        .AddAspNetIdentity<ApplicationUser>()
+        .AddConfigurationStore(options =>
+        {
+            options.ConfigureDbContext = builder =>
+                builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                    sql => sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name));
+        })
+        .AddOperationalStore(options =>
+        {
+            options.ConfigureDbContext = builder =>
+                builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                    sql => sql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name));
+        })
+        .AddDeveloperSigningCredential()
+        .AddInMemoryApiScopes(GetApiScopes())
+        .AddInMemoryClients(GetClients());
 
             builder.Services.AddAuthentication()
                 .AddGoogle(options =>
