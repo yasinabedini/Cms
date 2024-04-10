@@ -23,12 +23,17 @@ public static class FileTools
         //    imageConvertor.Image_resize(imagePath, thumbImagePath, 213);
         //}
     }
-    public static void DeleteFile(string folder, string imageName)
+    public static bool DeleteFile(string folder, string imageName)
     {
         string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\img\\{folder}", imageName);
         if (File.Exists(path))
         {
             File.Delete(path);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

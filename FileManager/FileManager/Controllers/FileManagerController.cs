@@ -1,6 +1,8 @@
 ﻿using FileManager.Tools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Eventing.Reader;
+using System.Text.Json;
 
 namespace FileManager.Controllers
 {
@@ -8,7 +10,6 @@ namespace FileManager.Controllers
     [ApiController]
     public class FileManagerController : ControllerBase
     {
-
         [HttpPost("Upload")]
         public IActionResult Upload([FromForm] IFormFile image, string folder)
         {
@@ -35,12 +36,29 @@ namespace FileManager.Controllers
             {
                 return BadRequest("Invalid Image Format.");
             }
-     
+
             string imageName = Guid.NewGuid().ToString() + extension;
 
             FileTools.SaveImage(image, imageName, folder, false);
 
-            return Ok(imageName);
+            var imageNameJson = JsonSerializer.Serialize(imageName);
+
+            Response.Headers.Add("imageName", imageName);
+            return Ok();
+        }
+
+        [HttpGet("Delete")]
+        public IActionResult Delete(string imageName, string folder)
+        {
+            if (FileTools.DeleteFile(folder, imageName))
+            {
+                return Ok("File Deleted Successfully.");
+            }
+            else
+            {
+                return BadRequest("File Not Found.");
+            }
+
         }
     }
 }

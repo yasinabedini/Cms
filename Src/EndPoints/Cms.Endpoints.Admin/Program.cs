@@ -27,7 +27,10 @@ try
 
     builder.Services.AddEndpoints();
 
-
+    builder.Services.AddHttpClient("FileManager", t =>
+    {
+        t.BaseAddress = new Uri(builder.Configuration["FileManagerUrl"]);
+    });
 
     builder.Services.AddIdentity<CustomIdentityUser, IdentityRole>().AddEntityFrameworkStores<CmsDbContext>();
 
