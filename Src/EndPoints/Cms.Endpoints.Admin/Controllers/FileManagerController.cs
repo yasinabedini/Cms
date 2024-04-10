@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Cms.Domain.Models.News.Entities;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using System.IO.Pipelines;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Cms.Endpoints.Admin.Controllers
 {
@@ -34,9 +39,31 @@ namespace Cms.Endpoints.Admin.Controllers
 
             // Replace 'your_api_endpoint' with the actual endpoint where you want to send the image
             var response = await _FileManager.PostAsync($"/api/FileManager/upload?folder={folder}", requestContent);
-            
+
             item.Dispose();
-            return Ok(response.Headers.First(t=>t.Key=="imageName").Value);
+            return Ok(response.Headers.First(t => t.Key == "imageName").Value);
+        }
+
+        [HttpGet("GetImage")]
+        public async Task<IActionResult> GetImage(string imageName, string folder)
+        {
+            var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetImage?imageName={imageName}&&folder={folder}");
+            byte[] imageBytes = response;
+     
+            return File(imageBytes, "image/jpeg");
+        }
+
+        [HttpDelete("DeleteImage")]
+        public async Task<IActionResult> DeleteImage(string imageName, string folder)
+        {
+            var response = await _FileManager.DeleteAsync($"api/FileManager/Delete?imageName={imageName}&&folder={folder}");
+        
+            if (response.StatusCode is System.Net.HttpStatusCode.BadRequest)
+            {
+                return BadRequest("File Not Found");
+            }
+
+            return Ok("File Deleted SuccessFully");
         }
     }
 }

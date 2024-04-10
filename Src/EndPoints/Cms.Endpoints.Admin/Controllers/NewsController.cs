@@ -6,6 +6,7 @@ using Cmd.Application.Models.News.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Cms.Endpoints.Admin.Controllers
 {
@@ -43,7 +44,12 @@ namespace Cms.Endpoints.Admin.Controllers
         [Produces("multipart/form-data")]
         public IActionResult Create(CreateNewsCommand command)
         {
-            _sender.Send(command);
+            var result = _sender.Send(command);
+
+            if (!result.IsCompletedSuccessfully)
+            {
+                return BadRequest(result.Exception.Message);
+            }
 
             return Ok("News Created successfully.");
         }
