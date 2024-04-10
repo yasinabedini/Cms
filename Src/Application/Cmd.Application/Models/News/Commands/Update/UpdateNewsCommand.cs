@@ -18,19 +18,19 @@ namespace Cmd.Application.Models.News.Commands.Update
         public long NewsTypeId { get; private set; }
         public DateTime PublishDate { get; private set; }
         public string Text { get; set; }
-        public IFormFile MainImage { get; private set; }
-        public IFormFile? SecondImage { get; private set; }
-        public IFormFile? ThirdImage { get; private set; }
+        public string? MainImage { get; private set; }
+        public string? SecondImage { get; private set; }
+        public string? ThirdImage { get; private set; }
 
-        public UpdateNewsCommand(long id, string title, string introduction, string text,long languageId, long newsTypeId, DateTime publishDate, string firstParagraph, string? seconodParagraph, string? thirdParagraph, IFormFile mainImage, IFormFile? secondImage, IFormFile? thirdImage)
+        public UpdateNewsCommand(long id, string title, string introduction, long languageId, long newsTypeId, DateTime publishDate, string text, string? mainImage, string? secondImage, string? thirdImage)
         {
             Id = id;
             Title = title;
             Introduction = introduction;
-            Text = text;
             LanguageId = languageId;
             NewsTypeId = newsTypeId;
-            PublishDate = publishDate;      
+            PublishDate = publishDate;
+            Text = text;
             MainImage = mainImage;
             SecondImage = secondImage;
             ThirdImage = thirdImage;

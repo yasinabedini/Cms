@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.News.Commands.Delete
+namespace Cmd.Application.Models.Language.Commands.CheckLanguageAvailability
 {
-    public class DeleteNewsCommand:ICommand
+    public class CheckLanguageAvailabilityCommand:ICommand<bool>
     {
         public long Id { get; set; }
     }

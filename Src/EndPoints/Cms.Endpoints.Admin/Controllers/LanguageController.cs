@@ -1,4 +1,6 @@
-﻿using Cmd.Application.Models.Language.Commands.Create;
+﻿using Cmd.Application.Models.Info.Commands.CheckInfoAvailability;
+using Cmd.Application.Models.Language.Commands.CheckLanguageAvailability;
+using Cmd.Application.Models.Language.Commands.Create;
 using Cmd.Application.Models.Language.Commands.Delete;
 using Cmd.Application.Models.Language.Commands.Update;
 using Cmd.Application.Models.Language.Queries.GetAll;
@@ -7,6 +9,8 @@ using Cms.Domain.Models.Language.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Cms.Endpoints.Admin.Controllers
 {
@@ -24,6 +28,11 @@ namespace Cms.Endpoints.Admin.Controllers
         [HttpPost("GetById")]
         public IActionResult GetById(GetLanguageByIdQuery query)
         {
+            if (!_sender.Send(new CheckLanguageAvailabilityCommand() { Id = query.Id }).Result)
+            {
+                return NotFound("Language is not available.");
+            }
+
             var result = _sender.Send(query).Result;
             if (result is null)
             {
@@ -53,14 +62,24 @@ namespace Cms.Endpoints.Admin.Controllers
         [HttpPut("Update")]
         public IActionResult Update(UpdateLanguageCommand command)
         {
+            if (!_sender.Send(new CheckLanguageAvailabilityCommand() { Id = command.Id }).Result)
+            {
+                return NotFound("Language is not available.");
+            }
+
             _sender.Send(command);
 
-            return Ok("Language Updated Successfuly.");
+            return Ok("Language Updated Successfully.");
         }
 
         [HttpDelete("Delete")]
         public IActionResult Delete(int id)
         {
+            if (!_sender.Send(new CheckLanguageAvailabilityCommand() { Id = id }).Result)
+            {
+                return NotFound("Language is not available.");
+            }
+
             _sender.Send(new DeleteLanguageCommand { Id = id });
 
             return Ok("Language Deleted Successfuly.");

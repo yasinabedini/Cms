@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.News.Commands.Delete
+namespace Cmd.Application.Models.Sweeper.Commands.CheckSweeperAvailability
 {
-    public class DeleteNewsCommand:ICommand
+    public class CheckSweeperAvailabilityCommand:ICommand<bool>
     {
         public long Id { get; set; }
     }

@@ -14,7 +14,7 @@ namespace Cmd.Application.Models.Language.Queries.GetById
         }
 
         public Task<LanguageViewModel> Handle(GetLanguageByIdQuery request, CancellationToken cancellationToken)
-        {
+        {            
             var language = _repository.GetById(request.Id);
             return Task.FromResult(new LanguageViewModel(language.Title, language.Name, language.Rtl, language.Region));
         }

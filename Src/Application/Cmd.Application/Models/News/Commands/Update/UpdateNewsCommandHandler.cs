@@ -1,6 +1,7 @@
 ﻿using Cmd.Application.Common.Commands;
 using Cmd.Application.Convertors;
 using Cmd.Application.Tools;
+using Cms.Domain.Models.Language.Repositories;
 using Cms.Domain.Models.News.Repository;
 using Ganss.Xss;
 using System;
@@ -15,56 +16,33 @@ namespace Cmd.Application.Models.News.Commands.Update
     public class UpdateNewsCommandHandler : ICommandHandler<UpdateNewsCommand>
     {
         private readonly INewsRepository _repository;
+        private readonly INewsTypeRepository _typeRepository;
+        private readonly ILanguageRepository _languageRepository;
 
-        public UpdateNewsCommandHandler(INewsRepository repository)
+        public UpdateNewsCommandHandler(INewsRepository repository, ILanguageRepository languageRepository, INewsTypeRepository typeRepository)
         {
             _repository = repository;
+            _languageRepository = languageRepository;
+            _typeRepository = typeRepository;
         }
 
         public Task Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
             var newsImageNames = _repository.GetById(request.Id);
 
-            List<string> imageNames = new List<string>
+            if (_languageRepository.GetById(request.LanguageId) is null)
             {
-                newsImageNames.MainImageName.Value,
-                newsImageNames.SecondImage.Value ?? "",
-                newsImageNames.ThirdImage.Value ?? ""
-            };
-
-
-            if (request.MainImage is not null) { FileTools.DeleteFile("News", imageNames[0]); FileTools.SaveImage(request.MainImage, imageNames[0], "News", false); }
-
-            if (request.SecondImage is not null)
-            {
-                if (!string.IsNullOrEmpty(imageNames[1]))
-                {
-                    FileTools.DeleteFile("News", imageNames[1]);
-                }
-                else
-                {
-                    imageNames[1] = Guid.NewGuid().ToString() + Path.GetExtension(request.SecondImage.FileName);
-                }
-                FileTools.SaveImage(request.SecondImage, imageNames[1], "News", false);
+                Task.FromException(new Exception("Language id is not available."));
             }
-
-            if (request.ThirdImage is not null)
+            if (_typeRepository.GetById(request.NewsTypeId) is null)
             {
-                if (!string.IsNullOrEmpty(imageNames[2]))
-                {
-                    FileTools.DeleteFile("News", imageNames[2]);
-                }
-                else
-                {
-                    imageNames[2] = Guid.NewGuid().ToString() + Path.GetExtension(request.ThirdImage.FileName);
-                }
-                FileTools.SaveImage(request.ThirdImage, imageNames[2], "News", false);
+                return Task.FromException(new Exception("News Type Id Is Not Available."));
             }
 
             var sanitizer = new HtmlSanitizer();
             string newsContent = sanitizer.Sanitize(request.Text);
 
-            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), imageNames[0], imageNames[1], imageNames[2]);
+            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.MainImage,request.SecondImage,request.ThirdImage);
             news.SetId(request.Id);
 
             _repository.Update(news);

@@ -13,7 +13,7 @@ public abstract class Entity<TId> : IAuditableEntity where TId : struct, ICompar
     /// صرفا برای ذخیره در دیتابیس و سادگی کار مورد استفاده قرار بگیرید.
     /// </summary>
     public TId Id { get; protected set; }
-    public DateTime CreateAt { get; set; }
+    public DateTime CreateAt { get; init; }
     public DateTime? ModifiedAt { get; set; }
     public bool IsDelete { get; set; }
     public bool IsEnable { get; set; }

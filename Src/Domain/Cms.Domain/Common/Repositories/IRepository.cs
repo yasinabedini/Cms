@@ -8,5 +8,6 @@
         void Update(TEntity entity);
         void Delete(long id);
         void Save();
+        bool CheckAvailability(long id);
     }
 }

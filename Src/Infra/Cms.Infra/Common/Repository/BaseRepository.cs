@@ -45,5 +45,18 @@ namespace Cms.Infra.Common.Repository
         {
             _context.SaveChanges();
         }
+
+        public bool CheckAvailability(long id)
+        {
+            var entity = _context.Set<TEntity>().FirstOrDefault(t => t.Id == id);
+            if (entity is not null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ public static class DependencyInjection
         services.AddDbContext<CmsDbContext>(c => c.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString")));
 
         services.AddTransient<ISweeperRepository, SweeperRepository>();
-        services.AddTransient<ILanguageRepository, LanguageRepository>();
+        services.AddTransient<ILanguageRepository, LanguageRepository>();        
         services.AddTransient<INewsRepository, NewsRepository>();
         services.AddTransient<INewsTypeRepository, NewsRepository>();
         services.AddTransient<IContactRepository, ContactRepository>();
