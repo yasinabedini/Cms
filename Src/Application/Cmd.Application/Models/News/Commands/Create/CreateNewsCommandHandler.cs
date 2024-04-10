@@ -1,6 +1,7 @@
 ﻿using Cmd.Application.Common.Commands;
 using Cmd.Application.Convertors;
 using Cmd.Application.Tools;
+using Cms.Domain.Models.Language.Repositories;
 using Cms.Domain.Models.News.Repository;
 using Ganss.Xss;
 
@@ -9,31 +10,30 @@ namespace Cmd.Application.Models.News.Commands.Create
     public class CreateNewsCommandHandler : ICommandHandler<CreateNewsCommand>
     {
         private readonly INewsRepository _repository;
+        private readonly INewsTypeRepository _typeRepository;
+        private readonly ILanguageRepository _languageRepository;
 
-        public CreateNewsCommandHandler(INewsRepository repository)
+        public CreateNewsCommandHandler(INewsRepository repository, INewsTypeRepository typeRepository, ILanguageRepository languageRepository)
         {
             _repository = repository;
+            _typeRepository = typeRepository;
+            _languageRepository = languageRepository;
         }
 
         public Task Handle(CreateNewsCommand request, CancellationToken cancellationToken)
         {
-            List<string> imageNames = new List<string>
-            {
-                Guid.NewGuid().ToString()+Path.GetExtension(request.MainImage.FileName)
-            };
-            
-            if (request.SecondImage is not null) imageNames.Add(Guid.NewGuid().ToString() + Path.GetExtension(request.SecondImage.FileName));
-            if (request.ThirdImage is not null) imageNames.Add(Guid.NewGuid().ToString() + Path.GetExtension(request.ThirdImage.FileName));
-
-            FileTools.SaveImage(request.MainImage, imageNames[0], "News", false);
-
-            if (request.SecondImage is not null) FileTools.SaveImage(request.SecondImage, imageNames[1], "News", false);
-            if (request.ThirdImage is not null) FileTools.SaveImage(request.ThirdImage, imageNames[2], "News", false);
-
             var sanitizer = new HtmlSanitizer();
             string newsContent = sanitizer.Sanitize(request.Text);
 
-            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), imageNames[0], imageNames[1], imageNames[2]));
+            if (_typeRepository.GetById(request.NewsTypeId) is null)
+            {
+                return Task.FromException(new Exception("News Type Id Is Not Available."));
+            }
+            if (_languageRepository.GetById(request.LanguageId) is null)
+            {
+                return Task.FromException(new Exception("Language Id Is Not Available."));
+            }
+            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.MainImage, request.SecondImage, request.ThirdImage));
             _repository.Save();
 
             return Task.CompletedTask;

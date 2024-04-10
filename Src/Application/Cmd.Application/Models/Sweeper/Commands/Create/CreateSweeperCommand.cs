@@ -14,10 +14,10 @@ namespace Cmd.Application.Models.Sweeper.Commands.Create
         public string Title { get; private set; }
         public string Text { get; private set; }
         public string Link { get; private set; }
-        public IFormFile Image { get; set; }
+        public string Image { get; set; }
         public long LanguageId { get; private set; }
 
-        public CreateSweeperCommand(string title, string text, string link, IFormFile image, long languageId)
+        public CreateSweeperCommand(string title, string text, string link, string image, long languageId)
         {
             Title = title;
             Text = text;

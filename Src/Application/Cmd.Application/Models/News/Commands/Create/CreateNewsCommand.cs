@@ -18,11 +18,11 @@ namespace Cmd.Application.Models.News.Commands.Create
         public long NewsTypeId { get; private set; }
         public DateTime PublishDate { get; private set; }
         public string Text { get; set; }
-        public IFormFile MainImage { get; set; }
-        public IFormFile? SecondImage { get; set; }
-        public IFormFile? ThirdImage { get; set; }
+        public string? MainImage { get; set; }
+        public string? SecondImage { get; set; }
+        public string? ThirdImage { get; set; }
 
-        public CreateNewsCommand(string title, string introduction, long languageId, long newsTypeId, DateTime publishDate, string text, IFormFile mainImage, IFormFile? secondImage, IFormFile? thirdImage)
+        public CreateNewsCommand(string title, string introduction, long languageId, long newsTypeId, DateTime publishDate, string text, string? mainImage, string? secondImage, string? thirdImage)
         {
             Title = title;
             Introduction = introduction;
