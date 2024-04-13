@@ -7,6 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddHttpClient("AdminApi", option =>
+{
+    option.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
+});
+
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 builder.Services.AddAuthentication(c =>
 {
@@ -15,20 +20,21 @@ builder.Services.AddAuthentication(c =>
 }).AddCookie("Cookies")
 .AddOpenIdConnect("oidc", options =>
 {
-    options.Authority = "https://localhost:5001"; // Replace with your IdentityServer authority URL
-    options.ClientId = "admin";    
-    options.ClientSecret = "mysecret"; // Replace with your actual secret
-    options.RequireHttpsMetadata = true;
+    options.Authority = "https://localhost:5001";
+    options.ClientId = "adminPanel";
+    options.ClientSecret = "secret";
     options.ResponseType = "code";
     options.Scope.Add("openid");
     options.Scope.Add("profile");
+    options.Scope.Add("api.admin");
     options.Scope.Add("offline_access");
+
+    options.GetClaimsFromUserInfoEndpoint = true;
     options.SaveTokens = true;
-    options.GetClaimsFromUserInfoEndpoint = true;            
 });
 
 builder.Services.AddAuthorization();
-var app = builder.Build();  
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

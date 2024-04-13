@@ -1,37 +1,35 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-using Cms.Identity.Models;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Cms.Identity.Pages.Account.Create;
+namespace Cms.Identity.Pages.Create;
 
 [SecurityHeaders]
 [AllowAnonymous]
 public class Index : PageModel
 {
-    private readonly UserManager<CustomIdentityUser> _userManager;
+    private readonly TestUserStore _users;
     private readonly IIdentityServerInteractionService _interaction;
 
     [BindProperty]
     public InputModel Input { get; set; } = default!;
 
     public Index(
-        IIdentityServerInteractionService interaction
-,
-UserManager<CustomIdentityUser> userManager)
+        IIdentityServerInteractionService interaction,
+        TestUserStore? users = null)
     {
-
+        // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
+        _users = users ?? throw new InvalidOperationException("Please call 'AddTestUsers(TestUsers.Users)' on the IIdentityServerBuilder in Startup or remove the TestUserStore from the AccountController.");
+            
         _interaction = interaction;
-        _userManager = userManager;
     }
 
     public IActionResult OnGet(string? returnUrl)
@@ -39,7 +37,7 @@ UserManager<CustomIdentityUser> userManager)
         Input = new InputModel { ReturnUrl = returnUrl };
         return Page();
     }
-
+        
     public async Task<IActionResult> OnPost()
     {
         // check if we are in the context of an authorization request
@@ -72,43 +70,19 @@ UserManager<CustomIdentityUser> userManager)
             }
         }
 
-        var findUser = await _userManager.FindByNameAsync(Input.Username);
-        if (findUser is not null)
+        if (_users.FindByUsername(Input.Username) != null)
         {
             ModelState.AddModelError("Input.Username", "Invalid username");
         }
 
         if (ModelState.IsValid)
         {
-            CustomIdentityUser user = new CustomIdentityUser()
-            {
-                UserName = Input.Username,
-                Email = Input.Email,
-                NormalizedUserName = Input.Name
-            };
-
-            var result = await _userManager.CreateAsync(user, Input.Password);
-
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    if (error.Code.ToLower().Contains("password"))
-                    {
-                        ModelState.AddModelError("Input.Password", error.Description);
-                    }
-                    if (error.Code.ToLower().Contains("email"))
-                    {
-                        ModelState.AddModelError("Input.Email", error.Description);
-                    }
-                }
-                return Page();
-            }
+            var user = _users.CreateUser(Input.Username, Input.Password, Input.Name, Input.Email);
 
             // issue authentication cookie with subject ID and username
-            var isuser = new IdentityServerUser(user.Id)
+            var isuser = new IdentityServerUser(user.SubjectId)
             {
-                DisplayName = user.NormalizedUserName
+                DisplayName = user.Username
             };
 
             await HttpContext.SignInAsync(isuser);

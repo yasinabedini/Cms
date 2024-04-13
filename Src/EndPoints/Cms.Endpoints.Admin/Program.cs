@@ -19,22 +19,25 @@ try
 
     // Add services to the container.
 
-    builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", option =>
+    builder.Services.AddAuthentication("Bearer")
+                    .AddJwtBearer("Bearer", option =>
     {
         option.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
         option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
-            SaveSigninToken = true,
             ValidateAudience = false
         };
+        option.Audience = "api.admin";
+
+        option.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
     });
 
     builder.Services.AddAuthorization(option =>
     {
-        option.AddPolicy("IsAdmin", t => t.RequireRole("Admin"));
-        option.AddPolicy("HasScope", t => t.RequireClaim("scope", "api.admin"));
+        // option.AddPolicy("IsAdmin", t => t.RequireRole("Admin"));
+        option.AddPolicy("HasScope", t => t.RequireClaim("scope", "api.admin"));        
     });
-    
+
     builder.Services.AddApplication();
 
     builder.Services.AddEndpoints();
@@ -106,7 +109,7 @@ try
 
     app.UseAuthorization();
 
-    app.MapControllers().RequireAuthorization("IsAdmin","HasScope");
+    app.MapControllers().RequireAuthorization("HasScope");
 
     app.Run();
 }

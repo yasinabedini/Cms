@@ -24,23 +24,23 @@ try
     // Add services to the container.
 
 
-    //builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", option =>
-    //{
-    //    option.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
-    //    option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-    //    {
-    //        SaveSigninToken = true,
-    //        ValidateAudience = false
-    //    };
-    //});
+    builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", option =>
+    {
+        option.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
+        option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            SaveSigninToken = true,
+            ValidateAudience = false
+        };
+    });
 
-    //builder.Services.AddAuthorization(c =>
-    //{
-    //    c.AddPolicy("myPolicy", c =>
-    //    {
-    //        c.RequireClaim("scope", "api.site");
-    //    });
-    //});
+    builder.Services.AddAuthorization(c =>
+    {
+        c.AddPolicy("myPolicy", c =>
+        {
+            c.RequireClaim("scope", "api.site");
+        });
+    });
 
 
     builder.Services.AddApplication();

@@ -1,7 +1,8 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-namespace Cms.Identity.Pages.Account.Logout;
+
+namespace Cms.Identity.Pages.Logout;
 
 public static class LogoutOptions
 {

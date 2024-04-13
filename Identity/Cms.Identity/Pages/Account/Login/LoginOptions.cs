@@ -1,7 +1,7 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-namespace Cms.Identity.Pages.Account.Login;
+namespace Cms.Identity.Pages.Login;
 
 public static class LoginOptions
 {
