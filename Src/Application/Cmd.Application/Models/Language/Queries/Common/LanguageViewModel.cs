@@ -14,12 +14,13 @@ namespace Cmd.Application.Models.Language.Queries.Common
         public string Region { get; private set; }
         public bool IsEnable { get; set; }
 
-        public LanguageViewModel(string title, string name, bool rtl, string region)
+        public LanguageViewModel(string title, string name, bool rtl, string region, bool isEnable)
         {
             Title = title;
             Name = name;
             Rtl = rtl;
             Region = region;
+            IsEnable = isEnable;
         }
     }
 }

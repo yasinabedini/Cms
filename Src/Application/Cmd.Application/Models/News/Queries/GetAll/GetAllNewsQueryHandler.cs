@@ -15,17 +15,19 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
 
     public Task<PagedData<NewsViewModel>> Handle(GetAllNewsQuery request, CancellationToken cancellationToken)
     {
-        var newsList = _repository.GetAllWithRelations().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t => t.CreateAt).Where(t => t.NewsType.IsPage = request.IsPage);
+        var newsList = _repository.GetAllWithRelations().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t => t.CreateAt).ToList();
+
+        newsList = newsList.Where(t => t.NewsType.IsPage == request.IsPage).ToList();
 
         if (request.TypeId is not 0 || request.TypeId is not null)
         {
-            newsList.Where(t => t.NewsTypeId == request.TypeId);
+           newsList =  newsList.Where(t => t.NewsTypeId == request.TypeId).ToList();
         }
 
 
         if (request.LanguageId is not 0 || request.LanguageId is not null)
         {
-            newsList.Where(t => t.LanguageId == request.LanguageId);
+            newsList = newsList.Where(t => t.LanguageId == request.LanguageId).ToList();
         }
 
         return Task.FromResult(
@@ -34,13 +36,14 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
                 QueryResult = newsList.Select(t => new NewsViewModel(
                     t.Title.Value,
                     t.Introduction.Value,
-                    t.Text,
                     t.LanguageId,
                     t.NewsTypeId,
                     t.PublishDate,
+                    t.Text,
                     t.MainImageName.Value,
                     t.SecondImage is not null ? t.SecondImage.Value : "",
-                    t.ThirdImage is not null ? t.ThirdImage.Value : "")).ToList(),
+                    t.ThirdImage is not null ? t.ThirdImage.Value : "",
+                    t.IsEnable)).ToList(),                    
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize
             });

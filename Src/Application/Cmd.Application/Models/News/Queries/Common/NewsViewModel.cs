@@ -20,18 +20,20 @@ namespace Cmd.Application.Models.News.Queries.Common
         public string? SecondImage { get; private set; }
         public string? ThirdImage { get; private set; }
         public NewsTypeViewModel NewsType { get; set; }
+        public bool IsEnable { get; set; }
 
-        public NewsViewModel(string title,string introduction, string text,long languageId, long newsTypeId, string publishDate,  string mainImageName, string? secondImage, string? thirdImage)
+        public NewsViewModel(string title, string introduction, long languageId, long newsTypeId, string publishDate, string text, string mainImageName, string? secondImage, string? thirdImage, bool isEnable)
         {
             Title = title;
             Introduction = introduction;
-            Text = text;
             LanguageId = languageId;
             NewsTypeId = newsTypeId;
-            PublishDate = publishDate;            
+            PublishDate = publishDate;
+            Text = text;
             MainImageName = mainImageName;
             SecondImage = secondImage;
             ThirdImage = thirdImage;
+            IsEnable = isEnable;
         }
     }
 }

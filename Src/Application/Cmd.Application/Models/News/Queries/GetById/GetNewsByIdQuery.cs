@@ -10,6 +10,6 @@ namespace Cmd.Application.Models.News.Queries.GetById
 {
     public class GetNewsByIdQuery:IQuery<NewsViewModel>
     {
-        public long Id { get; set; }
+        public long Id { get; set; }        
     }
 }

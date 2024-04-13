@@ -15,13 +15,13 @@ namespace Cmd.Application.Models.Sweeper.Queries.Common
         public bool IsEnable { get; private set; }
         public long LanguageId { get; private set; }
 
-        public SweeperViewModel(string title, string text, string link, string imageName, bool IsEnable, long languageId)
+        public SweeperViewModel(string title, string text, string link, string imageName, bool isEnable, long languageId)
         {
             Title = title;
             Text = text;
             Link = link;
             ImageName = imageName;
-            IsEnable = IsEnable;
+            IsEnable = isEnable;
             LanguageId = languageId;
         }
     }
