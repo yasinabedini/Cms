@@ -16,25 +16,31 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Services.AddHttpClient("FileManager", t =>
+    {
+        t.BaseAddress = new Uri(builder.Configuration["FileManagerUrl"]);
+    });
+
     // Add services to the container.
 
-    builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", j =>
-    {
-        j.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
-        j.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-            ValidateAudience = false,
-            RequireExpirationTime = true
-        };
-    });
 
-    builder.Services.AddAuthorization(c =>
-    {
-        c.AddPolicy("myPolicy", c =>
-        {
-            c.RequireClaim("scope", "api.site");
-        });
-    });
+    //builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", option =>
+    //{
+    //    option.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
+    //    option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    //    {
+    //        SaveSigninToken = true,
+    //        ValidateAudience = false
+    //    };
+    //});
+
+    //builder.Services.AddAuthorization(c =>
+    //{
+    //    c.AddPolicy("myPolicy", c =>
+    //    {
+    //        c.RequireClaim("scope", "api.site");
+    //    });
+    //});
 
 
     builder.Services.AddApplication();
@@ -102,7 +108,7 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers()/*.RequireAuthorization("myPolicy")*/;
+    app.MapControllers();
 
     app.Run();
 }

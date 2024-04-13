@@ -41,10 +41,7 @@ namespace Cms.Endpoints.Admin.Controllers
             }
 
             var result = _sender.Send(query).Result;
-            if (result is null)
-            {
-                return NotFound();
-            }
+        
             return Ok(result);
         }
 

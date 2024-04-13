@@ -1,4 +1,6 @@
-﻿using Cmd.Application.Models.News.Queries.GetAll;
+﻿using Cmd.Application.Models.Contact.Commands.CheckAvailability;
+using Cmd.Application.Models.News.Commands.CheckNewsAvailability;
+using Cmd.Application.Models.News.Queries.GetAll;
 using Cmd.Application.Models.News.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -23,14 +25,27 @@ namespace Cms.Endpoints.Site.Controllers
         {
             var result = _sender.Send(query).Result;
 
+            var queryResults = result.QueryResult;
+            result = new Cmd.Application.Common.Queries.PagedData<Cmd.Application.Models.News.Queries.Common.NewsViewModel>
+            {
+                QueryResult = queryResults.Where(t => t.IsEnable).ToList(),
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            };
+
             return Ok(result);
         }
 
         [HttpPost("GetById")]
         public IActionResult GetById(GetNewsByIdQuery query)
         {
+            if (!_sender.Send(new CheckNewsAvailabilityCommand() { Id = query.Id }).Result)
+            {
+                return NotFound("News is not available.");
+            }
+
             var result = _sender.Send(query).Result;
-            if (result is null)
+            if (!result.IsEnable)
             {
                 return NotFound();
             }

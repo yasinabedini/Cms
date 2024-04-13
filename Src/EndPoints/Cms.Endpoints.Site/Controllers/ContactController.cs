@@ -30,11 +30,8 @@ namespace Cms.Endpoints.Site.Controllers
         public IActionResult GetInfo(GetInfoByLanguageIdQuery query)
         {
             var result = _sender.Send(query);
-            if (result is null)
-            {
-                return NotFound();
-            }
-            return Ok(result.Result);
+         
+            return Ok(result);
         }
     }
 }

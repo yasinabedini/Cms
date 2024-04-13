@@ -1,4 +1,6 @@
 ﻿
+using Cmd.Application.Models.Contact.Commands.CheckAvailability;
+using Cmd.Application.Models.Language.Commands.CheckLanguageAvailability;
 using Cmd.Application.Models.Language.Queries.GetAll;
 using Cmd.Application.Models.Language.Queries.GetById;
 using MediatR;
@@ -21,7 +23,15 @@ namespace Cms.Endpoints.Site.Controllers
         [HttpPost("GetAll")]
         public IActionResult GetAll(GetAllLanguageQuery query)
         {
-            var result = _sender.Send(query).Result.QueryResult.Where(t => t.IsEnable).ToList();
+            var result = _sender.Send(query).Result;
+
+            var queryResults = result.QueryResult;
+            result = new Cmd.Application.Common.Queries.PagedData<Cmd.Application.Models.Language.Queries.Common.LanguageViewModel>
+            {
+                QueryResult = queryResults.Where(t => t.IsEnable).ToList(),
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            };
 
             return Ok(result);
         }
@@ -29,9 +39,14 @@ namespace Cms.Endpoints.Site.Controllers
         [HttpPost("GetById")]
         public IActionResult GetById(GetLanguageByIdQuery query)
         {
+            if (!_sender.Send(new CheckLanguageAvailabilityCommand() { Id = query.Id }).Result)
+            {
+                return NotFound("Language is not available.");
+            }
+
             var result = _sender.Send(query).Result;
 
-            if (!result.IsEnable || result is null)
+            if (!result.IsEnable)
             {
                 return NotFound();
             }

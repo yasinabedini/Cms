@@ -1,4 +1,6 @@
-﻿using Cmd.Application.Models.Sweeper.Queries.GetAll;
+﻿using Cmd.Application.Models.Contact.Commands.CheckAvailability;
+using Cmd.Application.Models.Sweeper.Commands.CheckSweeperAvailability;
+using Cmd.Application.Models.Sweeper.Queries.GetAll;
 using Cmd.Application.Models.Sweeper.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -20,9 +22,13 @@ namespace Cms.Endpoints.Site.Controllers
         [HttpPost("GetById")]
         public IActionResult GetById(GetSweeperByIdQuery query)
         {
+            if (!_sender.Send(new CheckSweeperAvailabilityCommand() { Id = query.Id }).Result)
+            {
+                return NotFound("Sweeper is not available.");
+            }
             var result = _sender.Send(query).Result;
 
-            if (!result.IsEnable || result is null)
+            if (!result.IsEnable)
             {
                 return NotFound();
             }
@@ -33,8 +39,14 @@ namespace Cms.Endpoints.Site.Controllers
         [HttpPost("GetAll")]
         public IActionResult GetAll(GetAllSweeperQuery query)
         {
-            var result = _sender.Send(query).Result.QueryResult.Where(t => t.IsEnable);
-
+            var result = _sender.Send(query).Result;
+            var queryResults = result.QueryResult;
+            result = new Cmd.Application.Common.Queries.PagedData<Cmd.Application.Models.Sweeper.Queries.Common.SweeperViewModel>
+            {
+                QueryResult = queryResults.Where(t => t.IsEnable).ToList(),
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            };
             return Ok(result);
         }
     }
