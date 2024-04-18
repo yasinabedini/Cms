@@ -1,7 +1,8 @@
 ﻿using Cms.Domain.Common.Entities;
 using Cms.Domain.Common.Repositories;
+using Cms.Domain.Models.News.Entities;
 using Cms.Infra.Contexts;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Cms.Infra.Common.Repository
 {
@@ -28,7 +29,7 @@ namespace Cms.Infra.Common.Repository
 
         public TEntity GetById(long id)
         {
-            return _context.Set<TEntity>().Find(id);
+            return _context.Set<TEntity>().AsNoTracking().FirstOrDefault(t => t.Id == id);
         }
 
         public List<TEntity> GetList()
@@ -36,14 +37,21 @@ namespace Cms.Infra.Common.Repository
             return _context.Set<TEntity>().ToList();
         }
 
-        public void Update(TEntity entity)
+        public async void Update(TEntity entity)
         {
-            _context.Set<TEntity>().Update(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
         public void Save()
         {
             _context.SaveChanges();
+
+        }
+
+        public async void SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
         public bool CheckAvailability(long id)
@@ -57,6 +65,11 @@ namespace Cms.Infra.Common.Repository
             {
                 return false;
             }
+        }
+
+        public void Close()
+        {
+            _context.Dispose();
         }
     }
 }

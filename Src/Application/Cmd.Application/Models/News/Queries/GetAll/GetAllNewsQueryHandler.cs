@@ -19,13 +19,13 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
 
         newsList = newsList.Where(t => t.NewsType.IsPage == request.IsPage).ToList();
 
-        if (request.TypeId is not 0 || request.TypeId is not null)
+        if (request.TypeId is not null && request.TypeId is not 0)
         {
-           newsList =  newsList.Where(t => t.NewsTypeId == request.TypeId).ToList();
+            newsList = newsList.Where(t => t.NewsTypeId == request.TypeId).ToList();
         }
 
 
-        if (request.LanguageId is not 0 || request.LanguageId is not null)
+        if (request.LanguageId is not null && request.LanguageId is not 0)
         {
             newsList = newsList.Where(t => t.LanguageId == request.LanguageId).ToList();
         }
@@ -34,6 +34,7 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
             new PagedData<NewsViewModel>
             {
                 QueryResult = newsList.Select(t => new NewsViewModel(
+                    t.Id,
                     t.Title.Value,
                     t.Introduction.Value,
                     t.LanguageId,
@@ -43,7 +44,7 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
                     t.MainImageName.Value,
                     t.SecondImage is not null ? t.SecondImage.Value : "",
                     t.ThirdImage is not null ? t.ThirdImage.Value : "",
-                    t.IsEnable)).ToList(),                    
+                    t.IsEnable)).ToList(),
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize
             });

@@ -22,7 +22,7 @@ namespace Cmd.Application.Models.Language.Queries.GetAll
         {
             var languages = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize).OrderByDescending(t=>t.CreateAt);
 
-            return Task.FromResult(new PagedData<LanguageViewModel> { QueryResult = languages.Select(t => new LanguageViewModel(t.Title, t.Name, t.Rtl, t.Region,t.IsEnable)).ToList(),PageSize = request.PageSize,PageNumber = request.PageNumber});
+            return Task.FromResult(new PagedData<LanguageViewModel> { QueryResult = languages.Select(t => new LanguageViewModel(t.Id,t.Title, t.Name, t.Rtl, t.Region,t.IsEnable)).ToList(),PageSize = request.PageSize,PageNumber = request.PageNumber});
         }
     }
 }

@@ -11,14 +11,19 @@ namespace Cmd.Application.Models.Sweeper.Commands.Update
     public class UpdateSweeperCommand:ICommand
     {
         public long Id { get; set; }
-        public string Title { get; private set; }
-        public string Text { get; private set; }
-        public string Link { get; private set; }
-        public IFormFile? Image { get; set; }
-        public bool IsEnable { get; private set; }
-        public long LanguageId { get; private set; }
+        public string Title { get;  set; }
+        public string Text { get;  set; }
+        public string Link { get;  set; }
+        public string Image { get; set; }
+        public bool IsEnable { get;  set; }
+        public long LanguageId { get;  set; }
 
-        public UpdateSweeperCommand(long id, string title, string text, string link, IFormFile? image, bool isEnable, long languageId)
+
+        public UpdateSweeperCommand()
+        {
+            
+        }
+        public UpdateSweeperCommand(long id, string title, string text, string link, string image, bool isEnable, long languageId)
         {
             Id = id;
             Title = title;

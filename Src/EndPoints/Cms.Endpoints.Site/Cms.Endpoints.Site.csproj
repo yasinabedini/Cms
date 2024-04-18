@@ -24,9 +24,4 @@
     <ProjectReference Include="..\..\Application\Cmd.Application\Cmd.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\Img\Sweeper\" />
-    <Folder Include="wwwroot\Img\News\" />
-  </ItemGroup>
-
 </Project>

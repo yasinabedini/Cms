@@ -4,6 +4,7 @@ using Cms.Infra.Contexts;
 using Cms.Infra.Identity.Entities;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
 using static System.Net.Mime.MediaTypeNames;
@@ -20,23 +21,16 @@ try
     // Add services to the container.
 
     builder.Services.AddAuthentication("Bearer")
-                    .AddJwtBearer("Bearer", option =>
-    {
-        option.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
-        option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        .AddJwtBearer("Bearer", options =>
         {
-            ValidateAudience = false
-        };
-        option.Audience = "api.admin";
+            options.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false
+            };
+        });
 
-        option.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-    });
-
-    builder.Services.AddAuthorization(option =>
-    {
-        // option.AddPolicy("IsAdmin", t => t.RequireRole("Admin"));
-        option.AddPolicy("HasScope", t => t.RequireClaim("scope", "api.admin"));        
-    });
+    builder.Services.AddAuthorization();    
 
     builder.Services.AddApplication();
 
@@ -47,8 +41,7 @@ try
         t.BaseAddress = new Uri(builder.Configuration["FileManagerUrl"]);
     });
 
-    builder.Services.AddIdentity<CustomIdentityUser, IdentityRole>().AddEntityFrameworkStores<CmsDbContext>();
-
+    
     builder.Host.UseSerilog((ctx, lc) =>
     {
         lc.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
@@ -106,10 +99,9 @@ try
     app.UseHttpsRedirection();
 
     app.UseAuthentication();
-
     app.UseAuthorization();
 
-    app.MapControllers().RequireAuthorization("HasScope");
+    app.MapControllers().RequireAuthorization();
 
     app.Run();
 }

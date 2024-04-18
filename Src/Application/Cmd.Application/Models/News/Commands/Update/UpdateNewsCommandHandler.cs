@@ -26,29 +26,29 @@ namespace Cmd.Application.Models.News.Commands.Update
             _typeRepository = typeRepository;
         }
 
-        public Task Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
-        {
-            var newsImageNames = _repository.GetById(request.Id);
-
+        public async Task Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
+        {            
             if (_languageRepository.GetById(request.LanguageId) is null)
             {
-                Task.FromException(new Exception("Language id is not available."));
+                Task.FromException(new Exception("Language id is not available."));                
             }
             if (_typeRepository.GetById(request.NewsTypeId) is null)
             {
-                return Task.FromException(new Exception("News Type Id Is Not Available."));
-            }
+                await Task.FromException(new Exception("News Type Id Is Not Available."));
+            }            
 
             var sanitizer = new HtmlSanitizer();
             string newsContent = sanitizer.Sanitize(request.Text);
 
-            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.MainImage,request.SecondImage,request.ThirdImage);
+            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.MainImage, request.SecondImage, request.ThirdImage);
             news.SetId(request.Id);
 
-            _repository.Update(news);
+            
+            _repository.Update(news);            
             _repository.Save();
+            
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

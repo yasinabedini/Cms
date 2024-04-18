@@ -8,14 +8,16 @@ namespace Cmd.Application.Models.Language.Queries.Common
 {
     public class LanguageViewModel
     {
+        public long Id { get; set; }
         public string Title { get; private set; }
         public string Name { get; private set; }
         public bool Rtl { get; private set; }
         public string Region { get; private set; }
         public bool IsEnable { get; set; }
 
-        public LanguageViewModel(string title, string name, bool rtl, string region, bool isEnable)
+        public LanguageViewModel(long id,string title, string name, bool rtl, string region, bool isEnable)
         {
+            Id = id;
             Title = title;
             Name = name;
             Rtl = rtl;

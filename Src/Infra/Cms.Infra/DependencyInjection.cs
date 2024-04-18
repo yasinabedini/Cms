@@ -33,10 +33,11 @@ public static class DependencyInjection
 
         services.AddTransient<ISweeperRepository, SweeperRepository>();
         services.AddTransient<ILanguageRepository, LanguageRepository>();        
-        services.AddTransient<INewsRepository, NewsRepository>();
-        services.AddTransient<INewsTypeRepository, NewsRepository>();
+        services.AddScoped<INewsRepository, NewsRepository>();
+        services.AddTransient<INewsTypeRepository, NewsRepository>();        
         services.AddTransient<IContactRepository, ContactRepository>();
         services.AddTransient<IInfoRepository, InfoRepository>();
+
 
         return services;
     }
