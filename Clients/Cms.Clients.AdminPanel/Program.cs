@@ -11,6 +11,11 @@ builder.Services.AddHttpClient("AdminApi", option =>
 {
     option.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
 });
+builder.Services.AddHttpClient("FileManager", option =>
+{
+    option.BaseAddress = new Uri(builder.Configuration.GetSection("FileManagerUrl").Value);
+});
+
 
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 builder.Services.AddAuthentication(c =>
@@ -20,17 +25,19 @@ builder.Services.AddAuthentication(c =>
 }).AddCookie("Cookies")
 .AddOpenIdConnect("oidc", options =>
 {
-    options.Authority = "https://localhost:5001";
+    options.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
     options.ClientId = "adminPanel";
     options.ClientSecret = "secret";
     options.ResponseType = "code";
+
+    options.SaveTokens = true;
+    options.GetClaimsFromUserInfoEndpoint = true;
+
+    options.Scope.Clear();
     options.Scope.Add("openid");
     options.Scope.Add("profile");
     options.Scope.Add("api.admin");
     options.Scope.Add("offline_access");
-
-    options.GetClaimsFromUserInfoEndpoint = true;
-    options.SaveTokens = true;
 });
 
 builder.Services.AddAuthorization();

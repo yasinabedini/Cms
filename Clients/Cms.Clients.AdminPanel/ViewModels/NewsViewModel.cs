@@ -2,19 +2,24 @@
 {
     public class NewsViewModel
     {
-        public string Title { get; private set; }
+        public long Id { get; set; }
+        public string Title { get;  set; }
         public string Introduction { get; set; }
-        public long LanguageId { get; private set; }
-        public long NewsTypeId { get; private set; }
-        public string PublishDate { get; private set; }
+        public long LanguageId { get;  set; }
+        public long NewsTypeId { get;  set; }
+        public string PublishDate { get;  set; }
         public string Text { get; set; }
-        public string MainImageName { get; private set; }
-        public string? SecondImage { get; private set; }
-        public string? ThirdImage { get; private set; }
-        public NewsTypeViewModel NewsType { get; set; }
+        public string? MainImageName { get;  set; }
+        public string? SecondImage { get;  set; }
+        public string? ThirdImage { get;  set; }        
         public bool IsEnable { get; set; }
 
-        public NewsViewModel(string title, string introduction, long languageId, long newsTypeId, string publishDate, string text, string mainImageName, string? secondImage, string? thirdImage, bool isEnable)
+        public NewsViewModel()
+        {
+            
+        }
+
+        public NewsViewModel(string title, string introduction, long languageId, long newsTypeId, string publishDate, string text, string? mainImageName, string? secondImage, string? thirdImage, bool isEnable)
         {
             Title = title;
             Introduction = introduction;

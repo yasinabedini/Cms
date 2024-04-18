@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 namespace Cms.Clients.AdminPanel.ViewModels
 {
     public class SweeperViewModel
-    {
-        public string Title { get; private set; }
-        public string Text { get; private set; }
-        public string Link { get; private set; }
-        public string ImageName { get; private set; }
-        public bool IsEnable { get; private set; }
-        public long LanguageId { get; private set; }
+    {   
+        public long Id { get; set; }
+        public string Title { get;  set; }
+        public string Text { get;  set; }
+        public string Link { get;  set; }
+        public string? ImageName { get;  set; }
+        public bool IsEnable { get;  set; }
+        public long LanguageId { get;  set; }
 
+        public SweeperViewModel()
+        {
+            
+        }
         public SweeperViewModel(string title, string text, string link, string imageName, bool isEnable, long languageId)
         {
             Title = title;

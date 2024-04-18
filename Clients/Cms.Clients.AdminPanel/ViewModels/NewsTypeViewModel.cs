@@ -8,6 +8,7 @@ namespace Cms.Clients.AdminPanel.ViewModels
 {
     public class NewsTypeViewModel
     {
+        public long Id { get; set; }
         public string Title { get; set; }
         public string Name { get; set; }
         public bool IsPage { get; set; }

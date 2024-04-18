@@ -46,7 +46,7 @@
 
 body {
   margin: 0;
-  font-family: var(--bs-font-sans-serif);
+  font-family: Vazir;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -251,7 +251,7 @@ pre,
 code,
 kbd,
 samp {
-  font-family: var(--bs-font-monospace);
+  font-family: Vazir;
   font-size: 1em;
   direction: ltr
     /* rtl:ignore */
@@ -6802,7 +6802,7 @@ fieldset:disabled .btn {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: var(--bs-font-sans-serif);
+  font-family: Vazir;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -6929,7 +6929,7 @@ fieldset:disabled .btn {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: var(--bs-font-sans-serif);
+  font-family: Vazir;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -9684,7 +9684,7 @@ fieldset:disabled .btn {
 }
 
 .font-monospace {
-  font-family: var(--bs-font-monospace) !important;
+  font-family: Vazir !important;
 }
 
 .fs-1 {
@@ -19386,7 +19386,7 @@ fieldset:disabled .btn {
 }
 
 .card .card-body {
-  font-family: "Open Sans";
+  font-family: Vazir;
   padding: 1.5rem;
 }
 
@@ -19629,7 +19629,7 @@ fieldset:disabled .btn {
   }
 
   .dropdown .dropdown-menu:before {
-    font-family: "FontAwesome";
+    font-family: Vazir;
     content: "\f0d8";
     position: absolute;
     top: 0;

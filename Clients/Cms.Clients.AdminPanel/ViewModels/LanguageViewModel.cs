@@ -8,6 +8,7 @@ namespace Cms.Clients.AdminPanel.ViewModels
 {
     public class LanguageViewModel
     {
+        public long Id { get; set; }
         public string Title { get; private set; }
         public string Name { get; private set; }
         public bool Rtl { get; private set; }
