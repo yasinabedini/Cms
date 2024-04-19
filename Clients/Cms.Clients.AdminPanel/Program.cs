@@ -19,7 +19,7 @@ builder.Services.AddHttpClient("FileManager", option =>
 
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 builder.Services.AddAuthentication(c =>
-{
+{    
     c.DefaultScheme = "Cookies";
     c.DefaultChallengeScheme = "oidc";
 }).AddCookie("Cookies")

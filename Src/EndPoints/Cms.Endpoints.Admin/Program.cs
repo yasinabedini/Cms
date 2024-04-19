@@ -26,6 +26,7 @@ try
             options.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
             options.TokenValidationParameters = new TokenValidationParameters
             {
+                SaveSigninToken = true,
                 ValidateAudience = false
             };
         });

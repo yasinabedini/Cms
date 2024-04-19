@@ -34,14 +34,6 @@ try
         };
     });
 
-    builder.Services.AddAuthorization(c =>
-    {
-        c.AddPolicy("myPolicy", c =>
-        {
-            c.RequireClaim("scope", "api.site");
-        });
-    });
-
 
     builder.Services.AddApplication();
 
@@ -69,7 +61,7 @@ try
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-                // using static System.Net.Mime.MediaTypeNames;
+               
                 context.Response.ContentType = Text.Plain;
 
                 await context.Response.WriteAsync("An exception was thrown.");
@@ -103,19 +95,18 @@ try
     }
     
     app.UseHttpsRedirection();
-
+    
     app.UseAuthentication();
-    app.UseAuthorization();
-
+    app.UseAuthorization();    
     app.MapControllers();
 
     app.Run();
 }
 
-catch (Exception ex)
+catch (DirectoryNotFoundException ex)
 {
 
-    Log.Fatal(ex, "UnHandled Exception");
+    Log.Fatal(ex, $"UnHandled Exception:{ex.Message}");
 }
 finally
 {

@@ -1,12 +1,13 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+using Cms.Identity.Data;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
-using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,19 +17,15 @@ namespace Cms.Identity.Pages.Create;
 [AllowAnonymous]
 public class Index : PageModel
 {
-    private readonly TestUserStore _users;
+    private readonly UserManager<CustomIdentityUser> _userManager;
     private readonly IIdentityServerInteractionService _interaction;
 
     [BindProperty]
     public InputModel Input { get; set; } = default!;
 
-    public Index(
-        IIdentityServerInteractionService interaction,
-        TestUserStore? users = null)
+    public Index(UserManager<CustomIdentityUser> userManager, IIdentityServerInteractionService interaction)
     {
-        // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-        _users = users ?? throw new InvalidOperationException("Please call 'AddTestUsers(TestUsers.Users)' on the IIdentityServerBuilder in Startup or remove the TestUserStore from the AccountController.");
-            
+        _userManager = userManager;
         _interaction = interaction;
     }
 
@@ -37,7 +34,7 @@ public class Index : PageModel
         Input = new InputModel { ReturnUrl = returnUrl };
         return Page();
     }
-        
+
     public async Task<IActionResult> OnPost()
     {
         // check if we are in the context of an authorization request
@@ -70,22 +67,38 @@ public class Index : PageModel
             }
         }
 
-        if (_users.FindByUsername(Input.Username) != null)
+        if (_userManager.Users.FirstOrDefault(t => t.PhoneNumber == Input.PhoneNumber) != null)
         {
-            ModelState.AddModelError("Input.Username", "Invalid username");
+            ModelState.AddModelError("Input.Phone", "کاربری با این شماره موبایل ثبت انم کرده است");
         }
 
         if (ModelState.IsValid)
         {
-            var user = _users.CreateUser(Input.Username, Input.Password, Input.Name, Input.Email);
-
-            // issue authentication cookie with subject ID and username
-            var isuser = new IdentityServerUser(user.SubjectId)
+            CustomIdentityUser user = new CustomIdentityUser()
             {
-                DisplayName = user.Username
+                UserName = Input.Username ?? Guid.NewGuid().ToString().Substring(1, 10),
+                NormalizedUserName = Input.Name,
+                PhoneNumber = Input.PhoneNumber,
+                Email = Input.Email
+            };
+
+            var CreateUser = await _userManager.CreateAsync(user, Input.Password);
+
+            if (!CreateUser.Succeeded)
+            {
+
+                ModelState.AddModelError($"Input.PhoneNumber", "ثبت انم کاربر با خطا مواجه شد");
+                return Page();
+            }
+
+            var isuser = new IdentityServerUser(user.Id)
+            {
+                DisplayName = user.UserName
             };
 
             await HttpContext.SignInAsync(isuser);
+
+            // issue authentication cookie with subject ID and username
 
             if (context != null)
             {
