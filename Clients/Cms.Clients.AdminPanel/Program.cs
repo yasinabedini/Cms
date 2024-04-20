@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(c =>
     options.ResponseType = "code";
 
     options.SaveTokens = true;
-    options.GetClaimsFromUserInfoEndpoint = true;
+    options.GetClaimsFromUserInfoEndpoint = true;    
 
     options.Scope.Clear();
     options.Scope.Add("openid");
@@ -51,6 +51,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseDeveloperExceptionPage();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -59,6 +61,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapRazorPages().RequireAuthorization();
+app.MapRazorPages();
 
 app.Run();
