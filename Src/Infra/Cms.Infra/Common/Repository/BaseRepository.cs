@@ -29,7 +29,7 @@ namespace Cms.Infra.Common.Repository
 
         public TEntity GetById(long id)
         {
-            return _context.Set<TEntity>().AsNoTracking().FirstOrDefault(t => t.Id == id);
+            return _context.Set<TEntity>().FirstOrDefault(t => t.Id == id);
         }
 
         public List<TEntity> GetList()
@@ -39,8 +39,7 @@ namespace Cms.Infra.Common.Repository
 
         public async void Update(TEntity entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+          _context.Update(entity);
         }
 
         public void Save()

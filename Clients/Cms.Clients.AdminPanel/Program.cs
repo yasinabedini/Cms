@@ -2,6 +2,7 @@ using IdentityModel;
 using IdentityServer4;
 using System.IdentityModel.Tokens.Jwt;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,9 +12,15 @@ builder.Services.AddHttpClient("AdminApi", option =>
 {
     option.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
 });
+
 builder.Services.AddHttpClient("FileManager", option =>
 {
     option.BaseAddress = new Uri(builder.Configuration.GetSection("FileManagerUrl").Value);
+});
+
+builder.Services.AddHttpClient("Authority", option =>
+{
+    option.BaseAddress = new Uri(builder.Configuration.GetSection("AuthorityUrl").Value);
 });
 
 
@@ -30,8 +37,8 @@ builder.Services.AddAuthentication(c =>
     options.ClientSecret = "secret";
     options.ResponseType = "code";
 
-    options.SaveTokens = true;
-    options.GetClaimsFromUserInfoEndpoint = true;    
+    options.MapInboundClaims = false;
+    options.SaveTokens = true;        
 
     options.Scope.Clear();
     options.Scope.Add("openid");
@@ -61,6 +68,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.MapRazorPages().RequireAuthorization();
 
 app.Run();

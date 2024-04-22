@@ -49,7 +49,7 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
             Sweeper = JsonConvert.DeserializeObject<SweeperViewModel>(modelResult);
         }
 
-        public IActionResult OnPost(IFormFile? image)
+        public async Task<IActionResult> OnPost(IFormFile? image)
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
@@ -83,12 +83,12 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
             }
             #endregion
 
-            var modelData = new { Id = Sweeper.Id, Title = Sweeper.Title, Text = Sweeper.Text, Link = Sweeper.Link, Image = Sweeper.ImageName, isEnable = true, LanguageId = Sweeper.LanguageId };
+            var modelData = new { Id = Sweeper.Id, Title = Sweeper.Title, Text = Sweeper.Text, Link = Sweeper.Link, ImageName = Sweeper.ImageName, isEnable = true, LanguageId = Sweeper.LanguageId };
             
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");
 
-            var methodresponse = _httpClient.PutAsync("/api/Sweeper/Update", modelContent).Result;
+            var methodresponse =await _httpClient.PutAsync("/api/Sweeper/Update", modelContent);
 
             if (methodresponse.IsSuccessStatusCode)
             {
