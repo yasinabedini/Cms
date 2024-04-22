@@ -23,13 +23,13 @@ namespace Cmd.Application.Models.Info.Commands.Update
 
         public Task Handle(UpdateInfoCommand request, CancellationToken cancellationToken)
         {
-            var info = Cms.Domain.Models.Info.Entities.Info.Create(request.Address, request.WorkTime, request.PhoneNumber, request.EmailAddress, request.InstagramAddress, request.LanguageId);
-            info.SetId(request.Id);
+            var info = _repository.GetById(request.Id);
 
-            if (_languageRepository.GetById(request.LanguageId) is null)
-            {
-                Task.FromException(new Exception("Language id is not available."));
-            }
+            info.ChangeAddress(request.Address);
+            info.ChangePhoneNumber(request.PhoneNumber);
+            info.ChangeInstagramAddress(request.InstagramAddress);
+            info.ChangeEmailAddress(request.EmailAddress);
+            info.ChangeWorkTime(request.WorkTime);            
 
             _repository.Update(info);
             _repository.Save();

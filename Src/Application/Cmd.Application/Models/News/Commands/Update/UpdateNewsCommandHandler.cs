@@ -30,7 +30,7 @@ namespace Cmd.Application.Models.News.Commands.Update
         {            
             if (_languageRepository.GetById(request.LanguageId) is null)
             {
-                Task.FromException(new Exception("Language id is not available."));                
+                await Task.FromException(new Exception("Language id is not available."));                
             }
             if (_typeRepository.GetById(request.NewsTypeId) is null)
             {
@@ -40,8 +40,17 @@ namespace Cmd.Application.Models.News.Commands.Update
             var sanitizer = new HtmlSanitizer();
             string newsContent = sanitizer.Sanitize(request.Text);
 
-            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToShamsi(), request.MainImage, request.SecondImage, request.ThirdImage);
-            news.SetId(request.Id);
+            var news = _repository.GetById(request.Id);
+
+            news.ChangeText(newsContent);
+            news.ChangeTitle(request.Title);
+            news.ChangeIntroduction(request.Introduction);
+            news.ChangeMainImage(request.MainImage);
+            news.ChangeSecondImage(request.SecondImage);
+            news.ChangeThirdImage(request.ThirdImage);
+            news.ChangePublishDate(request.PublishDate.ToString());
+            news.ChangeLanguageId(request.LanguageId);
+            news.ChangeNewsTypeId(request.NewsTypeId);
 
             
             _repository.Update(news);            

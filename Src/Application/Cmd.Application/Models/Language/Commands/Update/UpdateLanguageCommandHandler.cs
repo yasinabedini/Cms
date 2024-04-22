@@ -19,8 +19,12 @@ namespace Cmd.Application.Models.Language.Commands.Update
 
         public Task Handle(UpdateLanguageCommand request, CancellationToken cancellationToken)
         {
-            var language = Cms.Domain.Models.Language.Entities.Language.Create(request.Title, request.Name, request.Rtl, request.Region);
-            language.SetId(request.Id);
+            var language = _repository.GetById(request.Id);
+
+            language.ChangeName(request.Name);
+            language.ChangeRegion(request.Region);
+            language.ChangeTitle(request.Title);
+            language.ChangeRtl(request.Rtl);           
 
             _repository.Update(language);
             _repository.Save();
