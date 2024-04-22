@@ -60,14 +60,14 @@ namespace Cms.Endpoints.Admin.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateLanguageCommand command)
+        public async Task<IActionResult> Update(UpdateLanguageCommand command)
         {
-            if (!_sender.Send(new CheckLanguageAvailabilityCommand() { Id = command.Id }).Result)
+            if (!await _sender.Send(new CheckLanguageAvailabilityCommand() { Id = command.Id }))
             {
                 return NotFound("Language is not available.");
             }
 
-            _sender.Send(command);
+            await _sender.Send(command);
 
             return Ok("Language Updated Successfully.");
         }

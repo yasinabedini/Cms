@@ -40,7 +40,7 @@ namespace Cms.Endpoints.Admin.Controllers
             }
 
             var result = _sender.Send(query).Result;
-        
+
             return Ok(result);
         }
 
@@ -53,14 +53,14 @@ namespace Cms.Endpoints.Admin.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateNewsTypeCommand command)
+        public async Task<IActionResult> Update(UpdateNewsTypeCommand command)
         {
-            if (!_sender.Send(new CheckNewsTypeAvailabilityCommand() { Id = command.Id }).Result)
+            if (!await _sender.Send(new CheckNewsTypeAvailabilityCommand() { Id = command.Id }))
             {
                 return NotFound("News Type is not available.");
             }
 
-            _sender.Send(command);
+            await _sender.Send(command);
 
             return Ok("News Type Updated Successfully.");
         }
@@ -73,7 +73,7 @@ namespace Cms.Endpoints.Admin.Controllers
                 return NotFound("News Type is not available.");
             }
 
-            _sender.Send(new DeleteNewsTypeCommand { Id = id});
+            _sender.Send(new DeleteNewsTypeCommand { Id = id });
 
             return Ok("News Type Deleted Successfully.");
         }

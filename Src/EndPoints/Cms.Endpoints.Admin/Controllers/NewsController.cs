@@ -1,17 +1,11 @@
-﻿using Cmd.Application.Models.Language.Commands.CheckLanguageAvailability;
-using Cmd.Application.Models.News.Commands.CheckNewsAvailability;
+﻿using Cmd.Application.Models.News.Commands.CheckNewsAvailability;
 using Cmd.Application.Models.News.Commands.Create;
 using Cmd.Application.Models.News.Commands.Delete;
 using Cmd.Application.Models.News.Commands.Update;
 using Cmd.Application.Models.News.Queries.GetAll;
 using Cmd.Application.Models.News.Queries.GetById;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Cms.Endpoints.Admin.Controllers
 {
@@ -61,14 +55,14 @@ namespace Cms.Endpoints.Admin.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateNewsCommand command)
+        public async Task<IActionResult> Update(UpdateNewsCommand command)
         {
-            if (!_sender.Send(new CheckNewsAvailabilityCommand() { Id = command.Id }).Result)
+            if (!await _sender.Send(new CheckNewsAvailabilityCommand() { Id = command.Id }))
             {
                 return NotFound("News is not available.");
             }
 
-            _sender.Send(command);
+            await _sender.Send(command);
 
             return Ok("News Updated successfully.");
         }

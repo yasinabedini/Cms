@@ -54,14 +54,14 @@ namespace Cms.Endpoints.Admin.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateSweeperCommand command)
+        public async Task<IActionResult> Update(UpdateSweeperCommand command)
         {
-            if (!_sender.Send(new CheckSweeperAvailabilityCommand() { Id = command.Id }).Result)
+            if (!await _sender.Send(new CheckSweeperAvailabilityCommand() { Id = command.Id }))
             {
                 return NotFound("Sweeper is not available.");
             }
 
-            _sender.Send(command);
+            await _sender.Send(command);
 
             return Ok("Sweeper Updated Successfuly.");
         }
