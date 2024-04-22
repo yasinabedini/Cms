@@ -34,10 +34,34 @@ namespace Cms.Domain.Models.Sweeper.Entities
             return new Sweeper(title,text, link, imageName, languageId);
         }
 
-
-        public void SetId(long id)
+        public void ChangeTitle(string title)
         {
-            Id = id;
+            Title = title;
+            Modified();
+        }
+
+        public void ChangeText(string text)
+        {
+            Text = text;
+            Modified();
+        }
+
+        public void ChangeLink(string link)
+        {
+            Link = link;
+            Modified();
+        }
+
+        public void ChangeImageName(string imageName)
+        {
+            ImageName = imageName;
+            Modified();
+        }
+
+        public void ChangeLanguageId(long languageId)
+        {
+            LanguageId = languageId;
+            Modified();
         }
     }
 }

@@ -50,6 +50,50 @@ namespace Cms.Domain.Models.News.Entities
         }
         #endregion
 
-
+        public void ChangeTitle(string title)
+        {
+            Title = title;
+            Modified();
+        }
+        public void ChangeIntroduction(string introduction)
+        {
+            Introduction = introduction;
+            Modified();
+        }
+        public void ChangePublishDate(string publishDate)
+        {
+            PublishDate = publishDate;
+            Modified();
+        }
+        public void ChangeText(string text)
+        {
+            Text = text;
+            Modified();
+        }
+        public void ChangeMainImage(string mainImage)
+        {
+            MainImageName = mainImage;
+            Modified();
+        }
+        public void ChangeSecondImage(string secondImage)
+        {
+            SecondImage = secondImage;
+            Modified();
+        }
+        public void ChangeThirdImage(string thirdImage)
+        {
+            ThirdImage = thirdImage;
+            Modified();
+        }
+        public void ChangeLanguageId(long languageId )
+        {
+            LanguageId = languageId;
+            Modified();
+        }
+        public void ChangeNewsTypeId(long newsTypeId )
+        {
+            NewsTypeId = newsTypeId;
+            Modified();
+        }
     }
 }

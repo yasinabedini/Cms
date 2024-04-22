@@ -33,11 +33,7 @@ namespace Cms.Domain.Models.Language.Entities
         }
         #endregion
 
-        #region Methods
-        public void SetId(long id)
-        {
-            Id = id;            
-        }
+        #region Methods                       
 
         public void ChangeName(string name)
         {
@@ -51,28 +47,16 @@ namespace Cms.Domain.Models.Language.Entities
             Modified();
         }
 
-        public void ChnageRegion(string region)
+        public void ChangeRegion(string region)
         {
             Region = region;
             Modified();
         }
 
-        public void ChangeToLtr()
+        public void ChangeRtl(bool isRtl)
         {
-            if (Rtl == true)
-            {
-                Rtl = false;
-                Modified();
-            }
-        }
-
-        public void ChangeToRtl()
-        {
-            if (Rtl == false)
-            {
-                Rtl = true;
-                Modified();
-            }
+            Rtl = isRtl;
+            Modified();
         }
         #endregion
     }

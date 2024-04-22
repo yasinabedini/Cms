@@ -36,5 +36,29 @@ namespace Cms.Domain.Models.News.Entities
             return new NewsType(title, name, languageId,isPage);
         } 
         #endregion
+
+        public void ChangeTitle(string title)
+        {
+            Title = title;
+            Modified();
+        }
+
+        public void ChangeName(string name)
+        {
+            Name = name;
+            Modified();
+        }
+
+        public void ChangeLanguageId(long languageId)
+        {
+            LanguageId = languageId;
+            Modified();
+        }
+
+        public void ChangeIsPage(bool isPage)
+        {
+            IsPage = isPage;
+            Modified();
+        }
     }
 }
