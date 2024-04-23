@@ -1,4 +1,5 @@
 ﻿@page
+@inject IConfiguration _config;
 @model Cms.Clients.AdminPanel.Pages.Sweeper.IndexModel
 @{
     ViewBag.Title = "لیست اسلاید";
@@ -14,15 +15,15 @@
                     <thead>
                         <tr>
                             <th>عنوان</th>
-                            <th>عنوان وضعیت</th>                            
+                            <th>عنوان وضعیت</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var sweeper in Model.SweeperList.QueryResult.ToList())
                         {
-                            <tr>
-                                <td>@sweeper.Title</td>                       
+                            <tr id="sweeper[@sweeper.Id]">
+                                <td>@sweeper.Title</td>
                                 @if (sweeper.IsEnable)
                                 {
                                     <td class="align-middle text-center">
@@ -38,9 +39,8 @@
                                     </td>
                                 }
                                 <td>
-                                    <a class="text-white btn btn-primary">جزئیات</a>
-                                    <a class="text-white btn btn-primary">ویرایش</a>
-                                    <a class="text-white btn btn-danger">حذف</a>
+                                    <a href="/sweeper/edit?id=@sweeper.Id" class="text-white btn btn-primary">ویرایش</a>
+                                    <a onclick="Delete(@sweeper.Id)" class="text-white btn btn-danger">حذف</a>
                                 </td>
                             </tr>
                         }
@@ -53,3 +53,24 @@
     </div>
     <!-- /.col -->
 </div>
+
+
+@section Scripts {
+    <script>
+        function Delete(id) {
+
+            if (confirm("آیا از حذف این اسلایدر مطمئن هستید? ")) {
+                $.ajax({
+                    type: "Get",
+                    url: '@_config.GetSection("DomainAddress").Value/Sweeper/Delete?id=' + id,
+                    success: function () {
+                        document.getElementById("sweeper[" + id + "]").setAttribute("style", "display:none");
+                    },
+                    error: function () {
+                        alert("خطایی رخ داده است!");
+                    }
+                });
+            }
+        }
+    </script>
+}

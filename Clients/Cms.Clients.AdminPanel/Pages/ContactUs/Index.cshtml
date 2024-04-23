@@ -1,0 +1,66 @@
+﻿@page
+@inject IConfiguration _config;
+@model Cms.Clients.AdminPanel.Pages.ContactUs.IndexModel
+@{
+    ViewBag.Title = "لیست فرم های پر شده";
+    ViewBag.Page = "ارتباط با ما";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>ایمیل</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var contact in Model.ContactList.QueryResult.ToList())
+                        {
+                            <tr class="table-bordered" id="contact[@contact.Id]">
+                                <td>@contact.Name</td>
+                                <td>@contact.Email</td>
+                                <td>                                    
+                                    <a onclick="Delete(@contact.Id)" class="text-white btn btn-danger">حذف</a>
+                                </td>
+                            </tr>
+                            <tr id="contactText[@contact.Id]">
+                                <td colspan="3">
+                                    متن : @contact.Text
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+
+@section Scripts {
+    <script>
+        function Delete(id) {
+
+            if (confirm("آیا از حذف این فیلد مطمئن هستید? ")) {
+                $.ajax({
+                    type: "Get",
+                    url: '@_config.GetSection("DomainAddress").Value/ContactUs/Delete?id=' + id,
+                    success: function () {
+                        document.getElementById("contact[" + id + "]").setAttribute("style", "display:none");
+                        document.getElementById("contactText[" + id + "]").setAttribute("style", "display:none");
+                    },
+                    error: function () {
+                        alert("خطایی رخ داده است!");
+                    }
+                });
+            }
+        }
+    </script>
+}

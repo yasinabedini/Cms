@@ -1,0 +1,58 @@
+﻿@page
+@model Cms.Clients.AdminPanel.Pages.User.IndexModel
+@{
+    ViewBag.Title = "لیست کاربران";
+    ViewBag.Page = "کاربران";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>username</th>
+                            <th>شماره موبایل</th>
+                            <th>ایمیل</th>
+                            <th>تایید شماره موبایل</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.UserList.ToList())
+                        {
+                            <tr id="user[@user.Id]">
+                                <td>@user.NormalizedUserName</td>
+                                <td>@user.UserName</td>
+                                <td>@user.PhoneNumber</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @if (user.PhoneNumberConfirmed)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-close"></i>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="/user/edit?id=@user.Id" class="text-white btn btn-primary">جزئیات</a>
+                                    <a href="/user/edit?id=@user.Id" class="text-white btn btn-primary">ویرایش</a>
+                                    <a onclick="Delete(@user.Id)" class="text-white btn btn-danger">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>

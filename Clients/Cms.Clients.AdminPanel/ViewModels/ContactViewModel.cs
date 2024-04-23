@@ -8,15 +8,21 @@ namespace Cms.Clients.AdminPanel.ViewModels
 {
     public class ContactViewModel
     {
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Text { get; set; }
 
-        public ContactViewModel(string name, string email, string text)
+        public ContactViewModel()
+        {
+            
+        }
+        public ContactViewModel(long id, string name, string email, string text)
         {
             Name = name;
             Email = email;
             Text = text;
+            Id = id;
         }
     }
 }

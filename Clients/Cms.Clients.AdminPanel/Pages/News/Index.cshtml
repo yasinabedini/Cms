@@ -1,5 +1,6 @@
 ﻿@page
 @using Cms.Clients.AdminPanel.Pages.News
+@inject IConfiguration _config;
 @model IndexModel
 @{
     ViewBag.Title = "لیست اخبار";
@@ -24,16 +25,15 @@
                     <tbody>
                         @foreach (var news in Model.NewsList.QueryResult.ToList())
                         {
-                            <tr>
+                            <tr id="news[@news.Id]">
                                 <td>@news.Title</td>
                                 <td>
                                ادمین
                                 </td>
                                 <td>@news.PublishDate</td>
-                                <td>
-                                    <a class="text-white btn btn-primary">جزئیات</a>
-                                    <a class="text-white btn btn-primary">ویرایش</a>
-                                    <a class="text-white btn btn-danger">حذف</a>
+                                <td>                                    
+                                    <a href="/news/edit?id=@news.Id" class="text-white btn btn-primary">ویرایش</a>
+                                    <a onclick="Delete(@news.Id)" class="text-white btn btn-danger">حذف</a>
                                 </td>                                
                             </tr>
                         }
@@ -46,3 +46,23 @@
     </div>
     <!-- /.col -->
 </div>
+
+@section Scripts {
+    <script>
+        function Delete(id) {
+
+            if (confirm("آیا از حذف این خبر مطمئن هستید? ")) {
+                $.ajax({
+                    type: "Get",
+                    url: '@_config.GetSection("DomainAddress").Value/News/Delete?id=' + id,
+                    success: function () {
+                        document.getElementById("news[" + id + "]").setAttribute("style", "display:none");
+                    },
+                    error: function () {
+                        alert("خطایی رخ داده است!");
+                    }
+                });
+            }
+        }
+    </script>
+}

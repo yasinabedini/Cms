@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Cms.Clients.AdminPanel.Pages.Admin
+namespace Cms.Clients.AdminPanel.Pages
 {
     public class DashBoardModel : PageModel
     {
         public async Task OnGetAsync()
-        {                        
+        {
         }
     }
 }

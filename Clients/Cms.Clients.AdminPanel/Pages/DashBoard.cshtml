@@ -1,7 +1,9 @@
 ﻿@page "/"
-@model Cms.Clients.AdminPanel.Pages.Admin.DashBoardModel
+@using Cms.Clients.AdminPanel.Pages
+@model DashBoardModel
 @{
     ViewBag.Title = "پنل مدیریت موزه";
+    ViewBag.Page = "داشبورد";
 }
 
 <div class="container-fluid">
@@ -11,9 +13,9 @@
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>150</h3>
+                <h3>68</h3>
 
-                <p>سفارشات جدید</p>
+                <p>بلیط های فروخته شده</p>
             </div>
             <div class="icon">
                 <i class="ion ion-bag"></i>
@@ -25,9 +27,9 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>11</h3>
 
-                <p>افزایش امتیاز</p>
+                <p>تعداد خبر ها</p>
             </div>
             <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -53,9 +55,9 @@
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
+                <h3>10</h3>
 
-                <p>بازدید جدید</p>
+                <p>تعداد اطلاعیه ها</p>
             </div>
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>

@@ -1,4 +1,5 @@
 ﻿@page
+@inject IConfiguration _config;
 @model Cms.Clients.AdminPanel.Pages.Language.IndexModel
 @{
     ViewBag.Title = "زبان ها";
@@ -23,17 +24,16 @@
                     <tbody>
                         @foreach (var language in Model.Languages.ToList())
                         {
-                            <tr>
+                            <tr id="Language[@language.Id]">
                                 <td>@language.Title</td>                           
                                 <td>@language.Name</td>
                                 <td class="align-middle text-center text-sm">
                                     <span class="badge badge-sm bg-gradient-success">@((language.Rtl) ? "RTL" : "LTR")</span>
                                 </td>
                                 <td>@language.Region</td>
-                                <td>
-                                    <a class="text-white btn btn-primary">جزئیات</a>
-                                    <a class="text-white btn btn-primary">ویرایش</a>
-                                    <a class="text-white btn btn-danger">حذف</a>
+                                <td>                                    
+                                    <a href="/language/edit?id=@language.Id" class="text-white btn btn-primary">ویرایش</a>
+                                    <a onclick="Delete(@language.Id)" class="text-white btn btn-danger">حذف</a>
                                 </td>
                             </tr>
                         }
@@ -46,3 +46,23 @@
     </div>
     <!-- /.col -->
 </div>
+
+@section Scripts {
+    <script>
+        function Delete(id) {
+
+            if (confirm("آیا از حذف این زبان مطمئن هستید? ")) {
+                $.ajax({
+                    type: "Get",
+                    url: '@_config.GetSection("DomainAddress").Value/Language/Delete?id=' + id,
+                    success: function () {
+                        document.getElementById("Language[" + id + "]").setAttribute("style", "display:none");
+                    },
+                    error: function () {
+                        alert("خطایی رخ داده است!");
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,80 @@
+﻿@page
+@inject IConfiguration _config;
+@model Cms.Clients.AdminPanel.Pages.Activity.IndexModel
+@{
+    ViewBag.Title = "لیست برنامه ها و فعالیت ها";
+    ViewBag.Page = "فعالیت ها";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>زبان</th>
+                            <th>وضعیت</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var activity in Model.ActivityList)
+                        {
+                            <tr id="activity[@activity.Id]">
+                                <td>@activity.Title</td>
+                                <td>
+                                    @Model.Languages.FirstOrDefault(t=>t.Id==activity.LanguageId).Name
+                                </td>
+                                @if (activity.IsEnable)
+                                {
+                                    <td>
+                                        <span>فعال</span>
+                                        <i class="fa fa-check"></i>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <span>غیرفعال</span>
+                                        <i class="fa fa-close"></i>
+                                    </td>
+                                }
+                                <td>
+                                    <a href="/activity/edit?id=@activity.Id" class="text-white btn btn-primary">ویرایش</a>
+                                    <a onclick="Delete(@activity.Id)" class="text-white btn btn-danger">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+
+
+@section Scripts {
+    <script>
+        function Delete(id) {
+
+            if (confirm("آیا از حذف این فعالیت مطمئن هستید? ")) {
+                $.ajax({
+                    type: "Get",
+                    url: '@_config.GetSection("DomainAddress").Value/News/Delete?id=' + id,
+                    success: function () {
+                        document.getElementById("activity[" + id + "]").setAttribute("style", "display:none");
+                    },
+                    error: function () {
+                        alert("خطایی رخ داده است!");
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,62 @@
+﻿@page
+@model Cms.Clients.AdminPanel.Pages.Language.EditModel
+@{
+ViewBag.Title = "ویرایش زبان";
+ViewBag.Page="زبان";
+}
+
+
+<form enctype="multipart/form-data" method="post">
+    <input type="hidden" asp-for="Language.Id"/>
+    <div class="col-md-12 mb-lg-0 mb-4">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">ویرایش زبان</h3>
+            </div>
+            <div class="card-body p-3">
+                <div class="row">
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <div class="card card-body card-plain border-radius-lg ">
+                            <label>عنوان : </label>
+                            <input type="text" class="form-control" asp-for="Language.Title" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <div class="card card-body card-plain border-radius-lg">
+                            <label>نام : </label>
+                            <input type="text" class="form-control" asp-for="Language.Name" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <div class="card card-body card-plain border-radius-lg">
+                            <label>منطقه : </label>
+                            <input type="text" class="form-control" asp-for="Language.Region" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <div class="card card-body card-plain border-radius-lg">
+                            <label>جهت متن : </label>
+                            <select class="form-control" asp-for="Language.Rtl">
+                                <option selected value="@true">راست چین</option>
+                                <option value="@false">چپ چین</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-md-0 mb-4 mt-4">
+                        <div class="card">
+                            <input type="submit" class="btn-warning btn" value="ویرایش زبان" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
