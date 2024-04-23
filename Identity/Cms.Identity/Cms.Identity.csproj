@@ -7,6 +7,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\fonts\Vazir-Black.woff2" />
+	  <Content Remove="wwwroot\fonts\Vazir-Bold.woff2" />
+	  <Content Remove="wwwroot\fonts\Vazir-Light.woff2" />
+	  <Content Remove="wwwroot\fonts\Vazir-Medium.woff2" />
+	  <Content Remove="wwwroot\fonts\Vazir-Thin.woff2" />
+	  <Content Remove="wwwroot\fonts\Vazir.woff2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\fonts\Vazir-Black.woff2" />
+	  <None Include="wwwroot\fonts\Vazir-Bold.woff2" />
+	  <None Include="wwwroot\fonts\Vazir-Light.woff2" />
+	  <None Include="wwwroot\fonts\Vazir-Medium.woff2" />
+	  <None Include="wwwroot\fonts\Vazir-Thin.woff2" />
+	  <None Include="wwwroot\fonts\Vazir.woff2" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Duende.IdentityServer" Version="7.0.0" />
 		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
