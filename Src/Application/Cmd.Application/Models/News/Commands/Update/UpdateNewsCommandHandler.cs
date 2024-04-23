@@ -48,7 +48,7 @@ namespace Cmd.Application.Models.News.Commands.Update
             news.ChangeMainImage(request.MainImage);
             news.ChangeSecondImage(request.SecondImage);
             news.ChangeThirdImage(request.ThirdImage);
-            news.ChangePublishDate(request.PublishDate.ToString());
+            news.ChangePublishDate(request.PublishDate.ToShortDateString());
             news.ChangeLanguageId(request.LanguageId);
             news.ChangeNewsTypeId(request.NewsTypeId);
 

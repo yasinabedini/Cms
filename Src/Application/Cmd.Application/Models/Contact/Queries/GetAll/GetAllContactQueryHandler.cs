@@ -22,7 +22,7 @@ namespace Cmd.Application.Models.Contact.Queries.GetAll
         {
             var contacts = _repository.GetList().Skip(request.SkipCount).Take(request.PageSize);
 
-            return Task.FromResult(new PagedData<ContactViewModel> { QueryResult = contacts.Select(t => new ContactViewModel(t.Name, t.Email, t.Text.Value)).ToList(), PageNumber = request.PageNumber, PageSize = request.PageSize });
+            return Task.FromResult(new PagedData<ContactViewModel> { QueryResult = contacts.Select(t => new ContactViewModel(t.Id,t.Name, t.Email, t.Text.Value)).ToList(), PageNumber = request.PageNumber, PageSize = request.PageSize });
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Cmd.Application.Models.Contact.Queries.GetById
             }
 
             var contact = _repository.GetById(request.Id);
-            return Task.FromResult(new ContactViewModel(contact.Name, contact.Email, contact.Text.Value));
+            return Task.FromResult(new ContactViewModel(contact.Id,contact.Name, contact.Email, contact.Text.Value));
         }
     }
 }
