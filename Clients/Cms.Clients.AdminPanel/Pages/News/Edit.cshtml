@@ -1,4 +1,4 @@
-﻿@page 
+﻿@page
 @model Cms.Clients.AdminPanel.Pages.News.EditModel
 @{
     ViewBag.Title = "ویرایش خبر";
@@ -6,8 +6,8 @@
 }
 
 <form enctype="multipart/form-data" method="post">
-    <input type="hidden" asp-for="News.Id"/>
-    <input type="hidden" asp-for="News.MainImageName"/>
+    <input type="hidden" asp-for="News.Id" />
+    <input type="hidden" asp-for="News.MainImageName" />
     <input type="hidden" asp-for="News.SecondImage" />
     <input type="hidden" asp-for="News.ThirdImage" />
     <input type="hidden" asp-for="News.PublishDate" />
@@ -79,6 +79,18 @@
 
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <div class="card card-body card-plain border-radius-lg ">
+                            <label>وضعیت : </label>
+                            <select class="form-control" asp-for="News.IsEnable">
+                                <option value="@true" >فعال</option>
+                                <option value="@false">غیر فعال</option>
+                            </select>
                         </div>
                     </div>
                 </div>

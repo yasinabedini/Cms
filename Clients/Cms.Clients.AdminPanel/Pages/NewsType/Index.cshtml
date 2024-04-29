@@ -1,0 +1,79 @@
+﻿@page
+@inject IConfiguration _config;
+@model Cms.Clients.AdminPanel.Pages.NewsType.IndexModel
+@{
+    ViewBag.Title = "لیست تایپ های خبر";
+    ViewBag.Page = "اخبار";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+                <a href="/Newstype/create" class="btn btn-success text-white m-3">ایجاد تایپ خبری جدید</a>
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>نام</th>
+                            <th>وضعیت</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var newsType in Model.NewsTypeList.ToList())
+                        {
+                            <tr id="newsType[@newsType.Id]">
+                                <td>@newsType.Title</td>
+                                <td>@newsType.Name</td>
+                                @if (newsType.IsEnable)
+                                {
+                                    <td class="align-middle text-center">
+                                        <span class="badge bg-gradient-success">Enable</span>
+                                        <i class=" fa fa-check"></i>
+                                    </td>                                    
+                                }
+                                else
+                                {
+                                    <td class="align-middle text-center">
+                                        <span class="badge badge-sm bg-gradient-secondary">Disable</span>
+                                        <i class=" fa fa-close"></i>
+                                    </td>
+                                }
+                                <td>
+                                    <a href="/newsType/edit?id=@newsType.Id" class="text-white btn btn-primary">ویرایش</a>
+                                    <a onclick="Delete(@newsType.Id)" class="text-white btn btn-danger">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+
+@section Scripts {
+    <script>
+        function Delete(id) {
+
+            if (confirm("آیا از حذف این ایتم مطمئن هستید? ")) {
+                $.ajax({
+                    type: "Get",
+                    url: '@_config.GetSection("DomainAddress").Value/NewsType/Delete?id=' + id,
+                    success: function () {
+                        document.getElementById("newsType[" + id + "]").setAttribute("style", "display:none");
+                    },
+                    error: function () {
+                        alert("خطایی رخ داده است!");
+                    }
+                });
+            }
+        }
+    </script>
+}

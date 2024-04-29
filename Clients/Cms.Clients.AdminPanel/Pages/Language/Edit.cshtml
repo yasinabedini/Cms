@@ -50,6 +50,18 @@ ViewBag.Page="زبان";
                 </div>
 
                 <div class="row">
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <div class="card card-body card-plain border-radius-lg ">
+                            <label>وضعیت : </label>
+                            <select class="form-control" asp-for="Language.IsEnable">
+                                <option value="@true">فعال</option>
+                                <option value="@false">غیر فعال</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-12 mb-md-0 mb-4 mt-4">
                         <div class="card">
                             <input type="submit" class="btn-warning btn" value="ویرایش زبان" />

@@ -1,4 +1,5 @@
 ﻿@page
+@inject IConfiguration _config;
 @model Cms.Clients.AdminPanel.Pages.User.IndexModel
 @{
     ViewBag.Title = "لیست کاربران";
@@ -26,7 +27,7 @@
                         @foreach (var user in Model.UserList.ToList())
                         {
                             <tr id="user[@user.Id]">
-                                <td>@user.NormalizedUserName</td>
+                                <td>@user.Name</td>
                                 <td>@user.UserName</td>
                                 <td>@user.PhoneNumber</td>
                                 <td>@user.Email</td>
@@ -40,10 +41,9 @@
                                         <i class="fa fa-close"></i>
                                     }
                                 </td>
-                                <td>
-                                    <a href="/user/edit?id=@user.Id" class="text-white btn btn-primary">جزئیات</a>
+                                <td>                                    
                                     <a href="/user/edit?id=@user.Id" class="text-white btn btn-primary">ویرایش</a>
-                                    <a onclick="Delete(@user.Id)" class="text-white btn btn-danger">حذف</a>
+                                    <a href="/user/delete?id=@user.Id" class="text-white btn btn-danger">حذف</a>
                                 </td>
                             </tr>
                         }
@@ -56,3 +56,5 @@
     </div>
     <!-- /.col -->
 </div>
+
+

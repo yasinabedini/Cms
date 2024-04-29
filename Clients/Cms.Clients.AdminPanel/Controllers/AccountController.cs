@@ -39,13 +39,30 @@ namespace Cms.Clients.AdminPanel.Controllers
 
             CustomIdentityUser user = _userManager.Users.FirstOrDefault(t => t.PhoneNumber == login.PhoneNumber);
 
+            if (user is null)
+            {
+                ModelState.AddModelError("PhoneNumber", "پسورد یا شماره موبایل اشتباه است.");
+                return View();
+            }
+
             var result = await _signInManager.PasswordSignInAsync(user, login.Password, true, false);
 
             if (result.Succeeded)
             {
+                if (!user.PhoneNumberConfirmed)
+                {
+					ModelState.AddModelError("PhoneNumber", "شماره موبایل خود را تایید کنید.");
+					return View();
+				}
+
+                if (!user.LockoutEnabled)
+                {
+                    ModelState.AddModelError("PhoneNumber", "حساب کاربری مسدود است.");
+                    return View();
+                }
 
                 var props = new AuthenticationProperties();
-                if (true)
+                if (login.RemmemberMe)
                 {
                     props.IsPersistent = true;
                     props.ExpiresUtc = DateTimeOffset.UtcNow.Add(TimeSpan.FromDays(30));
@@ -61,14 +78,21 @@ namespace Cms.Clients.AdminPanel.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, props);
 
 
-                return LocalRedirect("/");
+                return LocalRedirect(login.ReturnUrl);
             }
 
-            ModelState.AddModelError(string.Empty, "پسورد یا نام کاربری اشتباه است.");
+            ModelState.AddModelError("PhoneNumber", "پسورد یا شماره موبایل اشتباه است.");
             return View();
 
             return View(login);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+           
+            return LocalRedirect("/");
+        }
     }
 }

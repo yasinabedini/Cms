@@ -32,8 +32,7 @@ builder.Services.AddAuthentication(options =>
 }).AddCookie(options =>
 {
     options.LoginPath = new PathString("/Account/Login");
-
-    options.LogoutPath = new PathString("/Account/Login");
+    options.LogoutPath = new PathString("/Account/Logout");
     options.SlidingExpiration = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(43200);
     options.Cookie = new CookieBuilder()

@@ -8,7 +8,8 @@
 
 
 <div class="wrap-login100">
-	<form asp-controller="Account" asp-action="Login" class="login100-form validate-form">
+	<form asp-controller="Account" asp-action="Login" class="login100-form validate-form" autocomplete="off">
+		<input type="hidden" asp-for="ReturnUrl"/>
 		<span class="login100-form-logo">
 			<img class="login100-form-logo  p-3" src="/login/images/logo.webp" />
 		</span>
@@ -16,10 +17,10 @@
 		<span class="login100-form-title p-b-34 p-t-27">
 			ورود
 		</span>
-
 		<div class="wrap-input100 validate-input" data-validate="شماره موبایل خود را وارد کنید">
 			<input class="input100" type="text" asp-for="PhoneNumber" placeholder="شماره موبایل">
-			<span class="focus-input100" data-placeholder="&#xf207;"></span>
+			<span class="focus-input100" data-placeholder="&#xf207;"></span>			
+		<span asp-validation-for="PhoneNumber" class="text-white"></span>
 		</div>
 
 		<div class="wrap-input100 validate-input" data-validate="رمز عبور خود را وارد کنید">
@@ -28,7 +29,7 @@
 		</div>
 
 		<div class="contact100-form-checkbox">
-			<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+			<input class="input-checkbox100" id="ckb1" type="checkbox" asp-for="RemmemberMe">
 			<label class="label-checkbox100" for="ckb1">
 				مرا به خاطر بسپار
 			</label>

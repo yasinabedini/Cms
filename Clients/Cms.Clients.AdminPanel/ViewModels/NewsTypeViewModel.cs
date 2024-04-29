@@ -12,12 +12,20 @@ namespace Cms.Clients.AdminPanel.ViewModels
         public string Title { get; set; }
         public string Name { get; set; }
         public bool IsPage { get; set; }
+        public bool IsEnable { get; set; }
+        public int LanguageId { get; set; }
 
-        public NewsTypeViewModel(string title, string name, bool isPage)
+        public NewsTypeViewModel()
+        {
+            
+        }
+        public NewsTypeViewModel(string title, string name, bool isPage, bool isEnable, int languageId)
         {
             Title = title;
             Name = name;
             IsPage = isPage;
+            IsEnable = isEnable;
+            LanguageId = languageId;
         }
     }
 }

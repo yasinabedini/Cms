@@ -83,7 +83,7 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
             }
             #endregion
 
-            var modelData = new { Id = Sweeper.Id, Title = Sweeper.Title, Text = Sweeper.Text, Link = Sweeper.Link, ImageName = Sweeper.ImageName, isEnable = true, LanguageId = Sweeper.LanguageId };
+            var modelData = new { Id = Sweeper.Id, Title = Sweeper.Title, Text = Sweeper.Text, Link = Sweeper.Link, ImageName = Sweeper.ImageName, IsEnable = Sweeper.IsEnable, LanguageId = Sweeper.LanguageId };
             
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");
