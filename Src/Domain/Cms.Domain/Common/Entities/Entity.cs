@@ -42,22 +42,10 @@ public abstract class Entity<TId> : IAuditableEntity where TId : struct, ICompar
         ModifiedAt = DateTime.Now;
     }
 
-    public void Enable()
+    public void ChangeIsEnable(bool isEnable)
     {
-        if (!IsEnable)
-        {
-            IsEnable = true;
-            Modified();
-        }
-    }
-
-    public void Disable()
-    {
-        if (IsEnable)
-        {
-            IsEnable = false;
-            Modified();
-        }
+        IsEnable = isEnable;
+        Modified();
     }
 
     public void SetId(TId id)
