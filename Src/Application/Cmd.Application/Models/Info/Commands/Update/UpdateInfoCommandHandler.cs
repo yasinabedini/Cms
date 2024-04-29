@@ -29,7 +29,8 @@ namespace Cmd.Application.Models.Info.Commands.Update
             info.ChangePhoneNumber(request.PhoneNumber);
             info.ChangeInstagramAddress(request.InstagramAddress);
             info.ChangeEmailAddress(request.EmailAddress);
-            info.ChangeWorkTime(request.WorkTime);            
+            info.ChangeWorkTime(request.WorkTime);
+            info.ChangeIsEnable(request.IsEnable);            
 
             _repository.Update(info);
             _repository.Save();

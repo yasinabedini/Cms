@@ -16,8 +16,9 @@ namespace Cmd.Application.Models.Info.Commands.Update
         public string EmailAddress { get; private set; }
         public string InstagramAddress { get; private set; }
         public long LanguageId { get; set; }
+        public bool IsEnable { get; set; }
 
-        public UpdateInfoCommand(long id, string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress, long languageId)
+        public UpdateInfoCommand(long id, string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress, long languageId, bool isEnable)
         {
             Id = id;
             Address = address;
@@ -26,6 +27,7 @@ namespace Cmd.Application.Models.Info.Commands.Update
             EmailAddress = emailAddress;
             InstagramAddress = instagramAddress;
             LanguageId = languageId;
+            IsEnable = isEnable;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Cmd.Application.Models.News.Queries.GetById
             var newsType = _newsTypeRepository.GetById(news.NewsTypeId);
 
             var newsViewModel = new NewsViewModel(news.Id,news.Title.Value, news.Introduction.Value, news.LanguageId, news.NewsTypeId,  news.PublishDate, news.Text, news.MainImageName.Value, news.SecondImage is not null ? news.SecondImage.Value : "", news.ThirdImage is not null ? news.ThirdImage.Value : "",news.IsEnable);
-            newsViewModel.NewsType = new NewsTypeViewModel(newsType.Id,newsType.Title.Value, newsType.Name.Value, newsType.IsPage);
+            newsViewModel.NewsType = new NewsTypeViewModel(newsType.Id,newsType.Title.Value, newsType.Name.Value, newsType.IsPage, newsType.IsEnable, (int)newsType.LanguageId);
 
             return Task.FromResult(newsViewModel);
         }

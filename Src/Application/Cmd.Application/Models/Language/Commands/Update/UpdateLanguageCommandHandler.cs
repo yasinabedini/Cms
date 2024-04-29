@@ -24,7 +24,8 @@ namespace Cmd.Application.Models.Language.Commands.Update
             language.ChangeName(request.Name);
             language.ChangeRegion(request.Region);
             language.ChangeTitle(request.Title);
-            language.ChangeRtl(request.Rtl);           
+            language.ChangeRtl(request.Rtl);
+            language.ChangeIsEnable(request.IsEnable);
 
             _repository.Update(language);
             _repository.Save();

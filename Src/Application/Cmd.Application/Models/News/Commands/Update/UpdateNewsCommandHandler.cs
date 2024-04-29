@@ -47,11 +47,10 @@ namespace Cmd.Application.Models.News.Commands.Update
             news.ChangeIntroduction(request.Introduction);
             news.ChangeMainImage(request.MainImage);
             news.ChangeSecondImage(request.SecondImage);
-            news.ChangeThirdImage(request.ThirdImage);
-            news.ChangePublishDate(request.PublishDate.ToShortDateString());
+            news.ChangeThirdImage(request.ThirdImage);            
             news.ChangeLanguageId(request.LanguageId);
             news.ChangeNewsTypeId(request.NewsTypeId);
-
+            news.ChangeIsEnable(request.IsEnable);
             
             _repository.Update(news);            
             _repository.Save();

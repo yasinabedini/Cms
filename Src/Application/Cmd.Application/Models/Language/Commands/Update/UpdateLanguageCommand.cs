@@ -14,6 +14,7 @@ namespace Cmd.Application.Models.Language.Commands.Update
         public string Name { get; private set; }
         public bool Rtl { get; private set; }
         public string Region { get; private set; }
+        public bool IsEnable { get; set; }
 
         public UpdateLanguageCommand(int id, string title, string name, bool rtl, string region)
         {

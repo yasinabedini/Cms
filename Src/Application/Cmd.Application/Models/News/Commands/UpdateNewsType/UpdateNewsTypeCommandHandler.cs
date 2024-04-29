@@ -28,7 +28,8 @@ namespace Cmd.Application.Models.News.Commands.UpdateNewsType
             newsType.ChangeTitle(request.Title);
             newsType.ChangeIsPage(request.IsPage);
             newsType.ChangeLanguageId(request.LanguageId);
-        
+            newsType.ChangeIsEnable(request.IsEnable);
+
 
             _repository.Update(newsType);
             _repository.Save();

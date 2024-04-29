@@ -27,6 +27,7 @@ namespace Cmd.Application.Models.Sweeper.Commands.Update
             sweeper.ChangeLink(request.Link);
             sweeper.ChangeImageName(request.ImageName);
             sweeper.ChangeLanguageId(request.LanguageId);
+            sweeper.ChangeIsEnable(request.IsEnable);
 
             _repository.Update(sweeper);
             _repository.Save();

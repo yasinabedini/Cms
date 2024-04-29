@@ -23,7 +23,7 @@ namespace Cmd.Application.Models.News.Queries.GetNewsTypeById
         {
             var newsType = _repository.GetById(request.Id);
 
-            return Task.FromResult(new NewsTypeViewModel(newsType.Id, newsType.Title.Value, newsType.Name.Value, newsType.IsPage));
+            return Task.FromResult(new NewsTypeViewModel(newsType.Id, newsType.Title.Value, newsType.Name.Value, newsType.IsPage, newsType.IsEnable,(int)newsType.LanguageId));
         }
     }
 }

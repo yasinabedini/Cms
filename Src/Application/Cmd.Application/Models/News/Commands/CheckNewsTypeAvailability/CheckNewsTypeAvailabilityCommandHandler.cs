@@ -19,7 +19,9 @@ namespace Cmd.Application.Models.News.Commands.CheckNewsTypeAvailability
 
         public Task<bool> Handle(CheckNewsTypeAvailabilityCommand request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_repository.CheckAvailability(request.Id));
+            bool availability = _repository.GetById(request.Id) is not null;
+
+            return Task.FromResult(availability);
         }
     }
 }
