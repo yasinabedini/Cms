@@ -4,6 +4,7 @@ using Cms.Infra.Contexts;
 using Cms.Infra.Identity.Entities;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
 using static System.Net.Mime.MediaTypeNames;
@@ -20,6 +21,13 @@ try
     {
         t.BaseAddress = new Uri(builder.Configuration["FileManagerUrl"]);
     });
+
+
+    builder.Services.AddHttpClient("Asnad", t =>
+    {
+        t.BaseAddress = new Uri(builder.Configuration.GetSection("AsnadUrl").Value);
+    });
+
 
     // Add services to the container.
 
