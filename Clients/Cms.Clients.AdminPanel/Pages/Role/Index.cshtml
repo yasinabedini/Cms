@@ -17,21 +17,19 @@
                     <thead>
                         <tr>
                             <th>عنوان</th>
-                            <th>نام</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var role in Model.RoleList.ToList())
                         {
-                            <tr id="user[@role.Id]">
-                                <td>@role.NormalizedName</td>
+                            <tr id="role[@role.Id]">
                                 <td>@role.Name</td>
                                 <td>
                                     <a href="/role/edit?id=@role.Id" class="text-white btn btn-primary">ویرایش</a>
-                                    <a href="/Role/Delete?id=@role.Id" class="text-white btn btn-danger">حذف</a>
+                                    <a onclick="Delete(@role.Id)" href="/Role/Delete?id=@role.Id" class="text-white btn btn-danger">حذف</a>
                                 </td>
-                            </tr>
+                            </tr>                            
                         }
                     </tbody>
                 </table>
@@ -42,3 +40,14 @@
     </div>
     <!-- /.col -->
 </div>
+
+@section Scripts {
+    <script>
+        function Delete(id) {
+
+            if (confirm("آیا از حذف این ایتم مطمئن هستید? ")) {
+                document.getElementById("role[" + id + "]").setAttribute("style", "display:none");                
+            }
+        }
+    </script>
+}

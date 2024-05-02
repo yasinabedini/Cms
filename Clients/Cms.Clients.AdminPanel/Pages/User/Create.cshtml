@@ -15,14 +15,14 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>نام : </label>
+                            <label>نام : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="User.Name" />
                         </div>
                     </div>
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>نام کاربری : </label>
+                            <label>نام کاربری : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="User.UserName" />
                             <span asp-validation-for="User.UserName" class="text-danger"></span>
                         </div>
@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>شماره موبایل : </label>
+                            <label>شماره موبایل : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="User.PhoneNumber" />
                             <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
                         </div>
@@ -40,7 +40,7 @@
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>ایمیل : </label>
+                            <label>ایمیل :</label>
                             <input type="text" class="form-control" asp-for="User.Email" />
                             <span asp-validation-for="User.Email" class="text-danger"></span>
                         </div>
@@ -50,7 +50,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>کلمه عبور : </label>
+                            <label>کلمه عبور : <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" asp-for="Password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
@@ -58,7 +58,7 @@
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>تکرار کلمه عبور : </label>
+                            <label>تکرار کلمه عبور : <span class="text-danger">*</span></label>
                             <input type="password" class="form-control" asp-for="Re_Password" />
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>نقش ها : </label>
+                            <label>نقش ها :</label>
 
                            <div class="row">
                                 @foreach (var role in Model.RoleList)

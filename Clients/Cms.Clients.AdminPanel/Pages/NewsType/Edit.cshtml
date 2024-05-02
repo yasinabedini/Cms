@@ -15,13 +15,13 @@
                     <div class="row">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>عنوان : </label>
+                                <label>عنوان : <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" asp-for="NewsType.Title" />
                             </div>
                         </div>
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg">
-                                <label>نام : </label>
+                                <label>نام : <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" asp-for="NewsType.Name" />
                             </div>
                         </div>
@@ -30,7 +30,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>زبان : </label>
+                                <label>زبان : <span class="text-danger">*</span></label>
                                 <select class="form-control" asp-for="NewsType.LanguageId">
                                     <option hidden selected>زبان مورد نظر را انتخاب کنید</option>
                                     @foreach (var language in Model.Languages)
@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>آیا صفحه جداگانه ای است؟ : </label>
+                                <label>آیا صفحه جداگانه ای است؟ : <span class="text-danger">*</span></label>
                                 <select class="form-control" asp-for="NewsType.IsPage">                                    
                                     <option value="@true">بله</option>
                                     <option value="@false">خیر</option>
@@ -55,7 +55,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>وضعیت : </label>
+                                <label>وضعیت : <span class="text-danger">*</span></label>
                                 <select class="form-control" asp-for="NewsType.IsEnable">
                                     <option value="@true">فعال</option>
                                     <option value="@false">غیر فعال</option>

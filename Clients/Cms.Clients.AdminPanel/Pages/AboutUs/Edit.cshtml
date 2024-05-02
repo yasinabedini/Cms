@@ -1,11 +1,13 @@
 ﻿@page
 @model Cms.Clients.AdminPanel.Pages.AboutUs.EditModel
+@inject IConfiguration _config;
 @{
     ViewBag.Title = "ویرایش درباره موزه";
     ViewBag.Page = "درباره موزه";
 }
 <form enctype="multipart/form-data" method="post">
-    <input type="hidden"  asp-for="About.Id" />
+    <input type="hidden" asp-for="About.Id" />
+    <input type="hidden" asp-for="About.NewsTypeId" />
     <input type="hidden" value="متنی وجود ندارد" asp-for="About.Introduction" />
     <input type="hidden" asp-for="About.MainImageName" />
     <input type="hidden" asp-for="About.PublishDate" />
@@ -19,24 +21,13 @@
                     <div class="row">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>عنوان : </label>
+                                <label>عنوان : <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" asp-for="About.Title" />
                             </div>
                         </div>
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>نوع خبر : </label>
-                                <select class="form-control" asp-for="About.NewsTypeId">
-                                    <option selected value="8">درباره موزه</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-md-0 mb-4">
-                            <div class="card card-body card-plain border-radius-lg ">
-                                <label>زبان : </label>
+                                <label>زبان : <span class="text-danger">*</span></label>
                                 <select class="form-control" asp-for="About.LanguageId">
                                     <option hidden selected>زبان مورد نظر را انتخاب کنید</option>
                                     @foreach (var language in Model.Languages)
@@ -51,7 +42,7 @@
                     <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>متن : </label>
+                                <label>متن : <span class="text-danger">*</span></label>
 
                                 <div class="col-md-12">
                                     <div class="card card-info ">
@@ -66,13 +57,13 @@
 
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>وضعیت : </label>
+                                <label>وضعیت : <span class="text-danger">*</span></label>
                                 <select class="form-control" asp-for="About.IsEnable">
                                     <option value="@true">فعال</option>
                                     <option value="@false">غیر فعال</option>
@@ -80,27 +71,29 @@
                             </div>
                         </div>
                     </div>
-                </div>
-           
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <label for="exampleInputFile">تصویر اصلی</label>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر درباره موزه <span class="text-danger">*</span> </label>
                             <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="mainImage" id="mainImage">
-                                    <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                                <div class="">
+                                    <input type="file" asp-for="MainImage" class="form-control m-2" id="mainImage">
                                 </div>
                             </div>
+                            <span class="text-danger" asp-validation-for="MainImage"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <img id="mainImgAvatar" class=" ImageBox" src="@(_config.GetSection("FileManagerUrl").Value+$"/api/fileManager/getimage?imageName={Model.About.MainImageName}&&folder=news")" />
                         </div>
                     </div>
-                </div>
 
 
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <input type="submit" class="btn-success btn" value="ایجاد درباره ما" />
+                    <div class="row">
+                        <div class="col-md-12 mb-md-0 mb-4">
+                            <div class="card card-body card-plain border-radius-lg ">
+                                <input type="submit" class="btn-warning btn" value="ویرایش  درباره ما" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -130,5 +123,24 @@
                 toolbar: { fa: true }
             })
         })
+    </script>
+
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#mainImgAvatar').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#mainImage").change(function () {
+            readURL(this);
+        });
     </script>
 }

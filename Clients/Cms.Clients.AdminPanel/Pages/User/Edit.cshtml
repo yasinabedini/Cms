@@ -17,14 +17,14 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>نام : </label>
+                            <label>نام : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="User.Name" />
                         </div>
                     </div>
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>نام کاربری : </label>
+                            <label>نام کاربری : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="User.UserName" />
                             <span asp-validation-for="User.UserName" class="text-danger"></span>
                         </div>
@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>شماره موبایل : </label>
+                            <label>شماره موبایل : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="User.PhoneNumber" />
                             <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
                         </div>
@@ -42,7 +42,7 @@
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>ایمیل : </label>
+                            <label>ایمیل : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="User.Email" />
                             <span asp-validation-for="User.Email" class="text-danger"></span>
                         </div>

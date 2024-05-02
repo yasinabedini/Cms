@@ -1,8 +1,9 @@
 ﻿@page
 @model Cms.Clients.AdminPanel.Pages.News.EditModel
+@inject IConfiguration _config;
 @{
     ViewBag.Title = "ویرایش خبر";
-    ViewBag.Model = "خبر";
+    ViewBag.Page = "ویرایش خبر";
 }
 
 <form enctype="multipart/form-data" method="post">
@@ -81,64 +82,66 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <label>وضعیت : </label>
-                            <select class="form-control" asp-for="News.IsEnable">
-                                <option value="@true" >فعال</option>
-                                <option value="@false">غیر فعال</option>
-                            </select>
+                    <div class="row">
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <div class="card card-body card-plain border-radius-lg ">
+                                <label>وضعیت : </label>
+                                <select class="form-control" asp-for="News.IsEnable">
+                                    <option value="@true">فعال</option>
+                                    <option value="@false">غیر فعال</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <label for="exampleInputFile">تصویر اصلی</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="mainImage" id="mainImage">
-                                    <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                    <div class="row">
+                        <div class="col-md-6 mb-md-0 mb-4">                            
+                                <label for="exampleInputFile">تصویر اصلی خبر <span class="text-danger">*</span> </label>
+                                <div class="input-group">
+                                    <div class="">
+                                        <input type="file" asp-for="MainImage" class="form-control m-2" id="mainImage">
+                                    </div>
                                 </div>
+                                <span class="text-danger" asp-validation-for="MainImage"></span>                            
+                        </div>
+
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <img id="mainImgAvatar" class=" ImageBox" src="@(_config.GetSection("FileManagerUrl").Value+$"/api/fileManager/getimage?imageName={Model.News.MainImageName}&&folder=news")" />
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12 mb-md-0 mb-4">
+                            <div class="card card-body card-plain border-radius-lg ">
+                                <label for="exampleInputFile">تصاویر جانبی</label>
+
+                                <div class="input-group">
+                                    <div class="custom-file m-1">
+                                        <input type="file" class="custom-file-input" name="image" id="mainImage">
+                                        <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                                    </div>
+
+
+                                    <div class="custom-file m-1">
+                                        <input type="file" class="custom-file-input" name="image" id="mainImage">
+                                        <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-md-0 mb-4">
+                            <div class="card card-body card-plain border-radius-lg ">
+                                <input type="submit" class="btn-warning btn" value="ویرایش خبر" />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <label for="exampleInputFile">تصاویر جانبی</label>
-
-                            <div class="input-group">
-                                <div class="custom-file m-1">
-                                    <input type="file" class="custom-file-input" name="image" id="mainImage">
-                                    <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
-                                </div>
-
-
-                                <div class="custom-file m-1">
-                                    <input type="file" class="custom-file-input" name="image" id="mainImage">
-                                    <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <input type="submit" class="btn-success btn" value="ویرایش خبر" />
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -146,6 +149,7 @@
 </form>
 
 @section Scripts {
+
     <script>
         $(function () {
             // Replace the <textarea id="editor1"> with a CKEditor
@@ -165,5 +169,24 @@
                 toolbar: { fa: true }
             })
         })
+    </script>
+
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#mainImgAvatar').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#mainImage").change(function () {
+            readURL(this);
+        });
     </script>
 }

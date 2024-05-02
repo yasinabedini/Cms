@@ -23,16 +23,21 @@ namespace Cms.Clients.AdminPanel.Pages.News
         public CreateModel(IHttpClientFactory factory)
         {
             _httpClient = factory.CreateClient("AdminApi");
-            _fileManager = factory.CreateClient("FileManager");            
+            _fileManager = factory.CreateClient("FileManager");
         }
 
 
         public List<NewsTypeViewModel> NewsTypes { get; set; }
         public List<LanguageViewModel> Languages { get; set; }
+        [BindProperty]
+        public IFormFile MainImage { get; set; }
+
+        [BindProperty]
+        public List<IFormFile>? Images { get; set; }
 
         public void OnGet()
         {
-            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken); 
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
@@ -51,42 +56,57 @@ namespace Cms.Clients.AdminPanel.Pages.News
 
         }
 
-        public IActionResult OnPost(IFormFile mainImage, List<IFormFile> images)
+        public IActionResult OnPost()
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
+            #region Fill Data
+            var data = new { pageNumber = 1, pageSize = 200 };
+            var jsonInString = JsonConvert.SerializeObject(data);
+            var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+            var response = _httpClient.PostAsync("/api/NewsType/GetAll", content).Result;
+            var result = response.Content.ReadAsStringAsync().Result;
+            NewsTypes = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult;
+
+            data = new { pageNumber = 1, pageSize = 200 };
+            jsonInString = JsonConvert.SerializeObject(data);
+            content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+            response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
+            result = response.Content.ReadAsStringAsync().Result;
+            Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
+            #endregion
+
+
             if (!ModelState.IsValid)
             {
-                if (mainImage is null)
+                if (MainImage is null)
                 {
-                    ModelState.AddModelError("mainImage", "یک عکس برای خبر اپلود کنید");
+                    ModelState.AddModelError("MainImage", "یک عکس برای خبر اپلود کنید");
                 }
-
-                var data = new { pageNumber = 1, pageSize = 200 };
-                var jsonInString = JsonConvert.SerializeObject(data);
-                var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-                var response = _httpClient.PostAsync("/api/NewsType/GetAll", content).Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-                NewsTypes = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult;
-
-                data = new { pageNumber = 1, pageSize = 200 };
-                jsonInString = JsonConvert.SerializeObject(data);
-                content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-                response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
-                result = response.Content.ReadAsStringAsync().Result;
-                Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
 
                 return Page();
             }
 
             #region Save Main Image
+
+            if (Path.GetExtension(MainImage.FileName).ToLower() != ".png" && Path.GetExtension(MainImage.FileName).ToLower() != ".jpg" && Path.GetExtension(MainImage.FileName).ToLower() != ".jpeg")
+            {
+                ModelState.AddModelError("MainImage", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                return Page();
+            }
+
+            if (MainImage.Length>5000000)
+            {
+                ModelState.AddModelError("MainImage", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                return Page();
+            }
             var requestContent = new MultipartFormDataContent();
             var item = new MemoryStream();
-            mainImage.CopyTo(item);
+            MainImage.CopyTo(item);
             item.Position = 0;
             var imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "image", Path.GetFileName(mainImage.FileName));
+            requestContent.Add(imageContent, "image", Path.GetFileName(MainImage.FileName));
             var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
 
             News.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
@@ -94,27 +114,51 @@ namespace Cms.Clients.AdminPanel.Pages.News
             #endregion
 
             #region Save Gallery
-            if (images is not null && images.Count is not 0)
+            if (Images is not null && Images.Count is not 0)
             {
+                if (Path.GetExtension(Images[0].FileName).ToLower() != ".png" && Path.GetExtension(Images[0].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[0].FileName).ToLower() != ".jpeg")
+                {
+                    ModelState.AddModelError("Images", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                    return Page();
+                }
+
+                if (Images[0].Length > 5000000)
+                {
+                    ModelState.AddModelError("Images", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                    return Page();
+                }
+
                 requestContent = new MultipartFormDataContent();
                 item = new MemoryStream();
-                images[0].CopyTo(item);
+                Images[0].CopyTo(item);
                 item.Position = 0;
                 imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                requestContent.Add(imageContent, "image", Path.GetFileName(images[0].FileName));
+                requestContent.Add(imageContent, "image", Path.GetFileName(Images[0].FileName));
                 imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                 News.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
 
-                if (images[1] is not null)
+                if (Images[1] is not null)
                 {
+                    if (Path.GetExtension(Images[1].FileName).ToLower() != ".png" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpeg")
+                    {
+                        ModelState.AddModelError("Images", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                        return Page();
+                    }
+
+                    if (Images[1].Length > 5000000)
+                    {
+                        ModelState.AddModelError("Images", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                        return Page();
+                    }
+
                     requestContent = new MultipartFormDataContent();
                     item = new MemoryStream();
-                    images[1].CopyTo(item);
+                    Images[1].CopyTo(item);
                     item.Position = 0;
                     imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                    requestContent.Add(imageContent, "image", Path.GetFileName(images[1].FileName));
+                    requestContent.Add(imageContent, "image", Path.GetFileName(Images[1].FileName));
                     imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                     News.ThirdImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
                 }

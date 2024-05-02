@@ -2,7 +2,7 @@
 @model Cms.Clients.AdminPanel.Pages.News.CreateModel
 @{
     ViewBag.Title = "انتشار خبر";
-    ViewBag.Model = "خبر";
+    ViewBag.Page = "انتشار خبر";
 }
 
 
@@ -17,13 +17,13 @@
                     <div class="row">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>عنوان : </label>
+                                <label>عنوان : <span class="text-danger">*</span>  </label>
                                 <input type="text" class="form-control" asp-for="News.Title" />
                             </div>
                         </div>
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg">
-                                <label>مقدمه : </label>
+                                <label>مقدمه : <span class="text-danger">*</span> </label>
                                 <input type="text" class="form-control" asp-for="News.Introduction" />
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>نوع خبر : </label>
+                                <label>نوع خبر : <span class="text-danger">*</span> </label>
                                 <select class="form-control" asp-for="News.NewsTypeId">
                                     <option hidden selected>نوع خبر را انتخاب کنید</option>
                                     @foreach (var newsType in Model.NewsTypes)
@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-md-6 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>زبان : </label>
+                                <label>زبان : <span class="text-danger">*</span> </label>
                                 <select class="form-control" asp-for="News.LanguageId">
                                     <option hidden selected>زبان مورد نظر را انتخاب کنید</option>
                                     @foreach (var language in Model.Languages)
@@ -59,7 +59,7 @@
                     <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
-                                <label>متن : </label>
+                                <label>متن : <span class="text-danger">*</span> </label>
 
                                 <div class="col-md-12">
                                     <div class="card card-info ">
@@ -76,58 +76,58 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <label>تاریخ انتشار : </label>
-                            <input type="date" class="form-control" asp-for="News.PublishDate" />
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <label for="exampleInputFile">تصویر اصلی</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="mainImage" id="mainImage">
-                                    <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-md-0 mb-4">
+                            <div class="card card-body card-plain border-radius-lg ">
+                                <label>تاریخ انتشار : <span class="text-danger">*</span> </label>
+                                <input type="date" class="form-control" asp-for="News.PublishDate" />
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <label for="exampleInputFile">تصاویر جانبی</label>
-
+                    <div class="row">
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر اصلی خبر <span class="text-danger">*</span> </label>
                             <div class="input-group">
-                                <div class="custom-file m-1">
-                                    <input type="file" class="custom-file-input" name="image" id="mainImage">
-                                    <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
-                                </div>
-
-
-                                <div class="custom-file m-1">
-                                    <input type="file" class="custom-file-input" name="image" id="mainImage">
-                                    <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                                <div class="">
+                                    <input type="file" asp-for="MainImage" class="form-control m-2" id="mainImage">
                                 </div>
                             </div>
+                            <span class="text-danger" asp-validation-for="MainImage"></span>
+                        </div>
 
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <img id="mainImgAvatar" class=" ImageBox" src="~/dist/img/DefalutPic.png" />
                         </div>
                     </div>
-                </div>
 
+                    <div class="row mt-3">
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر جانبی خبر</label>
+                            <div class="input-group">
+                                <div class="">
+                                    <input type="file" class="form-control m-2" name="images" id="secondImage">
+                                </div>
+                            </div>
+                        </div>                        
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر جانبی خبر</label>
+                            <div class="input-group">
+                                <div class="">
+                                    <input type="file" class="form-control m-2" name="images" id="thirdImage">
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Images" class="text-danger"></span>
+                    </div>
 
-                <div class="row">
-                    <div class="col-md-12 mb-md-0 mb-4">
-                        <div class="card card-body card-plain border-radius-lg ">
-                            <input type="submit" class="btn-success btn" value="انتشار خبر" />
+                    <div class="row mt-3">
+                        <div class="col-md-12 mb-md-0 mb-4">
+                            <div class="card card-body card-plain border-radius-lg ">
+                                <input type="submit" class="btn-success btn" value="انتشار خبر" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,6 +138,32 @@
 </form>
 
 @section Scripts {
+
+    <script>
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+            //Datemask dd/mm/yyyy
+            $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            //Datemask2 mm/dd/yyyy
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+
+            $('.normal-example').persianDatepicker();
+        })
+    </script>
+
+
+    <script src="/dist/js/persian-date.min.js"></script>
+    <script src="/dist/js/persian-datepicker.min.js"></script>
+    <!-- InputMask -->
+    <script src="/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="/plugins/daterangepicker/daterangepicker.js"></script>
+
     <script>
         $(function () {
             // Replace the <textarea id="editor1"> with a CKEditor
@@ -158,4 +184,24 @@
             })
         })
     </script>
+
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#mainImgAvatar').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#mainImage").change(function () {
+            readURL(this);
+        });
+    </script>
+
 }

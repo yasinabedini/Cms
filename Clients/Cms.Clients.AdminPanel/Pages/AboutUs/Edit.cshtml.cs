@@ -19,6 +19,7 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
         public NewsViewModel About { get; set; }
         public List<NewsViewModel> AboutList { get; set; }
         public List<LanguageViewModel> Languages { get; set; }
+        public IFormFile? MainImage { get; set; }
 
 
         public EditModel(IHttpClientFactory factory)
@@ -76,7 +77,7 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             return Page();
         }
 
-        public async Task<IActionResult> OnPost(IFormFile? mainImage)
+        public async Task<IActionResult> OnPost()
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
@@ -113,27 +114,36 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             }
 
             #region Update Gallery
-            if (mainImage is not null)
+            if (MainImage is not null)
             {
-                var deleteResult = _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={About.MainImageName}&&folder=news").Result;
-                if (deleteResult.IsSuccessStatusCode)
+                if (Path.GetExtension(MainImage.FileName).ToLower() != ".png" && Path.GetExtension(MainImage.FileName).ToLower() != ".jpg" && Path.GetExtension(MainImage.FileName).ToLower() != ".jpeg")
                 {
-                    var requestContent = new MultipartFormDataContent();
-                    var item = new MemoryStream();
-                    mainImage.CopyTo(item);
-                    item.Position = 0;
-                    var imageContent = new ByteArrayContent(item.ToArray());
-                    imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                    requestContent.Add(imageContent, "image", Path.GetFileName(mainImage.FileName));
-                    var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-
-                    About.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                    ModelState.AddModelError("MainImage", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                    return Page();
                 }
+
+                if (MainImage.Length > 5000000)
+                {
+                    ModelState.AddModelError("MainImage", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                    return Page();
+                }
+
+                var deleteResult = _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={About.MainImageName}&&folder=news").Result;
+                var requestContent = new MultipartFormDataContent();
+                var item = new MemoryStream();
+                MainImage.CopyTo(item);
+                item.Position = 0;
+                var imageContent = new ByteArrayContent(item.ToArray());
+                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+                requestContent.Add(imageContent, "image", Path.GetFileName(MainImage.FileName));
+                var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+
+                About.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
             }
 
             #endregion
 
-            var modelData = new { Id = About.Id, Title = About.Title, Introduction = About.Introduction, LanguageId = About.LanguageId, NewsTypeId = About.NewsTypeId,IsEnable = About.IsEnable ,PublishDate = About.PublishDate, Text = About.Text, MainImage = About.MainImageName, SecondImage = About.SecondImage, ThirdImage = About.ThirdImage };
+            var modelData = new { Id = About.Id, Title = About.Title, Introduction = About.Introduction, LanguageId = About.LanguageId, NewsTypeId = About.NewsTypeId, IsEnable = About.IsEnable, PublishDate = About.PublishDate, Text = About.Text, MainImage = About.MainImageName, SecondImage = About.SecondImage, ThirdImage = About.ThirdImage };
 
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");

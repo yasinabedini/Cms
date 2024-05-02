@@ -20,6 +20,9 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
         public List<NewsViewModel> AboutList { get; set; }
         public List<LanguageViewModel> Languages { get; set; }
 
+        [BindProperty]
+        public IFormFile Image { get; set; }
+
 
         public CreateModel(IHttpClientFactory factory)
         {
@@ -31,6 +34,13 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
+            IConfiguration config;
+
+            config = HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration)) as IConfiguration;
+
+            var NewsAboutUsId = config.GetSection("NewsId")["NewsAboutUsId"];
+
+            ViewData["NewsAboutUs"] = NewsAboutUsId;
 
             #region languages
             var languageData = new { pageNumber = 1, pageSize = 200 };
@@ -41,7 +51,7 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult;
             #endregion
 
-            var data = new { pageNumber = 1, pageSize = 200, typeId = 7, isPage = true }; // Your data object
+            var data = new { pageNumber = 1, pageSize = 200, typeId = NewsAboutUsId, isPage = true }; // Your data object
 
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -59,44 +69,36 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             return Page();
         }
 
-        public async Task<IActionResult> OnPost(IFormFile mainImage)
+        public async Task<IActionResult> OnPost()
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
             #region languages
-            var languageData = new { pageNumber = 1, pageSize = 200 };
-            var languageJsonInString = JsonConvert.SerializeObject(languageData);
-            var languageContent = new StringContent(languageJsonInString, Encoding.UTF8, "application/json");
-            var languageResponse = _httpClient.PostAsync("/api/Language/GetAll", languageContent).Result;
-            var languageResult = languageResponse.Content.ReadAsStringAsync().Result;
-            Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult;
+            var data = new { pageNumber = 1, pageSize = 200 };
+            var jsonInString = JsonConvert.SerializeObject(data);
+            var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+            var response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
+            var result = response.Content.ReadAsStringAsync().Result;
+            Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
             #endregion
 
             if (!ModelState.IsValid)
             {
-                if (mainImage is null)
+                if (Image is null)
                 {
-                    ModelState.AddModelError("mainImage", "یک عکس برای فعالیت اپلود کنید");
-                }
-
-                var data = new { pageNumber = 1, pageSize = 200 };
-                var jsonInString = JsonConvert.SerializeObject(data);
-                var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-                var response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-                Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
-
+                    ModelState.AddModelError("Image", "یک عکس برای فعالیت اپلود کنید");
+                }            
                 return Page();
             }
 
             #region Save Main Image
             var requestContent = new MultipartFormDataContent();
             var item = new MemoryStream();
-            mainImage.CopyTo(item);
+            Image.CopyTo(item);
             item.Position = 0;
             var imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "image", Path.GetFileName(mainImage.FileName));
+            requestContent.Add(imageContent, "image", Path.GetFileName(Image.FileName));
             var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
 
             About.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();

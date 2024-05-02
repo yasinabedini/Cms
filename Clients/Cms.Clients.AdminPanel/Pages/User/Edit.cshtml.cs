@@ -41,8 +41,6 @@ namespace Cms.Clients.AdminPanel.Pages.User
                 Email = findUser.Email
             };
 
-
-
             UserRoles = (await _userManager.GetRolesAsync(findUser)).ToList();
             RoleList = _roleManager.Roles.ToList();
         }

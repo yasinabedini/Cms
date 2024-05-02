@@ -21,7 +21,7 @@ namespace Cms.Clients.AdminPanel.Pages
         public int UserCount { get; set; }
         public int NewsCount { get; set; }
         public int NotificationNewsCount { get; set; }
-        
+
 
 
         public List<CustomIdentityUser> Users { get; set; }
@@ -29,7 +29,7 @@ namespace Cms.Clients.AdminPanel.Pages
         public DashBoardModel(IHttpClientFactory factory, UserManager<CustomIdentityUser> userManager, IConfiguration configuration)
         {
             _httpClient = factory.CreateClient("AdminApi");
-            _userManager = userManager;            
+            _userManager = userManager;
             this.configuration = configuration;
         }
 
@@ -39,18 +39,18 @@ namespace Cms.Clients.AdminPanel.Pages
             Users = _userManager.Users.ToList().TakeLast(8).ToList();
 
 
-            var data = new { pageNumber=1, pageSize = 400, typeId = configuration.GetSection("NewsTypeId").Value, isPage = false }; // Your data object
+            var data = new { pageNumber = 1, pageSize = 400, typeId = configuration.GetSection("NewsId")["NewsTypeId"], isPage = false }; // Your data object
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
             var response = _httpClient.PostAsync("/api/News/GetAll", content).Result;
-            var result =await response.Content.ReadAsStringAsync();
+            var result = await response.Content.ReadAsStringAsync();
             NewsCount = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult.Count;
 
-            var secondData = new { pageNumber = 1, pageSize = 400, typeId = configuration.GetSection("NewsNotificationId").Value,  isPage = false }; // Your data object
-             jsonInString = JsonConvert.SerializeObject(secondData);
-             content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-             response = _httpClient.PostAsync("/api/News/GetAll", content).Result;
-             result =await response.Content.ReadAsStringAsync();
+            var secondData = new { pageNumber = 1, pageSize = 400, typeId = configuration.GetSection("NewsId")["NewsNotificationId"], isPage = false }; // Your data object
+            jsonInString = JsonConvert.SerializeObject(secondData);
+            content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+            response = _httpClient.PostAsync("/api/News/GetAll", content).Result;
+            result = await response.Content.ReadAsStringAsync();
             NotificationNewsCount = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult.Count;
         }
     }

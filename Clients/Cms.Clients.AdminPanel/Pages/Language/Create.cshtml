@@ -15,14 +15,14 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>عنوان : </label>
+                            <label>عنوان : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Language.Title" />
                         </div>
                     </div>
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>نام : </label>
+                            <label>نام : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Language.Name" />
                         </div>
                     </div>
@@ -31,14 +31,14 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label >منطقه : </label>
+                            <label>منطقه : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Language.Region" />
                         </div>
                     </div>
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>جهت متن : </label>
+                            <label>جهت متن : <span class="text-danger">*</span></label>
                             <select class="form-control" asp-for="Language.Rtl">
                                 <option selected value="@true">راست چین</option>
                                 <option value="@false">چپ چین</option>

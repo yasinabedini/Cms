@@ -17,7 +17,7 @@
                     <thead>
                         <tr>
                             <th>عنوان</th>
-                            <th>نویسنده</th>
+                            @* <th>نویسنده</th> *@
                             <th>تاریخ انتشار</th>
                             <th></th>
                         </tr>
@@ -27,9 +27,9 @@
                         {
                             <tr id="news[@news.Id]">
                                 <td>@news.Title</td>
-                                <td>
+                              @*   <td>
                                ادمین
-                                </td>
+                                </td> *@
                                 <td>@news.PublishDate</td>
                                 <td>                                    
                                     <a href="/news/edit?id=@news.Id" class="text-white btn btn-primary">ویرایش</a>

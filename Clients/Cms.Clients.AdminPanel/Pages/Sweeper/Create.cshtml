@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>عنوان : </label>
+                            <label>عنوان : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Sweeper.Title" />
                         </div>
                     </div>
@@ -26,14 +26,14 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>لینک : </label>
+                            <label>لینک : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Sweeper.Link" />
                         </div>
                     </div>
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>زبان : </label>
+                            <label>زبان : <span class="text-danger">*</span></label>
                             <select class="form-control" asp-for="Sweeper.LanguageId">
                                 <option hidden selected>زبان مورد نظر را انتخاب کنید</option>
                                 @foreach (var language in Model.Languages)
@@ -48,7 +48,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>متن : </label>
+                            <label>متن : <span class="text-danger">*</span></label>
 
                             <div class="col-md-12">
                                 <div class="card card-info ">
@@ -69,20 +69,24 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
-                        <label for="exampleInputFile">ارسال فایل</label>
+                        <label for="exampleInputFile">تصویر اسلایدر <span class="text-danger">*</span></label>
                         <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="image" id="mainImage">
-                                <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                            <div class="">
+                                <input type="file" class="form-control" name="image" id="image">
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <img id="imgAvatar" class=" ImageBox" src="~/dist/img/DefalutPic.png" />
+                    </div>
+
                 </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-md-0 mb-4 mt-4">
                         <div class="card">
-                            <input type="submit" class="btn-success btn" value="ساخت اسلایدر" />
+                            <input type="submit" class="btn-success btn " value="ساخت اسلایدر" />
                         </div>
                     </div>
                 </div>
@@ -93,6 +97,26 @@
 
 
 @section Scripts {
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgAvatar').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#image").change(function () {
+            readURL(this);
+        });
+    </script>
+
+
     <script>
         $(function () {
             // Replace the <textarea id="editor1"> with a CKEditor

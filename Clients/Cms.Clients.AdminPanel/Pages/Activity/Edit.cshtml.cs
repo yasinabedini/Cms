@@ -1,4 +1,4 @@
-using Cms.Clients.AdminPanel.Auth;
+﻿using Cms.Clients.AdminPanel.Auth;
 using Cms.Clients.AdminPanel.ViewModels;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
         public NewsViewModel Activity { get; set; }
         public List<NewsViewModel> ActivityList { get; set; }
         public List<LanguageViewModel> Languages { get; set; }
-
+        public IFormFile? MainImage { get; set; }
 
         public EditModel(IHttpClientFactory factory)
         {
@@ -76,7 +76,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
             return Page();
         }
 
-        public async Task<IActionResult> OnPost(IFormFile? mainImage)
+        public async Task<IActionResult> OnPost()
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
@@ -113,27 +113,37 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
             }
 
             #region Update Gallery
-            if (mainImage is not null)
+            if (MainImage is not null)
             {
-                var deleteResult = _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.MainImageName}&&folder=news").Result;
-                if (deleteResult.IsSuccessStatusCode)
+                if (Path.GetExtension(MainImage.FileName).ToLower() != ".png" && Path.GetExtension(MainImage.FileName).ToLower() != ".jpg" && Path.GetExtension(MainImage.FileName).ToLower() != ".jpeg")
                 {
-                    var requestContent = new MultipartFormDataContent();
-                    var item = new MemoryStream();
-                    mainImage.CopyTo(item);
-                    item.Position = 0;
-                    var imageContent = new ByteArrayContent(item.ToArray());
-                    imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                    requestContent.Add(imageContent, "image", Path.GetFileName(mainImage.FileName));
-                    var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-
-                    Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                    ModelState.AddModelError("MainImage", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                    return Page();
                 }
+
+                if (MainImage.Length > 5000000)
+                {
+                    ModelState.AddModelError("MainImage", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                    return Page();
+                }
+
+                var deleteResult = _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.MainImageName}&&folder=news").Result;
+
+                var requestContent = new MultipartFormDataContent();
+                var item = new MemoryStream();
+                MainImage.CopyTo(item);
+                item.Position = 0;
+                var imageContent = new ByteArrayContent(item.ToArray());
+                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+                requestContent.Add(imageContent, "image", Path.GetFileName(MainImage.FileName));
+                var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+
+                Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
             }
 
             #endregion
 
-            var modelData = new { Id = Activity.Id, Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId,IsEnable = Activity.IsEnable ,PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage };
+            var modelData = new { Id = Activity.Id, Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, IsEnable = Activity.IsEnable, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage };
 
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");

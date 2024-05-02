@@ -33,7 +33,7 @@ namespace Cms.Clients.AdminPanel.Pages.NewsType
             }
             var result = response.Content.ReadAsStringAsync().Result;
 
-            NewsTypeList = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult;
+            NewsTypeList = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult.Where(t=>!t.IsPage).ToList();
 
             return Page();
         }

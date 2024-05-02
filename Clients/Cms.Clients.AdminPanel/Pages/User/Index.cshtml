@@ -7,48 +7,84 @@
 }
 
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <!-- /.card-header -->
+
+<div class="col-12">
+    <div class="card">
+        <div class="row">
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>نام</th>
-                            <th>username</th>
-                            <th>شماره موبایل</th>
-                            <th>ایمیل</th>
-                            <th>تایید شماره موبایل</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model.UserList.ToList())
-                        {
-                            <tr id="user[@user.Id]">
-                                <td>@user.Name</td>
-                                <td>@user.UserName</td>
-                                <td>@user.PhoneNumber</td>
-                                <td>@user.Email</td>
-                                <td>
-                                    @if (user.PhoneNumberConfirmed)
+                <div class="col-sm-12 col-md-12 p-3 text-center">
+                    <form method="get">
+                        <input name="searchText" type="text" value="@HttpContext.Request.Query["searchText"].ToString()" placeholder="کاربر مورد نظر خود را جستحو کنید" class="form-control col-md-5 m-3 d-inline float-right" />
+                        <div class="form-group d-inline">
+                            <label class="m-3">نقش کاربری : </label>
+                            <select name="selectedRole" class="form-control d-inline col-md-2 m-3">
+                                <option selected value="0">همه کاربران</option>
+                                @foreach (var role in Model.Roles)
+                                {
+                                    if (HttpContext.Request.Query["selectedRole"] == role.Id)
                                     {
-                                        <i class="fa fa-check"></i>
+                                        <option selected value="@role.Id">@role.Name</option>
                                     }
                                     else
                                     {
-                                        <i class="fa fa-close"></i>
+                                        <option value="@role.Id">@role.Name</option>
                                     }
-                                </td>
-                                <td>                                    
-                                    <a href="/user/edit?id=@user.Id" class="text-white btn btn-primary">ویرایش</a>
-                                    <a href="/user/delete?id=@user.Id" class="text-white btn btn-danger">حذف</a>
-                                </td>
+                                }
+                            </select>
+                        </div>
+                        <input type="submit" value="جستجو" class="btn btn-success float-left d-inline m-3" />
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">                        
+            <!-- /.card-header -->
+            <div class="card-body">
+                @if (Model.UserList.Any())
+                {
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>نام</th>
+                                <th>username</th>
+                                <th>شماره موبایل</th>
+                                <th>ایمیل</th>
+                                <th>تایید شماره موبایل</th>
+                                <th></th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.UserList.ToList())
+                            {
+                                <tr id="user[@user.Id]">
+                                    <td>@user.Name</td>
+                                    <td>@user.UserName</td>
+                                    <td>@user.PhoneNumber</td>
+                                    <td>@user.Email</td>
+                                    <td>
+                                        @if (user.PhoneNumberConfirmed)
+                                        {
+                                            <i class="fa fa-check"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-close"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="/user/edit?id=@user.Id" class="text-white btn btn-primary">ویرایش</a>
+                                        <a href="/user/delete?id=@user.Id" class="text-white btn btn-danger">حذف</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h4 class="text-center">کاربری یافت نشد</h4>
+                }
+                    
             </div>
             <!-- /.card-body -->
         </div>

@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>عنوان : </label>
+                            <label>عنوان : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Sweeper.Title" />
                         </div>
                     </div>
@@ -28,14 +28,14 @@
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg">
-                            <label>لینک : </label>
+                            <label>لینک : <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Sweeper.Link" />
                         </div>
                     </div>
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>زبان : </label>
+                            <label>زبان : <span class="text-danger">*</span></label>
                             <select class="form-control" asp-for="Sweeper.LanguageId">
                                 @foreach (var language in Model.Languages)
                                 {
@@ -57,7 +57,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>متن : </label>
+                            <label>متن : <span class="text-danger">*</span></label>
 
                             <div class="col-md-12">
                                 <div class="card card-info ">
@@ -78,7 +78,7 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-md-0 mb-4">
-                        <label for="exampleInputFile">ارسال فایل</label>
+                        <label for="exampleInputFile">تصویر اسلایدر <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" name="image" id="mainImage">
@@ -89,7 +89,7 @@
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
-                            <label>وضعیت : </label>
+                            <label>وضعیت : <span class="text-danger">*</span></label>
                             <select class="form-control" asp-for="Sweeper.IsEnable">
                                 <option value="@true">فعال</option>
                                 <option value="@false">غیر فعال</option>

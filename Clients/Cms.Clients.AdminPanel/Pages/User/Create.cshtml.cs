@@ -50,7 +50,7 @@ namespace Cms.Clients.AdminPanel.Pages.User
                 ModelState.AddModelError("Password", "کلمه عبور با تکرارش یکسان نیست!");
                 return Page();
             }
-            if (_userManager.Users.Any(t=>t.UserName==User.UserName))
+            if (_userManager.Users.Any(t => t.UserName == User.UserName))
             {
                 ModelState.AddModelError("User.UserName", "کاربری با این نام کاربری ثبت نام کرده است!");
                 return Page();
@@ -66,14 +66,20 @@ namespace Cms.Clients.AdminPanel.Pages.User
 
             var result = await _userManager.CreateAsync(User, Password);
 
-            if (result.Errors.Any(t=>t.Description.ToLower().Contains("password")))
+            if (result.Errors.Any(t => t.Description.ToLower().Contains("password")))
             {
                 ModelState.AddModelError("Password", " حداقل 8 کاراکتر شامل اعدا حروف کوچک و بزرگ و کاراکتر خاص مثل @");
                 return Page();
             }
-            
-                await _userManager.AddToRolesAsync(User, Roles);
-            
+
+            if (result.Errors.Any(t => t.Description.Contains("Username")))
+            {
+                ModelState.AddModelError("User.UserName", "نام کاربری فقط باید شامل حروف، اعداد و . باشد و فاصله نداشته باشد!");
+                return Page();
+            }
+
+            await _userManager.AddToRolesAsync(User, Roles);
+
 
             return RedirectToPage("Index");
         }

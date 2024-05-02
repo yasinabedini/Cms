@@ -16,8 +16,7 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>عنوان</th>
-                            <th>نام</th>
+                            <th>عنوان</th>                            
                             <th>وضعیت</th>
                             <th></th>
                         </tr>
@@ -26,8 +25,7 @@
                         @foreach (var newsType in Model.NewsTypeList.ToList())
                         {
                             <tr id="newsType[@newsType.Id]">
-                                <td>@newsType.Title</td>
-                                <td>@newsType.Name</td>
+                                <td>@newsType.Title</td>                                
                                 @if (newsType.IsEnable)
                                 {
                                     <td class="align-middle text-center">
