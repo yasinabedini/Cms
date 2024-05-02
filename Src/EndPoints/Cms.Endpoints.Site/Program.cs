@@ -111,7 +111,7 @@ try
     app.Run();
 }
 
-catch (DirectoryNotFoundException ex)
+catch (Exception ex)
 {
 
     Log.Fatal(ex, $"UnHandled Exception:{ex.Message}");

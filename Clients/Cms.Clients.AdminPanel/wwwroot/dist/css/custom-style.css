@@ -271,3 +271,10 @@ ul {
 .datepicker-plot-area {
     font-family: 'Vazir', sans-serif;
 }
+
+.ImageBox {
+    width: 350px !important;
+    max-height: 350px !important;
+    border: 2px lightgray solid;
+    padding:10px
+}    
