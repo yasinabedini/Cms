@@ -29,7 +29,7 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
-            #region Fill News
+            #region Fill Sweeper
             var modelData = new { Id = id };
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");

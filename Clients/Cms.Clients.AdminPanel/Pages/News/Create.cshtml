@@ -82,7 +82,7 @@
                         <div class="col-md-12 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">
                                 <label>تاریخ انتشار : <span class="text-danger">*</span> </label>
-                                <input type="date" class="form-control" asp-for="News.PublishDate" />
+                                <input type="date" class="form-control" asp-for="News.PublishDate" value="@DateTime.Now" />
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                             <label for="exampleInputFile">تصویر جانبی خبر</label>
                             <div class="input-group">
                                 <div class="">
-                                    <input type="file" class="form-control m-2" name="images" id="secondImage">
+                                    <input type="file" class="form-control m-2" asp-for="Images" id="secondImage">
                                 </div>
                             </div>
                         </div>                        
@@ -116,7 +116,7 @@
                             <label for="exampleInputFile">تصویر جانبی خبر</label>
                             <div class="input-group">
                                 <div class="">
-                                    <input type="file" class="form-control m-2" name="images" id="thirdImage">
+                                    <input type="file" class="form-control m-2" asp-for="Images" id="thirdImage">
                                 </div>
                             </div>
                         </div>

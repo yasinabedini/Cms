@@ -43,6 +43,15 @@
                                     </td>
                                 }
                                 <td>
+                                    @if (aboutUs.IsEnable)
+                                    {
+                                        <a href="/AboutUs/edit?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/AboutUs/edit?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                    }
                                     <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
                                     <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
                                 </td>

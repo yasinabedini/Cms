@@ -22,6 +22,9 @@ namespace Cms.Clients.AdminPanel.Pages.News
 
         public IFormFile? MainImage { get; set; }
 
+        [BindProperty]
+        public List<IFormFile> Images { get; set; }
+
         public EditModel(IHttpClientFactory factory)
         {
             _httpClient = factory.CreateClient("AdminApi");
@@ -30,7 +33,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
 
         public void OnGet(int id)
         {
-            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
             #region Fill News
             var modelData = new { Id = id };
@@ -59,7 +62,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
             News = JsonConvert.DeserializeObject<NewsViewModel>(modelResult);
         }
 
-        public async Task<IActionResult> OnPost(List<IFormFile>? images)
+        public async Task<IActionResult> OnPost()
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
@@ -99,38 +102,60 @@ namespace Cms.Clients.AdminPanel.Pages.News
                 News.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
             }
 
-            if (images is not null && images.Count is not 0)
+            if (Images is not null && Images.Count is not 0)
             {
+                if (Path.GetExtension(Images[0].FileName).ToLower() != ".png" && Path.GetExtension(Images[0].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[0].FileName).ToLower() != ".jpeg")
+                {
+                    ModelState.AddModelError("Images", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                    return Page();
+                }
+                if (Images[0].Length > 5000000)
+                {
+                    ModelState.AddModelError("Images", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                    return Page();
+                }
+
                 if (!string.IsNullOrEmpty(News.SecondImage))
                 {
                     _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={News.SecondImage}&&folder=news");
                 }
                 var requestContent = new MultipartFormDataContent();
                 var item = new MemoryStream();
-                images[0].CopyTo(item);
+                Images[0].CopyTo(item);
                 item.Position = 0;
                 var imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                requestContent.Add(imageContent, "image", Path.GetFileName(images[0].FileName));
+                requestContent.Add(imageContent, "image", Path.GetFileName(Images[0].FileName));
                 var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                 News.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
 
-                if (images[1] is not null)
+                if (Images.Count == 2)
                 {
+                    if (Path.GetExtension(Images[1].FileName).ToLower() != ".png" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpeg")
+                    {
+                        ModelState.AddModelError("Images", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                        return Page();
+                    }
+                    if (Images[1].Length > 5000000)
+                    {
+                        ModelState.AddModelError("Images", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                        return Page();
+                    }
+
+
                     if (!string.IsNullOrEmpty(News.ThirdImage))
                     {
                         _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={News.ThirdImage}&&folder=news");
-                    }
-
+                    }                 
                     requestContent = new MultipartFormDataContent();
                     item = new MemoryStream();
-                    images[1].CopyTo(item);
+                    Images[1].CopyTo(item);
                     item.Position = 0;
                     imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                    requestContent.Add(imageContent, "image", Path.GetFileName(images[1].FileName));
+                    requestContent.Add(imageContent, "image", Path.GetFileName(Images[1].FileName));
                     imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                    News.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                    News.ThirdImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
                 }
 
                 item.Dispose();

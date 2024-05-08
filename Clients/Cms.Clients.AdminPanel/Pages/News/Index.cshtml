@@ -10,14 +10,14 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card">         
+        <div class="card">
             <!-- /.card-header -->
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>عنوان</th>
-                            @* <th>نویسنده</th> *@
+                            <th>نویسنده</th>
                             <th>تاریخ انتشار</th>
                             <th></th>
                         </tr>
@@ -27,14 +27,23 @@
                         {
                             <tr id="news[@news.Id]">
                                 <td>@news.Title</td>
-                              @*   <td>
-                               ادمین
-                                </td> *@
+                                <td>
+                                    @news.Author
+                                </td>
                                 <td>@news.PublishDate</td>
-                                <td>                                    
+                                <td>
+                                    @if (news.IsEnable)
+                                    {
+                                        <a href="/News/ChangeAvailability?id=@news.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/News/ChangeAvailability?id=@news.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                    }
                                     <a href="/news/edit?id=@news.Id" class="text-white btn btn-primary">ویرایش</a>
                                     <a onclick="Delete(@news.Id)" class="text-white btn btn-danger">حذف</a>
-                                </td>                                
+                                </td>
                             </tr>
                         }
                     </tbody>

@@ -20,6 +20,8 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
         public List<NewsViewModel> ActivityList { get; set; }
         public List<LanguageViewModel> Languages { get; set; }
         public IFormFile? MainImage { get; set; }
+        [BindProperty]
+        public List<IFormFile> Images { get; set; }
 
         public EditModel(IHttpClientFactory factory)
         {
@@ -141,6 +143,66 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
                 Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
             }
 
+
+            if (Images is not null && Images.Count is not 0)
+            {
+                if (Path.GetExtension(Images[0].FileName).ToLower() != ".png" && Path.GetExtension(Images[0].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[0].FileName).ToLower() != ".jpeg")
+                {
+                    ModelState.AddModelError("Images", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                    return Page();
+                }
+                if (Images[0].Length > 5000000)
+                {
+                    ModelState.AddModelError("Images", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                    return Page();
+                }
+
+                if (!string.IsNullOrEmpty(Activity.SecondImage))
+                {
+                    _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.SecondImage}&&folder=news");
+                }
+                var requestContent = new MultipartFormDataContent();
+                var item = new MemoryStream();
+                Images[0].CopyTo(item);
+                item.Position = 0;
+                var imageContent = new ByteArrayContent(item.ToArray());
+                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+                requestContent.Add(imageContent, "image", Path.GetFileName(Images[0].FileName));
+                var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                Activity.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+
+                if (Images.Count == 2)
+                {
+                    if (Path.GetExtension(Images[1].FileName).ToLower() != ".png" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpeg")
+                    {
+                        ModelState.AddModelError("Images", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                        return Page();
+                    }
+                    if (Images[1].Length > 5000000)
+                    {
+                        ModelState.AddModelError("Images", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                        return Page();
+                    }
+
+
+                    if (!string.IsNullOrEmpty(Activity.ThirdImage))
+                    {
+                        _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.ThirdImage}&&folder=news");
+                    }
+
+                    requestContent = new MultipartFormDataContent();
+                    item = new MemoryStream();
+                    Images[1].CopyTo(item);
+                    item.Position = 0;
+                    imageContent = new ByteArrayContent(item.ToArray());
+                    imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+                    requestContent.Add(imageContent, "image", Path.GetFileName(Images[1].FileName));
+                    imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                    Activity.ThirdImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                }
+
+                item.Dispose();
+            }
             #endregion
 
             var modelData = new { Id = Activity.Id, Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, IsEnable = Activity.IsEnable, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage };

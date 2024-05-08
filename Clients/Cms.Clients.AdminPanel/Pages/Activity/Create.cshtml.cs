@@ -1,6 +1,7 @@
 using Cms.Clients.AdminPanel.Auth;
 using Cms.Clients.AdminPanel.ViewModels;
 using IdentityModel.Client;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
@@ -150,7 +151,7 @@ public class CreateModel : PageModel
             imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
             Activity.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
 
-            if (Images[1] is not null)
+            if (Images.Count==2)
             {
                 if (Path.GetExtension(Images[1].FileName).ToLower() != ".png" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpeg")
                 {
@@ -178,7 +179,7 @@ public class CreateModel : PageModel
         item.Dispose();
         #endregion
 
-        var modelData = new { Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage }; // Your data object
+        var modelData = new { Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage,Author = HttpContext.User.GetDisplayName() }; // Your data object
 
         var modelJsonInString = JsonConvert.SerializeObject(modelData);
         var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");

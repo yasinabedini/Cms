@@ -84,6 +84,25 @@
                             </div>
                         </div>
                     
+                        <div class="row mt-3">
+                            <div class="col-md-6 mb-md-0 mb-4">
+                                <label for="exampleInputFile">تصویر جانبی</label>
+                                <div class="input-group">
+                                    <div class="">
+                                        <input type="file" class="form-control m-2" asp-for="Images" id="secondImage">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-md-0 mb-4">
+                                <label for="exampleInputFile">تصویر جانبی</label>
+                                <div class="input-group">
+                                    <div class="">
+                                        <input type="file" class="form-control m-2" asp-for="Images" id="thirdImage">
+                                    </div>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Images" class="text-danger"></span>
+                        </div>
                     </div>
                     
                     <div class="row mt-3">

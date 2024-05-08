@@ -10,7 +10,10 @@
     <input type="hidden" asp-for="About.NewsTypeId" />
     <input type="hidden" value="متنی وجود ندارد" asp-for="About.Introduction" />
     <input type="hidden" asp-for="About.MainImageName" />
+    <input type="hidden" asp-for="About.SecondImage" />
+    <input type="hidden" asp-for="About.ThirdImage" />
     <input type="hidden" asp-for="About.PublishDate" />
+    <input type="hidden" asp-for="About.Author" />
     <div class="card card-info">
         <div class="card-header">
             <h3 class="card-title">درباره ما</h3>
@@ -88,6 +91,25 @@
                         </div>
                     </div>
 
+                    <div class="row mt-3">
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر جانبی</label>
+                            <div class="input-group">
+                                <div class="">
+                                    <input type="file" class="form-control m-2" asp-for="Images" id="secondImage">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر جانبی</label>
+                            <div class="input-group">
+                                <div class="">
+                                    <input type="file" class="form-control m-2" asp-for="Images" id="thirdImage">
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Images" class="text-danger"></span>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">

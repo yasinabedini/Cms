@@ -1,6 +1,7 @@
 using Cms.Clients.AdminPanel.Auth;
 using Cms.Clients.AdminPanel.ViewModels;
 using IdentityModel.Client;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -22,6 +23,9 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
 
         [BindProperty]
         public IFormFile Image { get; set; }
+
+        [BindProperty]
+        public List<IFormFile>? Images { get; set; }
 
 
         public CreateModel(IHttpClientFactory factory)
@@ -104,7 +108,60 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             About.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
             #endregion
 
-            var modelData = new { Title = About.Title, Introduction = About.Introduction, LanguageId = About.LanguageId, NewsTypeId = About.NewsTypeId, PublishDate = About.PublishDate, Text = About.Text, MainImage = About.MainImageName, SecondImage = About.SecondImage, ThirdImage = About.ThirdImage }; // Your data object
+            #region Save Gallery
+            if (Images is not null && Images.Count is not 0)
+            {
+                if (Path.GetExtension(Images[0].FileName).ToLower() != ".png" && Path.GetExtension(Images[0].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[0].FileName).ToLower() != ".jpeg")
+                {
+                    ModelState.AddModelError("Images", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                    return Page();
+                }
+
+                if (Images[0].Length > 5000000)
+                {
+                    ModelState.AddModelError("Images", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                    return Page();
+                }
+
+                requestContent = new MultipartFormDataContent();
+                item = new MemoryStream();
+                Images[0].CopyTo(item);
+                item.Position = 0;
+                imageContent = new ByteArrayContent(item.ToArray());
+                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+                requestContent.Add(imageContent, "image", Path.GetFileName(Images[0].FileName));
+                imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                About.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+
+                if (Images.Count == 2)
+                {
+                    if (Path.GetExtension(Images[1].FileName).ToLower() != ".png" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpg" && Path.GetExtension(Images[1].FileName).ToLower() != ".jpeg")
+                    {
+                        ModelState.AddModelError("Images", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                        return Page();
+                    }
+
+                    if (Images[1].Length > 5000000)
+                    {
+                        ModelState.AddModelError("Images", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                        return Page();
+                    }
+
+                    requestContent = new MultipartFormDataContent();
+                    item = new MemoryStream();
+                    Images[1].CopyTo(item);
+                    item.Position = 0;
+                    imageContent = new ByteArrayContent(item.ToArray());
+                    imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+                    requestContent.Add(imageContent, "image", Path.GetFileName(Images[1].FileName));
+                    imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                    About.ThirdImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                }
+            }
+            item.Dispose();
+            #endregion
+
+            var modelData = new { Title = About.Title, Introduction = About.Introduction, LanguageId = About.LanguageId, NewsTypeId = About.NewsTypeId, PublishDate = About.PublishDate, Text = About.Text, MainImage = About.MainImageName, SecondImage = About.SecondImage, ThirdImage = About.ThirdImage,Author=HttpContext.User.GetDisplayName() }; // Your data object
 
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");

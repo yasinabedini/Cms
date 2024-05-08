@@ -12,6 +12,7 @@
     <input type="hidden" asp-for="News.SecondImage" />
     <input type="hidden" asp-for="News.ThirdImage" />
     <input type="hidden" asp-for="News.PublishDate" />
+    <input type="hidden" asp-for="News.Author" />
 
     <div class="card card-info">
         <div class="card-header">
@@ -96,14 +97,14 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 mb-md-0 mb-4">                            
-                                <label for="exampleInputFile">تصویر اصلی خبر <span class="text-danger">*</span> </label>
-                                <div class="input-group">
-                                    <div class="">
-                                        <input type="file" asp-for="MainImage" class="form-control m-2" id="mainImage">
-                                    </div>
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر اصلی خبر <span class="text-danger">*</span> </label>
+                            <div class="input-group">
+                                <div class="">
+                                    <input type="file" asp-for="MainImage" class="form-control m-2" id="mainImage">
                                 </div>
-                                <span class="text-danger" asp-validation-for="MainImage"></span>                            
+                            </div>
+                            <span class="text-danger" asp-validation-for="MainImage"></span>
                         </div>
 
                         <div class="col-md-6 mb-md-0 mb-4">
@@ -111,26 +112,25 @@
                         </div>
                     </div>
 
+
                     <div class="row mt-3">
-                        <div class="col-md-12 mb-md-0 mb-4">
-                            <div class="card card-body card-plain border-radius-lg ">
-                                <label for="exampleInputFile">تصاویر جانبی</label>
-
-                                <div class="input-group">
-                                    <div class="custom-file m-1">
-                                        <input type="file" class="custom-file-input" name="image" id="mainImage">
-                                        <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
-                                    </div>
-
-
-                                    <div class="custom-file m-1">
-                                        <input type="file" class="custom-file-input" name="image" id="mainImage">
-                                        <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
-                                    </div>
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر جانبی</label>
+                            <div class="input-group">
+                                <div class="">
+                                    <input type="file" class="form-control m-2" asp-for="Images" id="secondImage">
                                 </div>
-
                             </div>
                         </div>
+                        <div class="col-md-6 mb-md-0 mb-4">
+                            <label for="exampleInputFile">تصویر جانبی</label>
+                            <div class="input-group">
+                                <div class="">
+                                    <input type="file" class="form-control m-2" asp-for="Images" id="thirdImage">
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Images" class="text-danger"></span>
                     </div>
 
                     <div class="row">
