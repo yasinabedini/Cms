@@ -18,11 +18,12 @@ namespace Cmd.Application.Models.News.Commands.Create
         public long NewsTypeId { get; private set; }
         public DateTime PublishDate { get; private set; }
         public string Text { get; set; }
+        public string Author { get; set; }
         public string? MainImage { get; set; }
         public string? SecondImage { get; set; }
         public string? ThirdImage { get; set; }
 
-        public CreateNewsCommand(string title, string introduction, long languageId, long newsTypeId, DateTime publishDate, string text, string? mainImage, string? secondImage, string? thirdImage)
+        public CreateNewsCommand(string title, string introduction, long languageId, long newsTypeId, DateTime publishDate, string text, string? mainImage, string? secondImage, string? thirdImage, string author)
         {
             Title = title;
             Introduction = introduction;
@@ -33,6 +34,7 @@ namespace Cmd.Application.Models.News.Commands.Create
             MainImage = mainImage;
             SecondImage = secondImage;
             ThirdImage = thirdImage;
+            Author = author;
         }
     }
 }

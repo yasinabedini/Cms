@@ -19,7 +19,8 @@ namespace Cms.Domain.Models.News.Entities
         public long NewsTypeId { get; private set; }
         public string PublishDate { get; private set; }
         public Description Introduction { get;private set; }
-        public string Text { get; set; }        
+        public string Text { get; set; }
+        public string Author { get; private set; }
         public Image MainImageName { get; private set; }
         public Image? SecondImage { get; private set; }
         public Image? ThirdImage { get; private set; }
@@ -31,11 +32,12 @@ namespace Cms.Domain.Models.News.Entities
         #region Costructors and Factories
         protected News() { }
 
-        public News(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage)
+        public News(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage,string author)
         {
             Title = title;
             LanguageId = languageId;
             NewsTypeId = newsTypeId;
+            Author = author;
             PublishDate = publishDate;
             Introduction = introduction;
             Text = text;            
@@ -44,9 +46,9 @@ namespace Cms.Domain.Models.News.Entities
             ThirdImage = thirdImage;
         }
 
-        public static News Create(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage)
+        public static News Create(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage,string author)
         {
-            return new News(title, introduction, text, languageId, newsTypeId, publishDate,mainImageName,secondImage, thirdImage);
+            return new News(title, introduction, text, languageId, newsTypeId, publishDate,mainImageName,secondImage, thirdImage,author);
         }
         #endregion
 

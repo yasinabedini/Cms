@@ -17,13 +17,14 @@ namespace Cmd.Application.Models.News.Queries.Common
         public long NewsTypeId { get; private set; }
         public string PublishDate { get; private set; }
         public string  Text { get; set; }
+        public string Author { get; set; }
         public string MainImageName { get; private set; }
         public string? SecondImage { get; private set; }
         public string? ThirdImage { get; private set; }
         public NewsTypeViewModel NewsType { get; set; }
         public bool IsEnable { get; set; }
 
-        public NewsViewModel(long id,string title, string introduction, long languageId, long newsTypeId, string publishDate, string text, string mainImageName, string? secondImage, string? thirdImage, bool isEnable)
+        public NewsViewModel(long id, string title, string introduction, long languageId, long newsTypeId, string publishDate, string text, string mainImageName, string? secondImage, string? thirdImage, bool isEnable, string author)
         {
             Id = id;
             Title = title;
@@ -36,6 +37,7 @@ namespace Cmd.Application.Models.News.Queries.Common
             SecondImage = secondImage;
             ThirdImage = thirdImage;
             IsEnable = isEnable;
+            Author = author;
         }
     }
 }

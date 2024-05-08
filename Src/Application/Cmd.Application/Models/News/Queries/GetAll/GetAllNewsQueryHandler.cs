@@ -44,7 +44,9 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
                     t.MainImageName.Value,
                     t.SecondImage is not null ? t.SecondImage.Value : "",
                     t.ThirdImage is not null ? t.ThirdImage.Value : "",
-                    t.IsEnable)).ToList(),
+                    t.IsEnable,
+                    t.Author
+                    )).ToList(),
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize
             });

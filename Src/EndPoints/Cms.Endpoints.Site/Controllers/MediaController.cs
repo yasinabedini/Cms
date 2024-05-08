@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Cms.Endpoints.Site.Proxy.Asnad;
 
 namespace Cms.Endpoints.Site.Controllers;
 
@@ -9,274 +12,292 @@ namespace Cms.Endpoints.Site.Controllers;
 [ApiController]
 public class MediaController : ControllerBase
 {
-	private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
-	public MediaController(IHttpClientFactory factory)
-	{
-		_httpClient = factory.CreateClient("Asnad");
-	}
-
-
-	[HttpGet("GetHistoricalPeriods")]
-	public async Task<IActionResult> GetHistoricalPeriods()
-	{
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
-
-		var response = await _httpClient.GetAsync("api/Media/GetHistoricalPeriods");
-		response.EnsureSuccessStatusCode(); // Ensure a successful response
-		var content = await response.Content.ReadAsStringAsync();
-
-		return Ok(content);
-	}
-
-	[HttpGet("GetListBaseTypes")]
-	public async Task<IActionResult> GetListBaseTypes()
-	{
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
-
-		var response = await _httpClient.GetAsync("api/Media/GetListBaseTypes");
-		response.EnsureSuccessStatusCode();
-		var content = await response.Content.ReadAsStringAsync();
-
-		return Ok(content);
-	}
-
-	[HttpGet("GetMediaEvents")]
-	public async Task<IActionResult> GetMediaEvents()
-	{
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
-
-		var response = await _httpClient.GetAsync("api/Media/GetMediaEvents");
-		response.EnsureSuccessStatusCode();
-
-		var content = await response.Content.ReadAsStringAsync();
-
-		return Ok(content);
-	}
-
-	[HttpGet("GetMediaLanguages")]
-	public async Task<IActionResult> GetMediaLanguages()
-	{
-
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+    public MediaController(IHttpClientFactory factory)
+    {
+        _httpClient = factory.CreateClient("Asnad");
+    }
 
 
-		var response = await _httpClient.GetAsync("api/Media/GetMediaLanguages");
-		response.EnsureSuccessStatusCode();
+    [HttpGet("GetHistoricalPeriods")]
+    public async Task<IActionResult> GetHistoricalPeriods()
+    {
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
 
-		var content = await response.Content.ReadAsStringAsync();
+        var response = await _httpClient.GetAsync("api/Media/GetHistoricalPeriods");
+        response.EnsureSuccessStatusCode(); // Ensure a successful response
+        var content = await response.Content.ReadAsStringAsync();
 
-		return Ok(content);
-	}
+        return Ok(content);
+    }
 
-	[HttpGet("GetMediaPlaces")]
-	public async Task<IActionResult> GetMediaPlaces()
-	{
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+    [HttpGet("GetListBaseTypes")]
+    public async Task<IActionResult> GetListBaseTypes()
+    {
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
 
+        var response = await _httpClient.GetAsync("api/Media/GetListBaseTypes");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
 
-		var response = await _httpClient.GetAsync("api/Media/GetMediaPlaces");
-		response.EnsureSuccessStatusCode();
+        return Ok(content);
+    }
 
-		var content = await response.Content.ReadAsStringAsync();
-		return Ok(content);
-	}
+    [HttpGet("GetMediaEvents")]
+    public async Task<IActionResult> GetMediaEvents()
+    {
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
 
-	[HttpGet("GetMediaSources")]
-	public async Task<IActionResult> GetMediaSources()
-	{
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+        var response = await _httpClient.GetAsync("api/Media/GetMediaEvents");
+        response.EnsureSuccessStatusCode();
 
-		var response = await _httpClient.GetAsync("api/Media/GetMediaSources");
-		response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
 
-		var content = await response.Content.ReadAsStringAsync();
-		return Ok(content);
-	}
+        return Ok(content);
+    }
 
-	[HttpGet("GetMediaStructures")]
-	public async Task<IActionResult> GetMediaStructures()
-	{
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+    [HttpGet("GetMediaLanguages")]
+    public async Task<IActionResult> GetMediaLanguages()
+    {
 
-		var response = await _httpClient.GetAsync("api/Media/GetMediaStructures");
-		response.EnsureSuccessStatusCode();
-
-		var content = await response.Content.ReadAsStringAsync();
-		return Ok(content);
-	}
-
-	[HttpGet("GetPersonelInfos")]
-	public async Task<IActionResult> GetPersonelInfos()
-	{
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
-
-		var response = await _httpClient.GetAsync("api/Media/GetPersonelInfos");
-		response.EnsureSuccessStatusCode();
-
-		var content = await response.Content.ReadAsStringAsync();
-		return Ok(content);
-	}
-
-	[HttpGet("GetTypeWritingLines")]
-	public async Task<IActionResult> GetTypeWritingLines()
-	{
-		_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-		_httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
-		_httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-		_httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
-		_httpClient.DefaultRequestHeaders.Add("Language", "fa");
-		_httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-		_httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-		_httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
-		_httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
 
 
-		var response = await _httpClient.GetAsync("api/Media/GetTypeWritingLines");
-		response.EnsureSuccessStatusCode();
+        var response = await _httpClient.GetAsync("api/Media/GetMediaLanguages");
+        response.EnsureSuccessStatusCode();
 
-		var content = await response.Content.ReadAsStringAsync();
-		return Ok(content);
-	}
+        var content = await response.Content.ReadAsStringAsync();
 
-	[HttpGet("GetPagedMediaItemsForView")]
-	public async Task<IActionResult> GetPagedMediaItemsForView(string? thematicCategoriesId, string? mediaPlaceId, string? mediaStructureId, string? mediaSourceId, string? typeWritingLineId, string? historicalPeriodId, string? mediaPersonelId, string? mediaLanguageId, string? relatedMediaId, string? mediaTypeId, string? title, string? tag, int offset = 0, int count = 12)
-	{
-		var request = new HttpRequestMessage
-		{
-			Method = HttpMethod.Get,
-			RequestUri = new Uri($"https://asnad.isfahan.ir/api/Mediamanagement/GetPagedMediaItemsForView?thematicCategoriesId={thematicCategoriesId}&mediaPlaceId={mediaPlaceId}&mediaStructureId={mediaStructureId}&mediaSourceId={mediaSourceId}&typeWritingLineId={typeWritingLineId}&historicalPeriodId={historicalPeriodId}&mediaPersonelId={mediaPersonelId}&mediaLanguageId={mediaLanguageId}&relatedMediaId={relatedMediaId}&mediaTypeId={mediaTypeId}&title={title}&tag={tag}&offset={offset}&count={count}"),
-			Headers =
-				{
-					{ "Accept", "application/json, text/plain, */*" },
-					{ "Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7" },
-					{ "Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzOGM3MTljNy0wYTRlLTE5MTItMzI4ZC0wMDdiMTgzZmRiYTMiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxLyIsImlhdCI6MTcwMDExNTg3MiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Ik5pa2FuIiwiRGlzcGxheU5hbWUiOiLZhdiv24zYsduM2Kog2b7amNmI2YfYtNiMINiu2YTYp9mC24zYqiDZiCDZgdmG2KfZiNix24zigIzZh9in24wg2YbZiNuM2YYiLCJyZWplY3REZXNyaXB0aW9uIjoiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9zZXJpYWxudW1iZXIiOiI0OGFhNDcyNDY3MTg0YjliOGRhZTNlZDY2NzRjNjM2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvdXNlcmRhdGEiOiIxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjpbIkFkbWluIiwiQ2l0aXplbiIsIkNvbXBhbnkiLCJHdWFyZCIsIlVzZXIiXSwibmJmIjoxNzAwMTE1ODcyLCJleHAiOjE3MDAxMTYxNzIsImF1ZCI6IkFueSJ9.Yx7wJly8u9DStfOYDKUrnVsTKj2JezOpwdFuNtqXLVE" },
-					{ "Connection", "keep-alive" },
-					{ "Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1" },
-					{ "Language", "fa" },
-					{ "Referer", "https://asnad.isfahan.ir/home/document-list" },
-					{ "Sec-Fetch-Dest", "empty" },
-					{ "Sec-Fetch-Mode", "cors" },
-					{ "Sec-Fetch-Site", "same-origin" },
-					{ "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" },
-					{ "sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"" },
-					{ "sec-ch-ua-mobile", "?0" },
-					{ "sec-ch-ua-platform", "Windows" },
-				},
-		};
+        return Ok(content);
+    }
 
-		using (var response = await _httpClient.SendAsync(request))
-		{
-			response.EnsureSuccessStatusCode();
-			var body = await response.Content.ReadAsStringAsync();
-			return Ok(body);
-		}
-	}
+    [HttpGet("GetMediaPlaces")]
+    public async Task<IActionResult> GetMediaPlaces()
+    {
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
 
-	[HttpGet("GetImages")]
-	public async Task<IActionResult> GetImage(string folderName,string fileName)
-	{		
+
+        var response = await _httpClient.GetAsync("api/Media/GetMediaPlaces");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
+
+    [HttpGet("GetMediaSources")]
+    public async Task<IActionResult> GetMediaSources()
+    {
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+
+        var response = await _httpClient.GetAsync("api/Media/GetMediaSources");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
+
+    [HttpGet("GetMediaStructures")]
+    public async Task<IActionResult> GetMediaStructures()
+    {
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+
+        var response = await _httpClient.GetAsync("api/Media/GetMediaStructures");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
+
+    [HttpGet("GetPersonelInfos")]
+    public async Task<IActionResult> GetPersonelInfos()
+    {
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+
+        var response = await _httpClient.GetAsync("api/Media/GetPersonelInfos");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
+
+    [HttpGet("GetTypeWritingLines")]
+    public async Task<IActionResult> GetTypeWritingLines()
+    {
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Add("Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7");
+        _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+        _httpClient.DefaultRequestHeaders.Add("Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1");
+        _httpClient.DefaultRequestHeaders.Add("Language", "fa");
+        _httpClient.DefaultRequestHeaders.Add("Referer", "https://asnad.isfahan.ir/home/document-list");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+        _httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+        _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+
+
+        var response = await _httpClient.GetAsync("api/Media/GetTypeWritingLines");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
+
+    [HttpGet("GetPagedMediaItemsForView")]
+    public async Task<IActionResult> GetPagedMediaItemsForView(int id, string? thematicCategoriesId, string? mediaPlaceId, string? mediaStructureId, string? mediaSourceId, string? typeWritingLineId, string? historicalPeriodId, string? mediaPersonelId, string? mediaLanguageId, string? relatedMediaId, string? mediaTypeId, string? title, string? tag, int offset = 0, int count = 12)
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}api/Mediamanagement/GetPagedMediaItemsForView?thematicCategoriesId={thematicCategoriesId}&mediaPlaceId={mediaPlaceId}&mediaStructureId={mediaStructureId}&mediaSourceId={mediaSourceId}&typeWritingLineId={typeWritingLineId}&historicalPeriodId={historicalPeriodId}&mediaPersonelId={mediaPersonelId}&mediaLanguageId={mediaLanguageId}&relatedMediaId={relatedMediaId}&mediaTypeId={mediaTypeId}&title={title}&tag={tag}&offset={offset}&count={count}"),
+            Headers =
+                {
+                    { "Accept", "application/json, text/plain, */*" },
+                    { "Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7" },
+                    { "Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzOGM3MTljNy0wYTRlLTE5MTItMzI4ZC0wMDdiMTgzZmRiYTMiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxLyIsImlhdCI6MTcwMDExNTg3MiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Ik5pa2FuIiwiRGlzcGxheU5hbWUiOiLZhdiv24zYsduM2Kog2b7amNmI2YfYtNiMINiu2YTYp9mC24zYqiDZiCDZgdmG2KfZiNix24zigIzZh9in24wg2YbZiNuM2YYiLCJyZWplY3REZXNyaXB0aW9uIjoiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9zZXJpYWxudW1iZXIiOiI0OGFhNDcyNDY3MTg0YjliOGRhZTNlZDY2NzRjNjM2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvdXNlcmRhdGEiOiIxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjpbIkFkbWluIiwiQ2l0aXplbiIsIkNvbXBhbnkiLCJHdWFyZCIsIlVzZXIiXSwibmJmIjoxNzAwMTE1ODcyLCJleHAiOjE3MDAxMTYxNzIsImF1ZCI6IkFueSJ9.Yx7wJly8u9DStfOYDKUrnVsTKj2JezOpwdFuNtqXLVE" },
+                    { "Connection", "keep-alive" },
+                    { "Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1" },
+                    { "Language", "fa" },
+                    { "Referer", $"https://asnad.isfahan.ir/home/document-list" },
+                    { "Sec-Fetch-Dest", "empty" },
+                    { "Sec-Fetch-Mode", "cors" },
+                    { "Sec-Fetch-Site", "same-origin" },
+                    { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" },
+                    { "sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"" },
+                    { "sec-ch-ua-mobile", "?0" },
+                    { "sec-ch-ua-platform", "Windows" },
+                },
+        };
+
+        using (var response = await _httpClient.SendAsync(request))
+        {
+            response.EnsureSuccessStatusCode();
+            var body = await response.Content.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject<Root>(body);
+
+            if (id is not 0)
+            {
+                var findModel = model.data.items.SingleOrDefault(t => t.id == id);
+                model.data.items = new List<Item>();
+                model.data.items.Add(findModel);
+            }
+
+            return Ok(model);
+        }
+    }
+
+    [HttpGet("GetImages")]
+    public async Task<IActionResult> GetImage(string folderName, string fileName)
+    {
         var response = await _httpClient.GetByteArrayAsync($"uploads/Resources/File/{folderName}/{fileName}");
+        byte[] imageBytes = response;
+
+        return File(imageBytes, "image/jpeg");
+    }
+
+    [HttpGet("GetImagesByUrl")]
+    public async Task<IActionResult> GetImage(string url)
+    {
+        var response = await _httpClient.GetByteArrayAsync(url);
         byte[] imageBytes = response;
 
         return File(imageBytes, "image/jpeg");
