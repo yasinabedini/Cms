@@ -2,76 +2,720 @@
 @inject IConfiguration _config;
 @model Cms.Clients.AdminPanel.Pages.AboutUs.IndexModel
 @{
-    ViewBag.Title = "لیست درباره موزه";
+    ViewBag.Title = "درباره موزه";
     ViewBag.Page = "درباره موزه";
 }
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <!-- /.card-header -->
-            <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>عنوان</th>
-                            <th>زبان</th>
-                            <th>وضعیت</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var aboutUs in Model.AboutList)
-                        {
-                            <tr id="aboutUs[@aboutUs.Id]">
-                                <td>@aboutUs.Title</td>
-                                <td>
-                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
-                                </td>
-                                @if (aboutUs.IsEnable)
-                                {
-                                    <td>
-                                        <span>فعال</span>
-                                        <i class="fa fa-check"></i>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td>
-                                        <span>غیرفعال</span>
-                                        <i class="fa fa-close"></i>
-                                    </td>
-                                }
-                                <td>
-                                    @if (aboutUs.IsEnable)
-                                    {
-                                        <a href="/AboutUs/edit?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
-                                    }
-                                    else
-                                    {
-                                        <a href="/AboutUs/edit?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+        <div class="card-body">
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                معرفی موزه
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item1"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item1"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 40)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 39))</td>
+                                                }
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
 
-                                    }
-                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
-                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-            <!-- /.card-body -->
+
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                اهداف و ساختار موزه
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item2"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item2"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 30)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 29))</td>
+                                                }
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                بخش های موزه
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item3"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item3"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 30)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 29))</td>
+                                                }
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                عمارت تاريخي باغ‌ زرشک ( دوره صفوي)
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item4"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item4"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 30)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 29))</td>
+                                                }
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                چنار باغ زرشك
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item5"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item5"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 30)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 29))</td>
+                                                }
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                كوشك باغ زرشك ( دوره پهلوي اول)
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item6"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item6"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 30)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 29))</td>
+                                                }
+
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                کارخانه‌ی صنایع پشم اصفهان
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item7"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item7"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 30)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 29))</td>
+                                                }
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                پرونده ثبتي خانه همدانيان (باغ زرشك) در فهرست آثار ملي
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item8"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item8"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 30)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 29))</td>
+                                                }
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="card">
+                <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link d-block">
+                            <h3>
+                                فرايند مسابقه طراحي و معماري كالبدي موزه
+                                <i class="fa fa-angle-left right"></i>
+                            </h3>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/AboutUs/Create?typeId=@Convert.ToInt32(_config.GetSection("AboutUs")["item9"])" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>متن</th>
+                                            <th>زبان</th>
+                                            <th>وضعیت</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var aboutUs in Model.AboutList.Where(t => t.NewsTypeId == Convert.ToInt32(_config.GetSection("AboutUs")["item9"])))
+                                        {
+                                            <tr id="aboutUs[@aboutUs.Id]">
+                                                @if (aboutUs.Text.Length <= 30)
+                                                {
+                                                    <td>
+                                                        @Html.Raw(aboutUs.Text)
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.Raw(aboutUs.Text.Substring(0, 29))</td>
+                                                }
+                                                <td>
+                                                    @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name
+                                                </td>
+                                                @if (aboutUs.IsEnable)
+                                                {
+                                                    <td>
+                                                        <span>فعال</span>
+                                                        <i class="fa fa-check"></i>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>غیرفعال</span>
+                                                        <i class="fa fa-close"></i>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @if (aboutUs.IsEnable)
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/AboutUs/ChangeAvailability?id=@aboutUs.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                    }
+                                                    <a href="/aboutus/edit?id=@aboutUs.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                    <a onclick="Delete(@aboutUs.Id)" class="text-white btn btn-danger">حذف</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <!-- /.card-body -->
+                                <!-- /.card -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <!-- /.card -->
+        <!-- /.col -->
     </div>
-    <!-- /.col -->
+</div>
 </div>
 
 @section Scripts {
     <script>
         function Delete(id) {
 
-            if (confirm("آیا از حذف این توضیحات مطمئن هستید? ")) {
+            if (confirm("آیا از حذف این آیتم مطمئن هستید? ")) {
                 $.ajax({
                     type: "Get",
                     url: '@_config.GetSection("DomainAddress").Value/News/Delete?id=' + id,

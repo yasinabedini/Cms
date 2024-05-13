@@ -91,9 +91,12 @@
                         <div class="col-md-6 mb-md-0 mb-4">
                             <label for="exampleInputFile">تصویر اصلی خبر <span class="text-danger">*</span> </label>
                             <div class="input-group">
-                                <div class="">
-                                    <input type="file" asp-for="MainImage" class="form-control m-2" id="mainImage">
-                                </div>
+
+                                <input type="file" asp-for="MainImage" class="form-control" id="mainImage">
+
+                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('mainImage',true)">
+                                    <i class=" fa fa-trash"></i>
+                                </a>
                             </div>
                             <span class="text-danger" asp-validation-for="MainImage"></span>
                         </div>
@@ -101,23 +104,27 @@
                         <div class="col-md-6 mb-md-0 mb-4">
                             <img id="mainImgAvatar" class=" ImageBox" src="~/dist/img/DefalutPic.png" />
                         </div>
+
+
                     </div>
 
                     <div class="row mt-3">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <label for="exampleInputFile">تصویر جانبی خبر</label>
                             <div class="input-group">
-                                <div class="">
-                                    <input type="file" class="form-control m-2" asp-for="Images" id="secondImage">
-                                </div>
+                                <input type="file" class="form-control" asp-for="Images" id="secondImage">
+                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('secondImage',false)">
+                                    <i class=" fa fa-trash"></i>
+                                </a>
                             </div>
-                        </div>                        
+                        </div>
                         <div class="col-md-6 mb-md-0 mb-4">
                             <label for="exampleInputFile">تصویر جانبی خبر</label>
                             <div class="input-group">
-                                <div class="">
-                                    <input type="file" class="form-control m-2" asp-for="Images" id="thirdImage">
-                                </div>
+                                <input type="file" class="form-control" asp-for="Images" id="thirdImage">
+                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('thirdImage',false)">
+                                    <i class=" fa fa-trash"></i>
+                                </a>
                             </div>
                         </div>
                         <span asp-validation-for="Images" class="text-danger"></span>
@@ -154,7 +161,6 @@
             $('.normal-example').persianDatepicker();
         })
     </script>
-
 
     <script src="/dist/js/persian-date.min.js"></script>
     <script src="/dist/js/persian-datepicker.min.js"></script>
@@ -204,4 +210,14 @@
         });
     </script>
 
+    <script>
+        function clearFileInput(id, mainImage) {
+            // Assuming there's an <input type="file" id="fileInput"> in your HTML
+            document.getElementById(id).value = "";
+            if (mainImage === true) {
+                document.getElementById('mainImgAvatar').removeAttribute('src');
+                document.getElementById('mainImgAvatar').setAttribute('src', '/dist/img/DefalutPic.png');
+            }
+        }
+    </script>
 }

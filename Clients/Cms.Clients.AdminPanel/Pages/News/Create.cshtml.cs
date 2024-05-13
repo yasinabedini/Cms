@@ -100,6 +100,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
                 ModelState.AddModelError("MainImage", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
                 return Page();
             }
+
             var requestContent = new MultipartFormDataContent();
             var item = new MemoryStream();
             MainImage.CopyTo(item);

@@ -26,6 +26,9 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
 
         public List<LanguageViewModel> Languages { get; set; }
 
+        [BindProperty]
+        public IFormFile Image { get; set; }
+
         public void OnGet()
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
@@ -39,34 +42,45 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
 
         }
 
-        public IActionResult OnPost(IFormFile image)
+        public IActionResult OnPost()
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            var data = new { pageNumber = 1, pageSize = 200 };
+            var jsonInString = JsonConvert.SerializeObject(data);
+            var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+            var response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
+            var result = response.Content.ReadAsStringAsync().Result;
+            Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
 
             if (!ModelState.IsValid)
             {
-                if (image is null)
+                if (Image is null)
                 {
-                    ModelState.AddModelError("image", "یک عکس برای Sweeper اپلود کنید");
-                }
-                var data = new { pageNumber = 1, pageSize = 200 };
-                var jsonInString = JsonConvert.SerializeObject(data);
-                var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-                var response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-                Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
-
+                    ModelState.AddModelError("Image", "یک عکس برای اسلایدر اپلود کنید");
+                }                      
                 return Page();
             }
 
             #region Save Images
+            if (Path.GetExtension(Image.FileName).ToLower() != ".png" && Path.GetExtension(Image.FileName).ToLower() != ".jpg" && Path.GetExtension(Image.FileName).ToLower() != ".jpeg")
+            {
+                ModelState.AddModelError("Image", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
+                return Page();
+            }
+
+            if (Image.Length > 5000000)
+            {
+                ModelState.AddModelError("Image", "حداکثر حجم عکس آپلود شده باید 5 مگابایت باشد!");
+                return Page();
+            }
+
             var requestContent = new MultipartFormDataContent();
             var item = new MemoryStream();
-            image.CopyTo(item);
+            Image.CopyTo(item);
             item.Position = 0;
             var imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "image", Path.GetFileName(image.FileName));
+            requestContent.Add(imageContent, "image", Path.GetFileName(Image.FileName));
             var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=sweeper", requestContent).Result;
             Sweeper.ImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
             #endregion

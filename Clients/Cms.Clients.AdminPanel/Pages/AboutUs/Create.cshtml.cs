@@ -17,8 +17,7 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
 
 
         [BindProperty]
-        public NewsViewModel About { get; set; }
-        public List<NewsViewModel> AboutList { get; set; }
+        public NewsViewModel About { get; set; } = new NewsViewModel();        
         public List<LanguageViewModel> Languages { get; set; }
 
         [BindProperty]
@@ -34,54 +33,55 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             _fileManager = factory.CreateClient("FileManager");
 
         }
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet(int typeId)
         {
-            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
-
-            IConfiguration config;
-
-            config = HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration)) as IConfiguration;
-
-            var NewsAboutUsId = config.GetSection("NewsId")["NewsAboutUsId"];
-
-            ViewData["NewsAboutUs"] = NewsAboutUsId;
+           // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+                                                
 
             #region languages
             var languageData = new { pageNumber = 1, pageSize = 200 };
             var languageJsonInString = JsonConvert.SerializeObject(languageData);
             var languageContent = new StringContent(languageJsonInString, Encoding.UTF8, "application/json");
-            var languageResponse = _httpClient.PostAsync("/api/Language/GetAll", languageContent).Result;
-            var languageResult = languageResponse.Content.ReadAsStringAsync().Result;
+            var languageResponse =await _httpClient.PostAsync("/api/Language/GetAll", languageContent);
+            var languageResult = await languageResponse.Content.ReadAsStringAsync();
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult;
             #endregion
 
-            var data = new { pageNumber = 1, pageSize = 200, typeId = NewsAboutUsId, isPage = true }; // Your data object
+            var data = new { pageNumber = 1, pageSize = 200 }; // Your data object
 
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
 
-            var response = _httpClient.PostAsync("/api/News/GetAll", content).Result;
+            var response =await _httpClient.PostAsync("/api/NewsType/GetAll", content);
 
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest();
             }
-            var result = response.Content.ReadAsStringAsync().Result;
 
-            AboutList = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult;
+            var result =await response.Content.ReadAsStringAsync();
+
+            var typeList = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult;
+
+            if (!typeList.Any(t=>t.Id==typeId))
+            {
+                return BadRequest();
+            }
+
+            About.NewsTypeId = typeId;
 
             return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
             #region languages
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-            var response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
+            var response =await _httpClient.PostAsync("/api/Language/GetAll", content);
             var result = response.Content.ReadAsStringAsync().Result;
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
             #endregion
@@ -90,7 +90,7 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             {
                 if (Image is null)
                 {
-                    ModelState.AddModelError("Image", "یک عکس برای فعالیت اپلود کنید");
+                    ModelState.AddModelError("Image", "یک عکس برای آیتم اپلود کنید");
                 }            
                 return Page();
             }
@@ -103,7 +103,7 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             var imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent, "image", Path.GetFileName(Image.FileName));
-            var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+            var imageResponse = await _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent);
 
             About.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
             #endregion
@@ -166,9 +166,9 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");
 
-            var methodresponse = _httpClient.PostAsync("/api/News/Create", modelContent);
+            var methodresponse =await _httpClient.PostAsync("/api/News/Create", modelContent);
 
-            if (methodresponse.Result.IsSuccessStatusCode)
+            if (methodresponse.IsSuccessStatusCode)
             {
                 return RedirectToPage("Index");
             }

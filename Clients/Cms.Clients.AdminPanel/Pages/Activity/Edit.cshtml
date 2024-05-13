@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "ویرایش برنامه ها و فعالیت ها";
     ViewBag.Page = "فعالیت ها";
+    string imageAddress = _config.GetSection("FileManagerUrl").Value + $"/api/fileManager/getimage?imageName={Model.Activity.MainImageName}&&folder=news";
 }
 
 <form enctype="multipart/form-data" method="post">
@@ -80,10 +81,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <label for="exampleInputFile">تصویر فعالیت </label>
-                            <div class="input-group">
-                                <div class="">
-                                    <input type="file" asp-for="MainImage" class="form-control m-2" id="mainImage">
-                                </div>
+                            <div class="input-group">                                
+                                    <input type="file" asp-for="MainImage" class="form-control" id="mainImage">
+                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('mainImage',true,'@imageAddress')">
+                                    <i class=" fa fa-trash"></i>
+                                </a>
                             </div>
                             <span class="text-danger" asp-validation-for="MainImage"></span>
                         </div>
@@ -96,18 +98,21 @@
                     <div class="row mt-3">
                         <div class="col-md-6 mb-md-0 mb-4">
                             <label for="exampleInputFile">تصویر جانبی</label>
-                            <div class="input-group">
-                                <div class="">
-                                    <input type="file" class="form-control m-2" asp-for="Images" id="secondImage">
-                                </div>
+                            <div class="input-group">                                
+                                   <input type="file" class="form-control" asp-for="Images" id="secondImage">
+                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('secondImage',false,'@imageAddress')">
+                                    <i class=" fa fa-trash"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="col-md-6 mb-md-0 mb-4">
                             <label for="exampleInputFile">تصویر جانبی</label>
                             <div class="input-group">
-                                <div class="">
-                                    <input type="file" class="form-control m-2" asp-for="Images" id="thirdImage">
-                                </div>
+                                
+                                    <input type="file" class="form-control" asp-for="Images" id="thirdImage">
+                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('thirdImage',false,'@imageAddress')">
+                                    <i class=" fa fa-trash"></i>
+                                </a>
                             </div>
                         </div>
                         <span asp-validation-for="Images" class="text-danger"></span>
@@ -128,6 +133,18 @@
 </form>
 
 @section Scripts {
+    <script>
+        function clearFileInput(id, mainImage, imageName) {
+            // Assuming there's an <input type="file" id="fileInput"> in your HTML
+            document.getElementById(id).value = "";
+            if (mainImage === true) {
+                document.getElementById('mainImgAvatar').removeAttribute('src');
+                document.getElementById('mainImgAvatar').setAttribute('src', imageName);
+            }
+        }
+    </script>
+
+
     <script>
         $(function () {
             // Replace the <textarea id="editor1"> with a CKEditor

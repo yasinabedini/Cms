@@ -71,16 +71,18 @@
                     <div class="col-md-6 mb-md-0 mb-4">
                         <label for="exampleInputFile">تصویر اسلایدر <span class="text-danger">*</span></label>
                         <div class="input-group">
-                            <div class="">
-                                <input type="file" class="form-control" name="image" id="image">
-                            </div>
+                            
+                                <input type="file" class="form-control" asp-for="Image" id="image">
+                            <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('image',true)">
+                                <i class=" fa fa-trash"></i>
+                            </a>
                         </div>
                     </div>
 
                     <div class="col-md-6 mb-md-0 mb-4">
                         <img id="imgAvatar" class=" ImageBox" src="~/dist/img/DefalutPic.png" />
                     </div>
-
+                    <span asp-validation-for="Image" class="text-danger"></span>
                 </div>
 
                 <div class="row">
@@ -116,6 +118,17 @@
         });
     </script>
 
+
+    <script>
+        function clearFileInput(id, mainImage) {
+            // Assuming there's an <input type="file" id="fileInput"> in your HTML
+            document.getElementById(id).value = "";
+            if (mainImage === true) {
+                document.getElementById('imgAvatar').removeAttribute('src');
+                document.getElementById('imgAvatar').setAttribute('src', '/dist/img/DefalutPic.png');
+            }
+        }
+    </script>
 
     <script>
         $(function () {

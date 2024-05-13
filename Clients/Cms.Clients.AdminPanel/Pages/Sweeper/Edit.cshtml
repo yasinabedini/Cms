@@ -1,8 +1,10 @@
 ﻿@page
 @model Cms.Clients.AdminPanel.Pages.Sweeper.EditModel
+@inject IConfiguration _config;
 @{
     ViewBag.Title = "ویرایش اسلایدر";
     ViewBag.Page = "اسلایدر";
+    string imageAddress = _config.GetSection("FileManagerUrl").Value + $"/api/fileManager/getimage?imageName={Model.Sweeper.ImageName}&&folder=sweeper";
 }
 
 
@@ -76,17 +78,7 @@
                 </div>
 
 
-                <div class="row">
-                    <div class="col-md-6 mb-md-0 mb-4">
-                        <label for="exampleInputFile">تصویر اسلایدر <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="image" id="mainImage">
-                                <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="row">            
                     <div class="col-md-6 mb-md-0 mb-4">
                         <div class="card card-body card-plain border-radius-lg ">
                             <label>وضعیت : <span class="text-danger">*</span></label>
@@ -96,6 +88,24 @@
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <label for="exampleInputFile">تصویر اسلایدر <span class="text-danger">*</span></label>
+                        <div class="input-group">
+
+                            <input type="file" class="form-control" name="image" id="image">
+                            <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('image',true)">
+                                <i class=" fa fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-md-0 mb-4">
+                        <img id="imgAvatar" class=" ImageBox" src="@imageAddress" />
+                    </div>
+
                 </div>
 
                 <div class="row">
@@ -131,5 +141,36 @@
                 toolbar: { fa: true }
             })
         })
+    </script>
+
+
+    <script>
+        function clearFileInput(id, mainImage, imageName) {
+            // Assuming there's an <input type="file" id="fileInput"> in your HTML
+            document.getElementById(id).value = "";
+            if (mainImage === true) {
+                document.getElementById('imgAvatar').removeAttribute('src');
+                document.getElementById('imgAvatar').setAttribute('src', imageName);
+            }
+        }
+    </script>
+
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgAvatar').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#image").change(function () {
+            readURL(this);
+        });
     </script>
 }

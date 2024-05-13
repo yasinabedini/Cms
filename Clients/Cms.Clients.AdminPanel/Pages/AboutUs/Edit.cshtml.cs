@@ -33,7 +33,7 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
 
         }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
@@ -42,7 +42,7 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             var languageJsonInString = JsonConvert.SerializeObject(languageData);
             var languageContent = new StringContent(languageJsonInString, Encoding.UTF8, "application/json");
             var languageResponse = _httpClient.PostAsync("/api/Language/GetAll", languageContent).Result;
-            var languageResult = languageResponse.Content.ReadAsStringAsync().Result;
+            var languageResult =await languageResponse.Content.ReadAsStringAsync();
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult;
             #endregion
 
@@ -52,13 +52,13 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
 
-            var response = _httpClient.PostAsync("/api/News/GetAll", content).Result;
+            var response =await _httpClient.PostAsync("/api/News/GetAll", content);
 
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest();
             }
-            var result = response.Content.ReadAsStringAsync().Result;
+            var result =await response.Content.ReadAsStringAsync();
 
             AboutList = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult;
             #endregion
@@ -68,13 +68,13 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             jsonInString = JsonConvert.SerializeObject(silngeData);
             content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
 
-            response = _httpClient.PostAsync("/api/News/GetById", content).Result;
+            response =await _httpClient.PostAsync("/api/News/GetById", content);
 
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest();
             }
-            result = response.Content.ReadAsStringAsync().Result;
+            result =await response.Content.ReadAsStringAsync();
 
             About = JsonConvert.DeserializeObject<NewsViewModel>(result);
 
