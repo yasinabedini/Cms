@@ -19,4 +19,12 @@
     <ProjectReference Include="..\..\Infra\Cms.Infra\Cms.Infra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\File\Commands\Create\" />
+    <Folder Include="Models\File\Commands\Delete\" />
+    <Folder Include="Models\Gallery\Commands\Create\" />
+    <Folder Include="Models\Gallery\Commands\Delete\" />
+    <Folder Include="Models\Gallery\Commands\Update\" />
+  </ItemGroup>
+
 </Project>

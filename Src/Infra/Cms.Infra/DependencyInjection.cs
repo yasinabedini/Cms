@@ -18,6 +18,10 @@ using Cms.Domain.Models.Contact.Repositories;
 using Cms.Infra.Models.Contacts.Repositories;
 using Cms.Domain.Models.Info.Repositories;
 using Cms.Infra.Models.Info.Reositories;
+using Cms.Domain.Models.File.Repositories;
+using Cms.Infra.Models.File.Repositories;
+using Cms.Domain.Models.Gallery.Repositories;
+using Cms.Infra.Models.Gallery.Repositories;
 
 namespace Cms.Infra;
 
@@ -37,6 +41,8 @@ public static class DependencyInjection
         services.AddTransient<INewsTypeRepository, NewsRepository>();        
         services.AddTransient<IContactRepository, ContactRepository>();
         services.AddTransient<IInfoRepository, InfoRepository>();
+        services.AddTransient<IFileRepository, FileRepository>();
+        services.AddTransient<IGalleryRepository, GalleryRepository>();
 
 
         return services;
