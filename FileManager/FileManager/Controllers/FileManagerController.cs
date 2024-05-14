@@ -58,6 +58,18 @@ namespace FileManager.Controllers
             return File(imageBytes, "image/jpeg");
         }
 
+        [HttpGet("GetFile")]
+        public IActionResult GetFile(string fileName,string type)
+        {
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","gallery",type, fileName);
+
+            if (!Path.Exists(filePath)) return BadRequest();
+
+            byte[] imageBytes = System.IO.File.ReadAllBytes($@"wwwroot/Gallery/{type}/{fileName}");
+
+            return File(imageBytes, "image/jpeg");
+        }
+
         [HttpDelete("Delete")]
         public IActionResult Delete(string imageName, string folder)
         {

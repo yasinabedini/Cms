@@ -12,8 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Gallery\Document\" />
+    <Folder Include="wwwroot\Gallery\Voice\" />
+    <Folder Include="wwwroot\Gallery\Video\" />
     <Folder Include="wwwroot\Img\sweeper\" />
-    <Folder Include="wwwroot\Img\news\" />
   </ItemGroup>
 
 </Project>
