@@ -9,5 +9,6 @@ namespace Cms.Domain.Models.File.Repositories
 {
     public interface IFileRepository : IRepository<File.Entities.File>
     {
+        List<Entities.File> GetGalleryFiles(long galleryId);
     }
 }

@@ -22,9 +22,10 @@
   <ItemGroup>
     <Folder Include="Models\File\Commands\Create\" />
     <Folder Include="Models\File\Commands\Delete\" />
-    <Folder Include="Models\Gallery\Commands\Create\" />
-    <Folder Include="Models\Gallery\Commands\Delete\" />
-    <Folder Include="Models\Gallery\Commands\Update\" />
+    <Folder Include="Models\File\Queries\GetAllFile\" />
+    <Folder Include="Models\File\Queries\GetGalleryFiles\" />
+    <Folder Include="Models\Gallery\Queries\GetById\" />
+    <Folder Include="Models\Gallery\Queries\GetNewsGallery\" />
   </ItemGroup>
 
 </Project>

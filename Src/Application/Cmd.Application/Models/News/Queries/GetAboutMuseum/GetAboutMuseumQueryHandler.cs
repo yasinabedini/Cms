@@ -21,7 +21,7 @@ namespace Cmd.Application.Models.News.Queries.GetAboutMuseum
 
         public Task<List<AboutMuseumViewModel>> Handle(GetAboutMuseumQuery request ,CancellationToken cancellationToken)
         {
-            var allNews = _repository.GetAllWithRelations().OrderByDescending(t=>t.CreateAt).ToList();
+            var allNews = _repository.GetAllWithRelations().Where(t=>t.LanguageId==request.LanguageId).OrderByDescending(t=>t.CreateAt).ToList();
 
             var config = (IConfiguration)_serviceProvider.GetRequiredService(typeof(IConfiguration));
 
@@ -34,23 +34,26 @@ namespace Cmd.Application.Models.News.Queries.GetAboutMuseum
                 long id = long.Parse(item);
                 var about = allNews.FirstOrDefault(t => t.NewsTypeId == id);
 
-                if (about is not null)
+                if (_typeRepository.GetById(id).LanguageId == request.LanguageId)
                 {
-                    aboutList.Add(new AboutMuseumViewModel
+                    if (about is not null)
                     {
-                        TypeId = (int)id,
-                        TypeTitle = allNews.FirstOrDefault(t => t.NewsTypeId == id).NewsType.Title.Value,
-                        NewsViewModel = new NewsViewModel(about.Id, about.Title.Value, about.Introduction.Value, about.LanguageId, about.NewsTypeId, about.PublishDate, about.Text, about.MainImageName.Value, about.SecondImage?.Value, about.ThirdImage?.Value, about.IsEnable, about.Author)
-                    });
-                }
-                else
-                {
-                    aboutList.Add(new AboutMuseumViewModel
+                        aboutList.Add(new AboutMuseumViewModel
+                        {
+                            TypeId = (int)id,
+                            TypeTitle = allNews.FirstOrDefault(t => t.NewsTypeId == id).NewsType.Title.Value,
+                            NewsViewModel = new NewsViewModel(about.Id, about.Title.Value, about.Introduction.Value, about.LanguageId, about.NewsTypeId, about.PublishDate, about.Text, about.MainImageName.Value, about.SecondImage?.Value, about.ThirdImage?.Value, about.IsEnable, about.Author)
+                        });
+                    }
+                    else
                     {
-                        TypeId = (int)id,
-                        TypeTitle = _typeRepository.GetById(long.Parse(item)).Title.Value,
-                        NewsViewModel = new NewsViewModel()
-                    });
+                        aboutList.Add(new AboutMuseumViewModel
+                        {
+                            TypeId = (int)id,
+                            TypeTitle = _typeRepository.GetById(long.Parse(item)).Title.Value,
+                            NewsViewModel = new NewsViewModel()
+                        });
+                    }
                 }
             }
             return Task.FromResult(aboutList);

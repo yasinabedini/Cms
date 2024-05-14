@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.Gallery.Queries.Common
+namespace Cmd.Application.Models.Gallery.Commands.Create
 {
-    internal class GalleryType
+    public class CreateGalleryCommand
     {
     }
 }

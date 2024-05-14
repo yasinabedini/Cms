@@ -1,4 +1,5 @@
-﻿using Cms.Domain.Common.ValueObjects;
+﻿using Cmd.Application.Models.Gallery.Queries.Common;
+using Cms.Domain.Common.ValueObjects;
 using Cms.Domain.Models.News.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace Cmd.Application.Models.News.Queries.Common
         public string? SecondImage { get; private set; }
         public string? ThirdImage { get; private set; }
         public NewsTypeViewModel NewsType { get; set; }
+        public List<GalleryViewModel> Galleries { get; set; }
         public bool IsEnable { get; set; }
 
         public NewsViewModel()

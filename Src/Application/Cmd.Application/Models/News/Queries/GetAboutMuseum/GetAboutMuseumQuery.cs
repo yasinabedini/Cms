@@ -10,5 +10,6 @@ namespace Cmd.Application.Models.News.Queries.GetAboutMuseum
 {
     public class GetAboutMuseumQuery : IQuery<List<AboutMuseumViewModel>>
     {
+        public int LanguageId { get; set; }
     }
 }

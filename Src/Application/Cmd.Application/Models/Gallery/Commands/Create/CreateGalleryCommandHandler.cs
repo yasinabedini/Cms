@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.File.Queries.Common
+namespace Cmd.Application.Models.Gallery.Commands.Create
 {
-    internal class FileType
+    internal class CreateGalleryCommandHandler
     {
     }
 }

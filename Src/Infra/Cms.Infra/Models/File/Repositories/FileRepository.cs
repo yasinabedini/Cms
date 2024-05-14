@@ -11,8 +11,15 @@ namespace Cms.Infra.Models.File.Repositories
 {
     public class FileRepository : BaseRepository<Domain.Models.File.Entities.File>, IFileRepository
     {
+        private readonly CmsDbContext _context;
         public FileRepository(CmsDbContext context) : base(context)
         {
+            _context = context;
+        }
+
+        public List<Domain.Models.File.Entities.File> GetGalleryFiles(long galleryId)
+        {
+            return _context.Files.Where(t => t.GalleryId == galleryId).ToList();
         }
     }
 }

@@ -11,17 +11,17 @@ namespace Cms.Domain.Models.Gallery.Entities
     public class Gallery : AggregateRoot
     {
         public string? Title { get; private set; }
-        public GalleryType Type { get; private set; }
-        public long NewsId { get; private set; }
+        public string Type { get; private set; }
+        public long? NewsId { get; private set; }
 
-        public News.Entities.News News { get; set; }
+        public News.Entities.News? News { get; set; }
 
         #region constructors and factories
         public Gallery() { }
-        public Gallery(string? title, GalleryType type, long newsId)
+        public Gallery(string? title, GalleryType type, long? newsId)
         {
             Title = title;
-            Type = type;
+            Type = type.ToString();
             NewsId = newsId;
         }
         public static Gallery Create()

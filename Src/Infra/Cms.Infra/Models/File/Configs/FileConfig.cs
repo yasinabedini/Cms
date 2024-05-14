@@ -12,7 +12,7 @@ namespace Cms.Infra.Models.File.Configs
     {
         public void Configure(EntityTypeBuilder<Domain.Models.File.Entities.File> builder)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

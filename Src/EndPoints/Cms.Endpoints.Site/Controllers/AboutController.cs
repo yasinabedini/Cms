@@ -18,10 +18,10 @@ namespace Cms.Endpoints.Site.Controllers
             _sender = sender;
         }
 
-        [HttpGet("GetAll")]
-        public IActionResult GetAboutMuseum()
+        [HttpPost("GetAll")]
+        public async Task<IActionResult> GetAboutMuseum(GetAboutMuseumQuery query)
         {
-            var result = _sender.Send(new GetAboutMuseumQuery()).Result;
+            var result =await _sender.Send(query);
            
             return Ok(result);
         }

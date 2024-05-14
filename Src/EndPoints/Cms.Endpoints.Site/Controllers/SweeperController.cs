@@ -1,9 +1,7 @@
-﻿using Cmd.Application.Models.Contact.Commands.CheckAvailability;
-using Cmd.Application.Models.Sweeper.Commands.CheckSweeperAvailability;
+﻿using Cmd.Application.Models.Sweeper.Commands.CheckSweeperAvailability;
 using Cmd.Application.Models.Sweeper.Queries.GetAll;
 using Cmd.Application.Models.Sweeper.Queries.GetById;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cms.Endpoints.Site.Controllers

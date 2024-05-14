@@ -1,11 +1,8 @@
-﻿using Cmd.Application.Models.Contact.Commands.CheckAvailability;
-using Cmd.Application.Models.News.Commands.CheckNewsAvailability;
+﻿using Cmd.Application.Models.News.Commands.CheckNewsAvailability;
 using Cmd.Application.Models.News.Queries.GetAll;
 using Cmd.Application.Models.News.Queries.GetById;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 
 namespace Cms.Endpoints.Site.Controllers
 {

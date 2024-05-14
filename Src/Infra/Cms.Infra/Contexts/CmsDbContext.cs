@@ -1,21 +1,14 @@
 ﻿using Cms.Domain.Common.Entities;
 using Cms.Domain.Common.ValueObjects;
 using Cms.Domain.Models.Contact.Entities;
+using Cms.Domain.Models.Gallery.Entities;
 using Cms.Domain.Models.Info.Entities;
 using Cms.Domain.Models.Language.Entities;
 using Cms.Domain.Models.News.Entities;
 using Cms.Domain.Models.Sweeper.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cms.Infra.Contexts
 {
@@ -31,6 +24,8 @@ namespace Cms.Infra.Contexts
         public DbSet<NewsType> NewsTypes { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Info> Info { get; set; }
+        public DbSet<Gallery> Galleries { get; set; }
+        public DbSet<Domain.Models.File.Entities.File> Files { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

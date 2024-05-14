@@ -13,7 +13,7 @@ namespace Cms.Infra.Contexts
         public CmsDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CmsDbContext>();
-            optionsBuilder.UseSqlServer("Server=27-SRV-TAXIPLUS;Database=Cms-Db;User Id=sa;Password=Aa123456;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Data Source=YASIABDN\\ABDN;Database=Cms-Db;User Id=user;Password=1qaz;TrustServerCertificate=True;");
 
             return new CmsDbContext(optionsBuilder.Options);
         }

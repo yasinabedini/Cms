@@ -9,5 +9,6 @@ namespace Cms.Domain.Models.Gallery.Repositories
 {
     public interface IGalleryRepository : IRepository<Entities.Gallery>
     {
+        List<Entities.Gallery> GetNewsGalleries(long newsId);
     }
 }

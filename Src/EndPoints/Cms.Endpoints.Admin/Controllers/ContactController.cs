@@ -1,13 +1,9 @@
-﻿using Cmd.Application.Models.Contact.Commands.CheckAvailability;
+﻿using Cmd.Application.Models.Contact.Commands.CheckContactAvailability;
 using Cmd.Application.Models.Contact.Commands.Delete;
 using Cmd.Application.Models.Contact.Queries.GetAll;
 using Cmd.Application.Models.Contact.Queries.GetById;
-using Cmd.Application.Models.Info.Commands.Update;
-using Cmd.Application.Models.Info.Queries.GetById;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Cms.Endpoints.Admin.Controllers
 {

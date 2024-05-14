@@ -12,7 +12,7 @@ namespace Cms.Infra.Models.Gallery.Configs
     {
         public void Configure(EntityTypeBuilder<Domain.Models.Gallery.Entities.Gallery> builder)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
