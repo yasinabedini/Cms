@@ -21,7 +21,7 @@ namespace Cmd.Application.Models.File.Queries.GetById
         public Task<FileViewModel> Handle(GetFileByIdQuery request, CancellationToken cancellationToken)
         {
             var model = _fileRepository.GetById(request.Id);
-            return Task.FromResult(new FileViewModel(model.Name, model.GalleryId, model.Type, model.Length,model.Extension));
+            return Task.FromResult(new FileViewModel(model.Name, model.GalleryId,  model.Length,model.Extension,model.TypeId,model.DisplayName));
         }
     }
 }

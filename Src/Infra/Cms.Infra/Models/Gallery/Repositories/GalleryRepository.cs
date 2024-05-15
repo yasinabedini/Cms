@@ -1,6 +1,7 @@
 ﻿using Cms.Domain.Models.Gallery.Repositories;
 using Cms.Infra.Common.Repository;
 using Cms.Infra.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace Cms.Infra.Models.Gallery.Repositories
         }
 
         public List<Domain.Models.Gallery.Entities.Gallery> GetNewsGalleries(long newsId)
-        {
-            return _context.Galleries.Where(t => t.NewsId == newsId).ToList();
+        {            
+            return _context.Galleries.Include(t=>t.Files).Where(t => t.NewsId == newsId).ToList();
         }
     }
 }

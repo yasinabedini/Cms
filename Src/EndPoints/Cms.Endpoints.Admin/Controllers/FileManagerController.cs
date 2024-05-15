@@ -53,6 +53,15 @@ namespace Cms.Endpoints.Admin.Controllers
             return File(imageBytes, "image/jpeg");
         }
 
+        [HttpGet("GetFile")]
+        public async Task<IActionResult> GetFile(string fileName, string type)
+        {
+            var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetFile?fileName={fileName}&&type={type}");
+            byte[] imageBytes = response;
+
+            return File(imageBytes, "image/jpeg");
+        }
+
         [HttpDelete("DeleteImage")]
         public async Task<IActionResult> DeleteImage(string imageName, string folder)
         {

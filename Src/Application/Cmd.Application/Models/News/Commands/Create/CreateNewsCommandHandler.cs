@@ -33,10 +33,13 @@ namespace Cmd.Application.Models.News.Commands.Create
             {
                 return Task.FromException(new Exception("Language Id Is Not Available."));
             }
-            _repository.Add(Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToLongDateString(), request.MainImage, request.SecondImage, request.ThirdImage,request.Author));
+
+            var news = Cms.Domain.Models.News.Entities.News.Create(request.Title, request.Introduction, newsContent, request.LanguageId, request.NewsTypeId, request.PublishDate.ToLongDateString(), request.MainImage, request.SecondImage, request.ThirdImage, request.Author);            
+
+            _repository.Add(news);
             _repository.Save();
 
-            return Task.CompletedTask;
+            return Task.FromResult(news.Id);
         }
     }
 }

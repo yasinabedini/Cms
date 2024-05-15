@@ -26,6 +26,7 @@ namespace Cms.Infra.Contexts
         public DbSet<Info> Info { get; set; }
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<Domain.Models.File.Entities.File> Files { get; set; }
+        public DbSet<Domain.Models.File.Entities.FileType> FileTypes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

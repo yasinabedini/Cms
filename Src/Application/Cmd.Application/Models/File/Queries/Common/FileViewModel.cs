@@ -10,21 +10,23 @@ namespace Cmd.Application.Models.File.Queries.Common
     {
         public string Name { get;  set; }
         public long GalleryId { get;  set; }
-        public string Type { get;  set; }
         public int Length { get;  set; }
-        public string Extension { get; set; }
+        public string DisplayName { get; set; }
+        public string Extension { get;  set; }
+        public long TypeId { get; set; }
         public FileViewModel()
         {
             
         }
 
-        public FileViewModel(string name, long galleryId, string type, int length, string extension)
+        public FileViewModel(string name, long galleryId, int length, string extension, long typeId, string displayName)
         {
             Name = name;
             GalleryId = galleryId;
-            Type = type;
             Length = length;
             Extension = extension;
+            TypeId = typeId;
+            DisplayName = displayName;
         }
     }
 }

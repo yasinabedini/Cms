@@ -18,7 +18,7 @@ namespace Cms.Endpoints.Site.Controllers
             _sender = sender;
         }
 
-        [HttpGet("GetMainImage")]
+        [HttpGet("GetImage")]
         public async Task<IActionResult> GetImage(string imageName, string folder)
         {
             var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetImage?imageName={imageName}&&folder={folder}");

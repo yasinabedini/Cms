@@ -11,17 +11,17 @@ namespace Cmd.Application.Models.Gallery.Queries.Common
     public class GalleryViewModel
     {
         public string? Title { get;  set; }
-        public string Type { get;  set; }
+        public bool Type { get;  set; }
         public long? NewsId { get;  set; }
         public List<FileViewModel> Files { get; set; }
 
         public GalleryViewModel()
         {            
         }
-        public GalleryViewModel(string? title, GalleryType type, long? newsId)
+        public GalleryViewModel(string? title, bool type, long? newsId)
         {
             Title = title;
-            Type = type.ToString();
+            Type = type;
             NewsId = newsId;
         }
     }

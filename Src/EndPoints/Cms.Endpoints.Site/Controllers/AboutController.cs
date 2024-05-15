@@ -1,4 +1,5 @@
 ﻿using Cmd.Application.Models.News.Queries.GetAboutMuseum;
+using Cmd.Application.Models.News.Queries.GetAboutWithFilter;
 using Cmd.Application.Models.News.Queries.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -19,10 +20,10 @@ namespace Cms.Endpoints.Site.Controllers
         }
 
         [HttpPost("GetAll")]
-        public async Task<IActionResult> GetAboutMuseum(GetAboutMuseumQuery query)
+        public async Task<IActionResult> GetAboutMuseum(GetAboutWithFilterQuery query)
         {
             var result =await _sender.Send(query);
-           
+
             return Ok(result);
         }
     }
