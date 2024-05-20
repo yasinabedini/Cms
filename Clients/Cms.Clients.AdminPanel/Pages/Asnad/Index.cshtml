@@ -1,0 +1,119 @@
+﻿@page
+@inject IConfiguration _config;
+@model Cms.Clients.AdminPanel.Pages.Asnad.IndexModel
+@{
+    ViewBag.Title = "گنجینه اسناد";
+    ViewBag.Page = "گنجینه اسناد";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card-body">
+
+            @for (int i = 1; i <= _config.GetSection("Asnad").GetChildren().ToList().Count; i++)
+            {
+                long newsTypeId = @Convert.ToInt32(_config.GetSection("Asnad")[$"item{i}"]);
+
+                <div class="card">
+                    <ul class="nav nav-pills nav-sidebar flex-column m-4" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item has-treeview">
+                            <a class="nav-link d-block">
+                                <h4>
+                                    @Model.NewsTypes.SingleOrDefault(t => t.Id == newsTypeId).Title
+                                    <i class="fa fa-angle-left right"></i>
+                                </h4>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Asnad/Create?typeId=@newsTypeId" class="btn btn-success m-3 text-white">ایجاد آیتم جدید</a>
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>متن</th>
+                                                <th>زبان</th>
+                                                <th>وضعیت</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var asnad in Model.AsnadList.Where(t => t.NewsTypeId == newsTypeId))
+                                            {
+                                                <tr id="aboutUs[@asnad.Id]">
+                                                    @if (asnad.Text.Length <= 40)
+                                                    {
+                                                        <td>
+                                                            @Html.Raw(asnad.Text)
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@Html.Raw(asnad.Text.Substring(0, 39))</td>
+                                                    }
+                                                    <td>
+                                                        @Model.Languages.FirstOrDefault(t => t.Id == asnad.LanguageId).Name
+                                                    </td>
+                                                    @if (asnad.IsEnable)
+                                                    {
+                                                        <td>
+                                                            <span>فعال</span>
+                                                            <i class="fa fa-check"></i>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <span>غیرفعال</span>
+                                                            <i class="fa fa-close"></i>
+                                                        </td>
+                                                    }
+                                                    <td>
+                                                        <a href="/news/gallery?id=@asnad.Id&&pageName=aboutUs" class="btn btn-primary text-white">گالری و پیوست ها</a>
+                                                        <a href="/Asnad/edit?id=@asnad.Id" class="text-white btn btn-primary">ویرایش</a>
+                                                        @if (asnad.IsEnable)
+                                                        {
+                                                            <a href="/Asnad/ChangeAvailability?id=@asnad.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="/Asnad/ChangeAvailability?id=@asnad.Id" class="text-white btn btn-success">فعال کردن</a>
+
+                                                        }
+                                                        <a onclick="Delete(@asnad.Id)" class="text-white btn btn-danger">حذف</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <!-- /.card-body -->
+                                    <!-- /.card -->
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+        <!-- /.col -->
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        function Delete(id) {
+
+            if (confirm("آیا از حذف این آیتم مطمئن هستید? ")) {
+                $.ajax({
+                    type: "Get",
+                    url: '@_config.GetSection("DomainAddress").Value/News/Delete?id=' + id,
+                    success: function () {
+                        document.getElementById("aboutUs[" + id + "]").setAttribute("style", "display:none");
+                    },
+                    error: function () {
+                        alert("خطایی رخ داده است!");
+                    }
+                });
+            }
+        }
+    </script>
+}
