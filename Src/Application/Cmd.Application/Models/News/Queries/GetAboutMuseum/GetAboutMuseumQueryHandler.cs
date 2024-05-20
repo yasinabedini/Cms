@@ -21,7 +21,7 @@ namespace Cmd.Application.Models.News.Queries.GetAboutMuseum
 
         public Task<List<AboutMuseumViewModel>> Handle(GetAboutMuseumQuery request ,CancellationToken cancellationToken)
         {
-            var allNews = _repository.GetAllWithRelations().Where(t=>t.LanguageId==request.LanguageId).OrderByDescending(t=>t.CreateAt).ToList();
+            var allNews = _repository.GetAllWithRelations().OrderByDescending(t => t.CreateAt).Where(t=>t.LanguageId==request.LanguageId).ToList();
 
             var config = (IConfiguration)_serviceProvider.GetRequiredService(typeof(IConfiguration));
 
@@ -55,7 +55,7 @@ namespace Cmd.Application.Models.News.Queries.GetAboutMuseum
                         });
                     }
                 }
-            }
+            }            
             return Task.FromResult(aboutList);
         }
     }

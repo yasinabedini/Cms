@@ -1,12 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cmd.Application.Common.Commands;
 
 namespace Cmd.Application.Models.Gallery.Commands.Create
 {
-    public class CreateGalleryCommand
+    public class CreateGalleryCommand:ICommand
     {
+        public string? Title { get;  set; }
+        public bool Type { get;  set; }
+        public long? NewsId { get;  set; }
+
+        public CreateGalleryCommand()
+        {
+            
+        }
+        public CreateGalleryCommand(string? title, bool type, long? newsId)
+        {
+            Title = title;
+            Type = type;
+            NewsId = newsId;
+        }
     }
 }

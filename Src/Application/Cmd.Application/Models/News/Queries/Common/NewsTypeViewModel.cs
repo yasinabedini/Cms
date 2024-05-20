@@ -14,6 +14,11 @@ namespace Cmd.Application.Models.News.Queries.Common
         public bool IsPage { get; set; }
         public bool IsEnable { get; set; }
         public int LanguageId { get; set; }
+
+        public NewsTypeViewModel()
+        {
+            
+        }
         public NewsTypeViewModel(long id, string title, string name, bool isPage, bool isEnable, int languageId)
         {
             Id = id;
@@ -23,5 +28,7 @@ namespace Cmd.Application.Models.News.Queries.Common
             IsEnable = isEnable;
             LanguageId = languageId;
         }
+
+
     }
 }

@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\File\Commands\Delete\" />
     <Folder Include="Models\File\Queries\GetAllFile\" />
     <Folder Include="Models\File\Queries\GetGalleryFiles\" />
     <Folder Include="Models\Gallery\Queries\GetById\" />

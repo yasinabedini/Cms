@@ -22,7 +22,8 @@ namespace Cmd.Application.Models.Gallery.Queries.GetNewsGallery
         {
             var galleries = _galleryRepository.GetNewsGalleries(request.Id);
             return Task.FromResult(galleries.Select(t => new GalleryViewModel
-            {
+            {                
+                Id = t.Id,
                 NewsId = t.NewsId,
                 Title = t.Title,
                 Type = t.Type,

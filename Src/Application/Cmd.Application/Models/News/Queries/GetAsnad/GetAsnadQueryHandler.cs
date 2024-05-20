@@ -1,6 +1,6 @@
 ﻿using Cmd.Application.Common.Queries;
 using Cmd.Application.Models.News.Queries.Common;
-using Cmd.Application.Models.News.Queries.GetAboutMuseum;
+using Cms.Domain.Common.Repositories;
 using Cms.Domain.Models.Gallery.Repositories;
 using Cms.Domain.Models.News.Repository;
 using Microsoft.Extensions.Configuration;
@@ -11,16 +11,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.News.Queries.GetAboutWithFilter
+namespace Cmd.Application.Models.News.Queries.GetAsnad
 {
-    public class GetAboutWithFilterQueryHandler : IQueryHandler<GetAboutWithFilterQuery, List<AboutMuseumViewModel>>
+    public class GetAsnadQueryHandler : IQueryHandler<GetAsnadQuery, List<AsnadViewModel>>
     {
         private readonly INewsRepository _repository;
         private readonly INewsTypeRepository _typeRepository;
         private readonly IServiceProvider _serviceProvider;
         private readonly IGalleryRepository _galleryRepository;
 
-        public GetAboutWithFilterQueryHandler(INewsRepository repository, IServiceProvider serviceProvider, INewsTypeRepository typeRepository, IGalleryRepository galleryRepository)
+        public GetAsnadQueryHandler(INewsRepository repository, IServiceProvider serviceProvider, INewsTypeRepository typeRepository, IGalleryRepository galleryRepository)
         {
             _repository = repository;
             _serviceProvider = serviceProvider;
@@ -28,16 +28,17 @@ namespace Cmd.Application.Models.News.Queries.GetAboutWithFilter
             _galleryRepository = galleryRepository;
         }
 
-        public Task<List<AboutMuseumViewModel>> Handle(GetAboutWithFilterQuery request, CancellationToken cancellationToken)
+
+        public Task<List<AsnadViewModel>> Handle(GetAsnadQuery request, CancellationToken cancellationToken)
         {
             var allNews = _repository.GetAllWithRelations().Where(t => t.LanguageId == request.LanguageId).OrderByDescending(t => t.CreateAt).ToList();
 
             var config = (IConfiguration)_serviceProvider.GetRequiredService(typeof(IConfiguration));
 
 
-            List<AboutMuseumViewModel> aboutList = new List<AboutMuseumViewModel>();
+            List<AsnadViewModel> asnadList = new List<AsnadViewModel>();
 
-            var itemsId = config.GetSection("AboutUs").GetChildren();
+            var itemsId = config.GetSection("Asnad").GetChildren();
             foreach (var item in itemsId.Select(t => t.Value))
             {
                 long id = long.Parse(item);
@@ -47,9 +48,9 @@ namespace Cmd.Application.Models.News.Queries.GetAboutWithFilter
                 {
                     if (about is not null && about.IsEnable)
                     {
-                        var aboutGalleries = _galleryRepository.GetNewsGalleries(about.Id);                     
+                        var aboutGalleries = _galleryRepository.GetNewsGalleries(about.Id);
 
-                        var newsModel  = new NewsViewModel
+                        var newsModel = new NewsViewModel
                         {
                             Id = about.Id,
                             Title = about.Title.Value,
@@ -66,7 +67,7 @@ namespace Cmd.Application.Models.News.Queries.GetAboutWithFilter
                             IsEnable = about.IsEnable
                         };
 
-                        var model = new AboutMuseumViewModel
+                        var model = new AsnadViewModel
                         {
                             TypeId = (int)id,
                             TypeTitle = allNews.FirstOrDefault(t => t.NewsTypeId == id).NewsType.Title.Value,
@@ -80,7 +81,7 @@ namespace Cmd.Application.Models.News.Queries.GetAboutWithFilter
                             Type = t.Type,
                             Files = t.Files.Where(t => t.IsEnable).Select(f => new File.Queries.Common.FileViewModel(f.Name, f.GalleryId, f.Length, f.Extension, f.TypeId, f.DisplayName)).ToList()
                         }).ToList();
-                        if (galleries.Any(t=>t.Files.Any()))
+                        if (galleries.Any(t => t.Files.Any()))
                         {
                             newsModel.Galleries = galleries;
                         }
@@ -91,11 +92,11 @@ namespace Cmd.Application.Models.News.Queries.GetAboutWithFilter
 
                         model.NewsViewModel = newsModel;
 
-                        aboutList.Add(model);
+                        asnadList.Add(model);
                     }
                 }
             }
-            return Task.FromResult(aboutList);
+            return Task.FromResult(asnadList);
         }
     }
 }
