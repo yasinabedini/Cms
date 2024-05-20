@@ -80,9 +80,9 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
             item.Position = 0;
             var imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "image", Path.GetFileName(Image.FileName));
+            requestContent.Add(imageContent, "file", Path.GetFileName(Image.FileName));
             var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=sweeper", requestContent).Result;
-            Sweeper.ImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+            Sweeper.ImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             #endregion
 
 

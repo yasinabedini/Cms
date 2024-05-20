@@ -96,10 +96,10 @@ namespace Cms.Clients.AdminPanel.Pages.News
                 item.Position = 0;
                 var imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                requestContent.Add(imageContent, "image", Path.GetFileName(MainImage.FileName));
+                requestContent.Add(imageContent, "file", Path.GetFileName(MainImage.FileName));
                 var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
 
-                News.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                News.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
 
             if (Images is not null && Images.Count is not 0)
@@ -125,9 +125,9 @@ namespace Cms.Clients.AdminPanel.Pages.News
                 item.Position = 0;
                 var imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                requestContent.Add(imageContent, "image", Path.GetFileName(Images[0].FileName));
+                requestContent.Add(imageContent, "file", Path.GetFileName(Images[0].FileName));
                 var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                News.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                News.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
                 if (Images.Count == 2)
                 {
@@ -153,9 +153,9 @@ namespace Cms.Clients.AdminPanel.Pages.News
                     item.Position = 0;
                     imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                    requestContent.Add(imageContent, "image", Path.GetFileName(Images[1].FileName));
+                    requestContent.Add(imageContent, "file", Path.GetFileName(Images[1].FileName));
                     imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                    News.ThirdImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                    News.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
                 }
 
                 item.Dispose();

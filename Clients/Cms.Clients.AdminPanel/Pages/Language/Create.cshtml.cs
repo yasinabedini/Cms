@@ -24,16 +24,16 @@ namespace Cms.Clients.AdminPanel.Pages.Language
         {
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+           // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
             var modelData = new { Title = Language.Title, Name = Language.Name, Rtl = Language.Rtl, Region = Language.Region};
 
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");
 
-            var methodresponse = _httpClient.PostAsync("/api/Language/Create", modelContent).Result;
+            var methodresponse =await _httpClient.PostAsync("/api/Language/Create", modelContent);
 
             if (methodresponse.IsSuccessStatusCode)
             {

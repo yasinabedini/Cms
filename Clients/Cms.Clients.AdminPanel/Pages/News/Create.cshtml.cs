@@ -45,7 +45,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
             var response = _httpClient.PostAsync("/api/NewsType/GetAll", content).Result;
             var result = await response.Content.ReadAsStringAsync();
-            NewsTypes = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult;
+            NewsTypes = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult.Where(t => !t.IsPage).ToList();
 
             data = new { pageNumber = 1, pageSize = 200 };
             jsonInString = JsonConvert.SerializeObject(data);
@@ -53,8 +53,6 @@ namespace Cms.Clients.AdminPanel.Pages.News
             response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
             result =await response.Content.ReadAsStringAsync();
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
-
-
         }
 
         public async Task<IActionResult> OnPost()
@@ -67,7 +65,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
             var response = _httpClient.PostAsync("/api/NewsType/GetAll", content).Result;
             var result =await response.Content.ReadAsStringAsync();
-            NewsTypes = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult;
+            NewsTypes = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult.Where(t=>!t.IsPage).ToList();
 
             data = new { pageNumber = 1, pageSize = 200 };
             jsonInString = JsonConvert.SerializeObject(data);
@@ -107,10 +105,10 @@ namespace Cms.Clients.AdminPanel.Pages.News
             item.Position = 0;
             var imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "image", Path.GetFileName(MainImage.FileName));
+            requestContent.Add(imageContent, "file", Path.GetFileName(MainImage.FileName));
             var imageResponse = await _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent);
 
-            News.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+            News.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
             #endregion
 
@@ -135,9 +133,9 @@ namespace Cms.Clients.AdminPanel.Pages.News
                 item.Position = 0;
                 imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                requestContent.Add(imageContent, "image", Path.GetFileName(Images[0].FileName));
+                requestContent.Add(imageContent, "file", Path.GetFileName(Images[0].FileName));
                 imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                News.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                News.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
                 if (Images.Count==2)
                 {
@@ -159,9 +157,9 @@ namespace Cms.Clients.AdminPanel.Pages.News
                     item.Position = 0;
                     imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                    requestContent.Add(imageContent, "image", Path.GetFileName(Images[1].FileName));
+                    requestContent.Add(imageContent, "file", Path.GetFileName(Images[1].FileName));
                     imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                    News.ThirdImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                    News.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
                 }
             }
             item.Dispose();

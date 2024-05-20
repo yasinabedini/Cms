@@ -8,10 +8,38 @@
 }
 
 
-<div class="row">
+
     <div class="col-12">
         <div class="card">
+            <div class="row">
+            <div class="card-body">
+                <div class="col-sm-12 col-md-12 p-3 text-center">
+                    <form method="get">
+                        <input name="searchText" type="text" value="@HttpContext.Request.Query["searchText"].ToString()" placeholder="خبر مورد نظر خود را جستحو کنید" class="form-control col-md-5 m-3 d-inline float-right" />
+                        <div class="form-group d-inline">
+                            <label class="m-3">نوع خبر : </label>
+                            <select name="typeId" class="form-control d-inline col-md-2 m-3">
+                                <option selected value="0">همه خبر ها</option>
+                                @foreach (var type in Model.NewsTypes)
+                                {
+                                    if (HttpContext.Request.Query["typeId"] == type.Id)
+                                    {
+                                        <option selected value="@type.Id">@type.Title</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@type.Id">@type.Title</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <input type="submit" value="جستجو" class="btn btn-success float-left d-inline m-3" />
+                    </form>
+                </div>
+            </div>
+            </div>
             <!-- /.card-header -->
+            <div class="row">
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
@@ -32,6 +60,8 @@
                                 </td>
                                 <td>@news.PublishDate</td>
                                 <td>
+                                    <a href="/news/gallery?id=@news.Id&&pageName=news" class="btn btn-primary text-white">گالری و پیوست ها</a>
+                                    <a href="/news/edit?id=@news.Id&&pageName=News" class="text-white btn btn-primary">ویرایش</a>
                                     @if (news.IsEnable)
                                     {
                                         <a href="/News/ChangeAvailability?id=@news.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
@@ -41,7 +71,6 @@
                                         <a href="/News/ChangeAvailability?id=@news.Id" class="text-white btn btn-success">فعال کردن</a>
 
                                     }
-                                    <a href="/news/edit?id=@news.Id" class="text-white btn btn-primary">ویرایش</a>
                                     <a onclick="Delete(@news.Id)" class="text-white btn btn-danger">حذف</a>
                                 </td>
                             </tr>
@@ -49,12 +78,13 @@
                     </tbody>
                 </table>
             </div>
+            </div>
             <!-- /.card-body -->
         </div>
         <!-- /.card -->
     </div>
     <!-- /.col -->
-</div>
+
 
 @section Scripts {
     <script>

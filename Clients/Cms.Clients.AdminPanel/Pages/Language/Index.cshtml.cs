@@ -20,9 +20,9 @@ namespace Cms.Clients.AdminPanel.Pages.Language
             _httpClient = factory.CreateClient("AdminApi");
         }
 
-        public void OnGet()
+        public async void OnGet()
         {
-            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
             var data = new { pageNumber = 1, pageSize = 200, }; // Your data object
 
@@ -30,7 +30,7 @@ namespace Cms.Clients.AdminPanel.Pages.Language
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
 
             var response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
-            var result = response.Content.ReadAsStringAsync().Result;
+            var result =await response.Content.ReadAsStringAsync();
 
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
         }
