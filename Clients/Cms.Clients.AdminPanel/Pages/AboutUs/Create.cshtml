@@ -8,21 +8,14 @@
 <form enctype="multipart/form-data" method="post">
     <input type="hidden" asp-for="About.NewsTypeId" />
     <input type="hidden" asp-for="About.Title" value="بدون عنوان" />
+    <input type="hidden" asp-for="About.Introduction" value="بدون مقدمه" />
     <div class="card card-info">
         <div class="card-header">
             <h3 class="card-title">آیتم جدید</h3>
         </div>
         <div class="col-md-12 mb-lg-0 mb-4">
             <div class="card mt-4">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-md-12 mb-md-0 mb-4">
-                            <div class="card card-body card-plain border-radius-lg ">
-                                <label>مقدمه : <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" asp-for="About.Introduction" />
-                            </div>
-                        </div>
-                    </div>
+                <div class="card-body p-3">              
                     <div class="row">
                         <div class="col-md-12 mb-md-0 mb-4">
                             <div class="card card-body card-plain border-radius-lg ">

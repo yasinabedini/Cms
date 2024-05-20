@@ -13,6 +13,8 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
         private readonly HttpClient _httpClient;
 
         public List<NewsViewModel> AboutList { get; set; }
+        
+        public List<NewsTypeViewModel> NewsTypes { get; set; }
         public List<LanguageViewModel> Languages { get; set; }
 
 
@@ -36,19 +38,26 @@ namespace Cms.Clients.AdminPanel.Pages.AboutUs
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult;
             #endregion
 
-
-            var data = new { pageNumber = 1, pageSize = 200, typeId = 0, isPage = true }; // Your data object
-
-            var jsonInString = JsonConvert.SerializeObject(data);
+            var newsTypeData = new { pageNumber = 1, pageSize = 200 };
+            var jsonInString = JsonConvert.SerializeObject(newsTypeData);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+            var response = _httpClient.PostAsync("/api/NewsType/GetAll", content).Result;
+            var result = await response.Content.ReadAsStringAsync();
+            NewsTypes = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult.Where(t => t.IsPage).ToList();
 
-            var response =await _httpClient.PostAsync("/api/News/GetAll", content);
+
+            var data = new { pageNumber = 1, pageSize = 400, typeId = 0, isPage = true }; // Your data object
+
+             jsonInString = JsonConvert.SerializeObject(data);
+             content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+
+             response =await _httpClient.PostAsync("/api/News/GetAll", content);
 
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest();
             }
-            var result =await response.Content.ReadAsStringAsync();
+             result =await response.Content.ReadAsStringAsync();
 
             AboutList = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult;
 
