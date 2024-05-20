@@ -12,9 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Gallery\Document\" />
-    <Folder Include="wwwroot\Gallery\Voice\" />
-    <Folder Include="wwwroot\Gallery\Video\" />
+    <Folder Include="wwwroot\Img\attachment\document\" />
+    <Folder Include="wwwroot\Img\attachment\image\" />
+    <Folder Include="wwwroot\Img\attachment\voice\" />
+    <Folder Include="wwwroot\Img\attachment\video\" />
+    <Folder Include="wwwroot\Img\gallery\" />
     <Folder Include="wwwroot\Img\sweeper\" />
   </ItemGroup>
 
