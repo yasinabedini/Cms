@@ -75,14 +75,14 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPost()
     {
-        _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+        //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
         #region languages
         var data = new { pageNumber = 1, pageSize = 200 };
         var jsonInString = JsonConvert.SerializeObject(data);
         var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-        var response = _httpClient.PostAsync("/api/Language/GetAll", content).Result;
-        var result = response.Content.ReadAsStringAsync().Result;
+        var response =await _httpClient.PostAsync("/api/Language/GetAll", content);
+        var result =await response.Content.ReadAsStringAsync();
         Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
         #endregion
 
@@ -95,16 +95,6 @@ public class CreateModel : PageModel
             return Page();
         }
 
-
-        if (!ModelState.IsValid)
-        {
-            if (Image is null)
-            {
-                ModelState.AddModelError("Image", "یک عکس برای خبر اپلود کنید");
-            }
-
-            return Page();
-        }
 
         #region Save Main Image
 
@@ -120,10 +110,10 @@ public class CreateModel : PageModel
         item.Position = 0;
         var imageContent = new ByteArrayContent(item.ToArray());
         imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-        requestContent.Add(imageContent, "image", Path.GetFileName(Image.FileName));
+        requestContent.Add(imageContent, "file", Path.GetFileName(Image.FileName));
         var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
 
-        Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+        Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
         #endregion
 
         #region Save Gallery
@@ -147,9 +137,9 @@ public class CreateModel : PageModel
             item.Position = 0;
             imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "image", Path.GetFileName(Images[0].FileName));
+            requestContent.Add(imageContent, "file", Path.GetFileName(Images[0].FileName));
             imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-            Activity.SecondImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+            Activity.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
             if (Images.Count==2)
             {
@@ -171,22 +161,22 @@ public class CreateModel : PageModel
                 item.Position = 0;
                 imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                requestContent.Add(imageContent, "image", Path.GetFileName(Images[1].FileName));
+                requestContent.Add(imageContent, "file", Path.GetFileName(Images[1].FileName));
                 imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                Activity.ThirdImage = imageResponse.Headers.First(t => t.Key == "imageName").Value.First();
+                Activity.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
         }
         item.Dispose();
         #endregion
 
-        var modelData = new { Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage,Author = HttpContext.User.GetDisplayName() }; // Your data object
+        var modelData = new { Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage, Author = HttpContext.User.GetDisplayName() }; // Your data object
 
         var modelJsonInString = JsonConvert.SerializeObject(modelData);
         var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");
 
-        var methodresponse = _httpClient.PostAsync("/api/News/Create", modelContent);
+        var methodresponse = await _httpClient.PostAsync("/api/News/Create", modelContent);
 
-        if (methodresponse.Result.IsSuccessStatusCode)
+        if (methodresponse.IsSuccessStatusCode)
         {
             return RedirectToPage("Index");
         }

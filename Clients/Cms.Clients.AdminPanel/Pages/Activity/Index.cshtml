@@ -43,6 +43,8 @@
                                     </td>
                                 }
                                 <td>
+                                    <a href="/news/gallery?id=@activity.Id&&pageName=activity" class="btn btn-primary text-white">گالری و پیوست ها</a>
+                                    <a href="/activity/edit?id=@activity.Id" class="text-white btn btn-primary">ویرایش</a>
                                     @if (activity.IsEnable)
                                     {
                                         <a href="/Activity/ChangeAvailibility?id=@activity.Id" class="text-white btn btn-danger">غیرفعال کردن</a>
@@ -52,7 +54,6 @@
                                         <a href="/Activity/ChangeAvailibility?id=@activity.Id" class="text-white btn btn-success">فعال کردن</a>
 
                                     }
-                                    <a href="/activity/edit?id=@activity.Id" class="text-white btn btn-primary">ویرایش</a>
                                     <a onclick="Delete(@activity.Id)" class="text-white btn btn-danger">حذف</a>
                                 </td>
                             </tr>

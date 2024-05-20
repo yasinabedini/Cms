@@ -25,8 +25,8 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
 
         public ActionResult OnGet()
         {
-            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
-
+            // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            var config = (IConfiguration)HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration));
 
             #region languages
             var languageData = new { pageNumber = 1, pageSize = 200 };
@@ -34,11 +34,11 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
             var languageContent = new StringContent(languageJsonInString, Encoding.UTF8, "application/json");
             var languageResponse = _httpClient.PostAsync("/api/Language/GetAll", languageContent).Result;
             var languageResult = languageResponse.Content.ReadAsStringAsync().Result;
-            Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult; 
+            Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult;
             #endregion
 
 
-            var data = new { pageNumber = 1, pageSize = 200, typeId = 7, isPage = true }; // Your data object
+            var data = new { pageNumber = 1, pageSize = 200, typeId = config.GetSection("NewsId").GetSection("NewsActivityId").Value, isPage = true }; // Your data object
 
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
