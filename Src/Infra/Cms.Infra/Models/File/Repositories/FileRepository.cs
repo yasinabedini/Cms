@@ -1,4 +1,5 @@
-﻿using Cms.Domain.Models.File.Repositories;
+﻿using Cms.Domain.Models.File.Entities;
+using Cms.Domain.Models.File.Repositories;
 using Cms.Infra.Common.Repository;
 using Cms.Infra.Contexts;
 using System;
@@ -15,6 +16,16 @@ namespace Cms.Infra.Models.File.Repositories
         public FileRepository(CmsDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public List<FileType> GetAllFileTypes()
+        {
+            return _context.FileTypes.ToList();
+        }
+
+        public Domain.Models.File.Entities.File GetFileByName(string name)
+        {
+            return _context.Files.FirstOrDefault(t => t.Name == name);
         }
 
         public List<Domain.Models.File.Entities.File> GetGalleryFiles(long galleryId)
