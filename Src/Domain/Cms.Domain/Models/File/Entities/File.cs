@@ -21,13 +21,14 @@ namespace Cms.Domain.Models.File.Entities
         #region Constructors and factories
         public File() { }
 
-        public File(string name, long galleryId, string type, int length, string extension, long typeId)
+        public File(string name,string displayName, long galleryId, int length, string extension, long typeId)
         {
             Name = name;
             GalleryId = galleryId;            
             Length = length;
             Extension = extension;            
             TypeId = typeId;
+            DisplayName = displayName;
         }
 
         public static File Create()
@@ -35,9 +36,9 @@ namespace Cms.Domain.Models.File.Entities
             return new File();
         }
 
-        public static File Create(string name, long galleryId, string type, int length, string extension, long typeId)
+        public static File Create(string name, string displayName, long galleryId, int length, string extension, long typeId)
         {
-            return new File(name, galleryId, type, length,extension,typeId);
+            return new File(name, displayName, galleryId, length,extension,typeId);
         }
         #endregion
     }
