@@ -44,6 +44,29 @@ namespace Cms.Endpoints.Admin.Controllers
             return Ok(response.Headers.First(t => t.Key == "imageName").Value);
         }
 
+        [HttpPost("UploadFile")]
+        public async Task<IActionResult> UploadFile(IFormFile file, string type)
+        {
+            var requestContent = new MultipartFormDataContent();
+
+            var item = new MemoryStream();
+            file.CopyTo(item);
+            item.Position = 0;
+
+            // Assuming you have the image path            
+            var imageContent = new ByteArrayContent(item.ToArray());
+            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+
+            // 'file' corresponds to the name of the form field in your API
+            requestContent.Add(imageContent, "image", Path.GetFileName(file.FileName));
+
+            // Replace 'your_api_endpoint' with the actual endpoint where you want to send the image
+            var response = await _FileManager.PostAsync($"/api/FileManager/UploadFileToGallery?type={type}", requestContent);
+
+            item.Dispose();
+            return Ok(response.Headers.First(t => t.Key == "imageName").Value);
+        }
+
         [HttpGet("GetImage")]
         public async Task<IActionResult> GetImage(string imageName, string folder)
         {
@@ -54,12 +77,47 @@ namespace Cms.Endpoints.Admin.Controllers
         }
 
         [HttpGet("GetFile")]
-        public async Task<IActionResult> GetFile(string fileName, string type)
+        public async Task<IActionResult> GetFile(string fileName, int type)
         {
             var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetFile?fileName={fileName}&&type={type}");
             byte[] imageBytes = response;
 
-            return File(imageBytes, "image/jpeg");
+            string typeStr;
+            string mimType = "";
+            if (type is 3)
+            {
+                typeStr = "image";
+                mimType = "image/jpeg";
+            }
+            else if (type is 5)
+            {
+                typeStr = "document";
+                mimType = "application/pdf";
+            }
+            else if (type is 4)
+            {
+                typeStr = "video";
+                mimType = "video/mp4";
+            }
+            else if (type is 6)
+            {
+                typeStr = "voice";
+                mimType = "audio/mpeg";
+            }
+            else
+            {
+                typeStr = "";
+                mimType = "";
+            }
+
+            if (type is 3)
+            {
+                return File(imageBytes, mimType);
+            }
+            else
+            {
+                return File(imageBytes, mimType, fileName);
+            }
         }
 
         [HttpDelete("DeleteImage")]
