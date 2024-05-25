@@ -12,8 +12,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
 {
     public class GalleryModel : PageModel
     {
-        private readonly HttpClient _httpClient;
-        private readonly HttpClient _fileManager;
+        private readonly HttpClient _httpClient;        
 
         public List<GalleryViewModel> Galleries { get; set; }
 
@@ -25,8 +24,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
         public List<IFormFile> Files { get; set; }
         public GalleryModel(IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient("AdminApi");
-            _fileManager = factory.CreateClient("FileManager");
+            _httpClient = factory.CreateClient("AdminApi");            
         }
         public async Task<IActionResult> OnGet(int id, string pageName)
         {
@@ -89,7 +87,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
                     var imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                     requestContent.Add(imageContent, "file", Path.GetFileName(image.FileName));
-                    var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=gallery", requestContent).Result;
+                    var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=gallery", requestContent).Result;
                     string imageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
                     var dataModel = new { name = imageName, displayName = image.FileName.Replace(extension,""), galleryId = imageGalleryId, length = image.Length, extension = extension, typeId = 3 };
@@ -164,7 +162,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
                     var imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(mimType);
                     requestContent.Add(imageContent, "file", Path.GetFileName(file.FileName));
-                    var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=attachment", requestContent).Result;
+                    var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=attachment", requestContent).Result;
                     string imageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
                     var dataModel = new { name = imageName, displayName = file.FileName.Replace(extension, ""), galleryId = fileGalleryId, length = file.Length, extension = Path.GetExtension(file.FileName), typeId = typeId };

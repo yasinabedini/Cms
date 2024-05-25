@@ -11,8 +11,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
 {
     public class EditModel : PageModel
     {
-        private readonly HttpClient _httpClient;
-        private readonly HttpClient _fileManager;
+        private readonly HttpClient _httpClient;        
 
 
         [BindProperty]
@@ -25,8 +24,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
 
         public EditModel(IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient("AdminApi");
-            _fileManager = factory.CreateClient("FileManager");
+            _httpClient = factory.CreateClient("AdminApi");            
 
         }
 
@@ -129,7 +127,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
                     return Page();
                 }
 
-                var deleteResult = _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.MainImageName}&&folder=news").Result;
+                var deleteResult = _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.MainImageName}&&folder=news").Result;
 
                 var requestContent = new MultipartFormDataContent();
                 var item = new MemoryStream();
@@ -138,7 +136,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
                 var imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(MainImage.FileName));
-                var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
 
                 Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
@@ -159,7 +157,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
 
                 if (!string.IsNullOrEmpty(Activity.SecondImage))
                 {
-                    _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.SecondImage}&&folder=news");
+                    _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.SecondImage}&&folder=news");
                 }
                 var requestContent = new MultipartFormDataContent();
                 var item = new MemoryStream();
@@ -168,7 +166,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
                 var imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(Images[0].FileName));
-                var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                 Activity.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
                 if (Images.Count == 2)
@@ -187,7 +185,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
 
                     if (!string.IsNullOrEmpty(Activity.ThirdImage))
                     {
-                        _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.ThirdImage}&&folder=news");
+                        _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.ThirdImage}&&folder=news");
                     }
 
                     requestContent = new MultipartFormDataContent();
@@ -197,7 +195,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
                     imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                     requestContent.Add(imageContent, "file", Path.GetFileName(Images[1].FileName));
-                    imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                    imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                     Activity.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
                 }
 

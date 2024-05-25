@@ -1,3 +1,4 @@
+
 using Cms.Clients.AdminPanel.Auth;
 using Cms.Clients.AdminPanel.ViewModels;
 using IdentityModel.Client;
@@ -11,16 +12,14 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
 {
     public class EditModel : PageModel
     {
-        private readonly HttpClient _httpClient;
-        private readonly HttpClient _fileManager;
+        private readonly HttpClient _httpClient;        
 
         [BindProperty]
         public SweeperViewModel Sweeper { get; set; }
 
         public EditModel(IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient("AdminApi");
-            _fileManager = factory.CreateClient("FileManager");
+            _httpClient = factory.CreateClient("AdminApi");            
         }
 
         public List<LanguageViewModel> Languages { get; set; }
@@ -69,7 +68,7 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
             #region Save Image
             if (image is not null)
             {
-                _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Sweeper.ImageName}&&folder=sweeper");
+                _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Sweeper.ImageName}&&folder=sweeper");
 
                 var requestContent = new MultipartFormDataContent();
                 var item = new MemoryStream();
@@ -78,7 +77,7 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
                 var imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(image.FileName));
-                var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=sweeper", requestContent).Result;
+                var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=sweeper", requestContent).Result;
                 Sweeper.ImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
             #endregion

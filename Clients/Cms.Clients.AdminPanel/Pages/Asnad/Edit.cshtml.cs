@@ -9,8 +9,7 @@ namespace Cms.Clients.AdminPanel.Pages.Asnad
 {
     public class EditModel : PageModel
     {
-        private readonly HttpClient _httpClient;
-        private readonly HttpClient _fileManager;
+        private readonly HttpClient _httpClient;        
 
 
         [BindProperty]
@@ -26,8 +25,7 @@ namespace Cms.Clients.AdminPanel.Pages.Asnad
 
         public EditModel(IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient("AdminApi");
-            _fileManager = factory.CreateClient("FileManager");
+            _httpClient = factory.CreateClient("AdminApi");            
 
         }
 
@@ -129,7 +127,7 @@ namespace Cms.Clients.AdminPanel.Pages.Asnad
                     return Page();
                 }
 
-                var deleteResult = _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.MainImageName}&&folder=news").Result;
+                var deleteResult = _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.MainImageName}&&folder=news").Result;
                 var requestContent = new MultipartFormDataContent();
                 var item = new MemoryStream();
                 MainImage.CopyTo(item);
@@ -137,7 +135,7 @@ namespace Cms.Clients.AdminPanel.Pages.Asnad
                 var imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(MainImage.FileName));
-                var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
 
                 Asnad.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
@@ -157,7 +155,7 @@ namespace Cms.Clients.AdminPanel.Pages.Asnad
 
                 if (!string.IsNullOrEmpty(Asnad.SecondImage))
                 {
-                    _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.SecondImage}&&folder=news");
+                    _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.SecondImage}&&folder=news");
                 }
                 var requestContent = new MultipartFormDataContent();
                 var item = new MemoryStream();
@@ -166,7 +164,7 @@ namespace Cms.Clients.AdminPanel.Pages.Asnad
                 var imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(Images[0].FileName));
-                var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                 Asnad.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
                 if (Images.Count == 2)
@@ -185,7 +183,7 @@ namespace Cms.Clients.AdminPanel.Pages.Asnad
 
                     if (!string.IsNullOrEmpty(Asnad.ThirdImage))
                     {
-                        _fileManager.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.ThirdImage}&&folder=news");
+                        _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.ThirdImage}&&folder=news");
                     }
 
                     requestContent = new MultipartFormDataContent();
@@ -195,7 +193,7 @@ namespace Cms.Clients.AdminPanel.Pages.Asnad
                     imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                     requestContent.Add(imageContent, "file", Path.GetFileName(Images[1].FileName));
-                    imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                    imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                     Asnad.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
                 }
 

@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "ویرایش خبر";
     ViewBag.Page = "ویرایش خبر";
-    string imageAddress = _config.GetSection("FileManagerUrl").Value + $"/api/fileManager/getimage?imageName={Model.News.MainImageName}&&folder=news";
+    string imageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.News.MainImageName}&&folder=news";
 }
 
 <form enctype="multipart/form-data" method="post">
@@ -111,7 +111,7 @@
                         </div>
 
                         <div class="col-md-6 mb-md-0 mb-4">
-                            <img id="mainImgAvatar" class=" ImageBox" src="@(_config.GetSection("FileManagerUrl").Value+$"/api/fileManager/getimage?imageName={Model.News.MainImageName}&&folder=news")" />
+                            <img id="mainImgAvatar" class=" ImageBox" src="@imageAddress" />
                         </div>
                     </div>
 
@@ -121,7 +121,7 @@
                             <label for="exampleInputFile">تصویر جانبی</label>
                             <div class="input-group">
                                 <input type="file" class="form-control" asp-for="Images" id="secondImage">
-                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('secondImage',false,'@imageAddress')">
+                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('secondImage',false,'')">
                                     <i class=" fa fa-trash"></i>
                                 </a>
                             </div>
@@ -130,7 +130,7 @@
                             <label for="exampleInputFile">تصویر جانبی</label>
                             <div class="input-group">
                                 <input type="file" class="form-control" asp-for="Images" id="thirdImage">
-                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('thirdImage',false,'@imageAddress')">
+                                <a class="btn btn-danger btn-sm text-white p-2" onclick="clearFileInput('thirdImage',false,'')">
                                     <i class=" fa fa-trash"></i>
                                 </a>
                             </div>

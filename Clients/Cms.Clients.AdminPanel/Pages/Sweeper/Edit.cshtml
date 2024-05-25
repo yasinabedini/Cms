@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "ویرایش اسلایدر";
     ViewBag.Page = "اسلایدر";
-    string imageAddress = _config.GetSection("FileManagerUrl").Value + $"/api/fileManager/getimage?imageName={Model.Sweeper.ImageName}&&folder=sweeper";
+    string imageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.Sweeper.ImageName}&&folder=sweeper";
 }
 
 

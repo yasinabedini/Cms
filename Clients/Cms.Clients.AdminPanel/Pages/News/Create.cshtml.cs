@@ -16,15 +16,14 @@ namespace Cms.Clients.AdminPanel.Pages.News
     public class CreateModel : PageModel
     {
         private readonly HttpClient _httpClient;
-        private readonly HttpClient _fileManager;
+        
 
         [BindProperty]
         public NewsViewModel News { get; set; }
 
         public CreateModel(IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient("AdminApi");
-            _fileManager = factory.CreateClient("FileManager");
+            _httpClient = factory.CreateClient("AdminApi");            
         }
 
 
@@ -106,7 +105,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
             var imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent, "file", Path.GetFileName(MainImage.FileName));
-            var imageResponse = await _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent);
+            var imageResponse = await _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent);
 
             News.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
@@ -134,7 +133,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
                 imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(Images[0].FileName));
-                imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                 News.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
                 if (Images.Count==2)
@@ -158,7 +157,7 @@ namespace Cms.Clients.AdminPanel.Pages.News
                     imageContent = new ByteArrayContent(item.ToArray());
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                     requestContent.Add(imageContent, "file", Path.GetFileName(Images[1].FileName));
-                    imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                    imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                     News.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
                 }
             }

@@ -13,8 +13,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity;
 
 public class CreateModel : PageModel
 {
-    private readonly HttpClient _httpClient;
-    private readonly HttpClient _fileManager;
+    private readonly HttpClient _httpClient;    
 
 
     [BindProperty]
@@ -31,8 +30,7 @@ public class CreateModel : PageModel
 
     public CreateModel(IHttpClientFactory factory)
     {
-        _httpClient = factory.CreateClient("AdminApi");
-        _fileManager = factory.CreateClient("FileManager");
+        _httpClient = factory.CreateClient("AdminApi");        
 
     }
     public IActionResult OnGet()
@@ -87,6 +85,7 @@ public class CreateModel : PageModel
         #endregion
 
         if (!ModelState.IsValid)
+        
         {
             if (Image is null)
             {
@@ -111,7 +110,7 @@ public class CreateModel : PageModel
         var imageContent = new ByteArrayContent(item.ToArray());
         imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
         requestContent.Add(imageContent, "file", Path.GetFileName(Image.FileName));
-        var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+        var imageResponse =await _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent);
 
         Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
         #endregion
@@ -138,7 +137,7 @@ public class CreateModel : PageModel
             imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent, "file", Path.GetFileName(Images[0].FileName));
-            imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+            imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
             Activity.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
             if (Images.Count==2)
@@ -162,7 +161,7 @@ public class CreateModel : PageModel
                 imageContent = new ByteArrayContent(item.ToArray());
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(Images[1].FileName));
-                imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
+                imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
                 Activity.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
         }

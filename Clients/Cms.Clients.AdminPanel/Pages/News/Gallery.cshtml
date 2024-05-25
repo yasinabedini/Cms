@@ -2,7 +2,6 @@
 @inject IConfiguration _config;
 @model Cms.Clients.AdminPanel.Pages.News.GalleryModel
 @{
-    string fileManagerAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getFile";
     ViewBag.Title = "گالری و پیوست ها";
     ViewBag.Page = "گالری و پیوست ها";
 }
@@ -26,8 +25,9 @@
                                     {
                                         foreach (var file in Model.Galleries.FirstOrDefault(t => !t.Type).Files)
                                         {
+                                            string fileManagerAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getFile?fileName={file.Name.ToString()}&&type=3";
                                             <div class="col-md-2 h-25" id="file[@file.Name]">
-                                                <img class="col-md-6 " style="height:60px!important" src="@(fileManagerAddress+$"?fileName={file.Name}&&type=image")" />
+                                                <img class="col-md-6 " style="height:60px!important" src="@fileManagerAddress" />
                                                 <a href="/news/deleteFile?fileName=@file.Name&&newsId=@Model.Id&&pageAddress=@Model.PageName" class="btn btn-danger col-md-2  text-white text-center p-1"><i class="fa fa-trash-o"></i></a>
                                             </div>
                                         }
@@ -79,7 +79,7 @@
                                         foreach (var file in Model.Galleries.FirstOrDefault(t => t.Type).Files)
                                         {
 
-                                            <div class="d-flex m-2" >
+                                            <div class="d-flex m-2">
                                                 <div class="btn btn-primary" style="border-top-left-radius:0px!important;border-bottom-left-radius:0px!important;margin-left:0px!important">
 
                                                     <i class="fa @((file.TypeId==5)?"fa-file-pdf-o":"")  @((file.TypeId==4)?"fa-video-camera":"")  @((file.TypeId==7)?"fa-file-image-o":"") @((file.TypeId==6)?"fa-file-audio-o":"")"> </i>
@@ -180,5 +180,5 @@
             input.setAttribute('type', 'file');
             document.getElementById('filesDiv').append(input);
         }
-    </script>    
+    </script>
 }

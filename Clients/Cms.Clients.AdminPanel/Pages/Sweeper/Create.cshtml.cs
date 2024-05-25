@@ -12,16 +12,14 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
 {
     public class CreateModel : PageModel
     {
-        private readonly HttpClient _httpClient;
-        private readonly HttpClient _fileManager;
+        private readonly HttpClient _httpClient;        
 
         [BindProperty]
         public SweeperViewModel Sweeper { get; set; }
 
         public CreateModel(IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient("AdminApi");
-            _fileManager = factory.CreateClient("FileManager");
+            _httpClient = factory.CreateClient("AdminApi");            
         }
 
         public List<LanguageViewModel> Languages { get; set; }
@@ -81,7 +79,7 @@ namespace Cms.Clients.AdminPanel.Pages.Sweeper
             var imageContent = new ByteArrayContent(item.ToArray());
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent, "file", Path.GetFileName(Image.FileName));
-            var imageResponse = _fileManager.PostAsync($"/api/FileManager/upload?folder=sweeper", requestContent).Result;
+            var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=sweeper", requestContent).Result;
             Sweeper.ImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             #endregion
 
