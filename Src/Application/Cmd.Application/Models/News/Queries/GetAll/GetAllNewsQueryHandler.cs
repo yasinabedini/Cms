@@ -29,31 +29,33 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
             newsList = newsList.Where(t => t.LanguageId == request.LanguageId).ToList();
         }        
         newsList = newsList.Where(t => t.NewsType.IsPage == request.IsPage).ToList();
-
+        int totalCount = newsList.Count;
         newsList = newsList.Skip(request.SkipCount).Take(request.PageSize).ToList();
 
+        var page = new PagedData<NewsViewModel>();
 
-        return Task.FromResult(
-            new PagedData<NewsViewModel>
-            {
-                QueryResult = newsList.Select(t => new NewsViewModel
-                {
-                    Id = t.Id,
-                    Title = t.Title.Value,
-                    Introduction = t.Introduction.Value,
-                    LanguageId = t.LanguageId,
-                    NewsTypeId = t.NewsTypeId,
-                    PublishDate = t.PublishDate,
-                    Text = t.Text,
-                    MainImageName = t.MainImageName.Value,
-                    SecondImage = t.SecondImage is not null ? t.SecondImage.Value : "",
-                    ThirdImage = t.ThirdImage is not null ? t.ThirdImage.Value : "",
-                    IsEnable = t.IsEnable,
-                    Author = t.Author,
-                    Galleries = new List<Gallery.Queries.Common.GalleryViewModel>()
-                }).ToList(),
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize
-            });
+        page.QueryResult = newsList.Select(t => new NewsViewModel
+        {
+            Id = t.Id,
+            Title = t.Title.Value,
+            Introduction = t.Introduction.Value,
+            LanguageId = t.LanguageId,
+            NewsTypeId = t.NewsTypeId,
+            PublishDate = t.PublishDate,
+            Text = t.Text,
+            MainImageName = t.MainImageName.Value,
+            SecondImage = t.SecondImage is not null ? t.SecondImage.Value : "",
+            ThirdImage = t.ThirdImage is not null ? t.ThirdImage.Value : "",
+            IsEnable = t.IsEnable,
+            Author = t.Author,
+            Galleries = new List<Gallery.Queries.Common.GalleryViewModel>()
+        }).ToList();
+        page.PageSize = request.PageSize;
+        page.PageNumber = request.PageNumber;
+
+        page.TotalCount = totalCount;
+        
+
+        return Task.FromResult(page);
     }
 }

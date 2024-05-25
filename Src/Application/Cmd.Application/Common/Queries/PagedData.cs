@@ -6,8 +6,8 @@
 public class PagedData<T>
 {
     public List<T> QueryResult { get; set; }
-    public int PageNumber { get; set; } 
-    public int PageSize { get; set; } 
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
     public int TotalCount { get; set; }
     public int pageCount => calculatePageCount();
 
@@ -23,10 +23,11 @@ public class PagedData<T>
         {
             pageCount = 1;
         }
-        if (PageSize % pageCount != 0)
+        if (TotalCount % PageSize > 0)
         {
             pageCount++;
         }
+
         return pageCount;
     }
 

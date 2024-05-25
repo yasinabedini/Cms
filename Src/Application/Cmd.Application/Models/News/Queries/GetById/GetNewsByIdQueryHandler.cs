@@ -44,7 +44,9 @@ namespace Cmd.Application.Models.News.Queries.GetById
                     GalleryId = t.GalleryId,
                     Length = t.Length,
                     Name = t.Name,
-                    TypeId = t.TypeId
+                    TypeId = t.TypeId,
+                   Extension = t.Extension,
+                   DisplayName = t.DisplayName
                 }).ToList()
             }).ToList();
             if (galleries.Any(t=>t.Files.Any()))
