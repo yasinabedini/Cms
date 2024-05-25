@@ -12,7 +12,7 @@ namespace FileManager.Controllers
     public class FileManagerController : ControllerBase
     {
         [HttpPost("Upload")]
-        public IActionResult Upload([FromForm] IFormFile file, string folder)
+        public async Task<IActionResult> Upload([FromForm] IFormFile file, string folder)
         {
             if (file is null)
             {
@@ -71,7 +71,7 @@ namespace FileManager.Controllers
             var imageNameJson = JsonSerializer.Serialize(imageName);
 
             Response.Headers.Add("fileName", imageName);
-            return Ok();
+            return Ok(imageNameJson);
         }
 
         [HttpPost("UploadFile")]
@@ -119,7 +119,7 @@ namespace FileManager.Controllers
 
         [HttpGet("GetFile")]
         public IActionResult GetFile(string fileName, int type)
-        {
+        {            
             string typeStr;
             string mimType = "";
             if (type is 3)
