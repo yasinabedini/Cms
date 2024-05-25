@@ -26,8 +26,9 @@ namespace Cms.Endpoints.Site.Controllers
             result = new Cmd.Application.Common.Queries.PagedData<Cmd.Application.Models.News.Queries.Common.NewsViewModel>
             {
                 QueryResult = queryResults.Where(t => t.IsEnable).ToList(),
-                PageNumber = query.PageNumber,
-                PageSize = query.PageSize
+                PageNumber = result.PageNumber,
+                PageSize = result.PageSize,
+                TotalCount = result.TotalCount
             };
 
             return Ok(result);

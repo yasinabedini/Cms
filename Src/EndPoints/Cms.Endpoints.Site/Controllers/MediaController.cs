@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Cms.Endpoints.Site.Proxy.Asnad;
+using Cms.Endpoints.Site.Proxy.Archive;
+using Cms.Domain.Common.ValueObjects;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Cms.Endpoints.Site.Controllers;
 
@@ -277,7 +280,7 @@ public class MediaController : ControllerBase
             if (id is not 0)
             {
                 var findModel = model.data.items.SingleOrDefault(t => t.id == id);
-                model.data.items = new List<Item>();
+                model.data.items = new List<Site.Proxy.Asnad.Item>();
                 model.data.items.Add(findModel);
             }
 
@@ -303,6 +306,49 @@ public class MediaController : ControllerBase
         return File(imageBytes, "image/jpeg");
     }
 
+    [HttpPost]
+    public async Task<IActionResult> GetArchive(Request request)
+    {
+        var requestData = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri($"https://hisofcity.isfahan.ir/api/content/file-list"),
+            Headers =
+            {
+                { "Accept", "application/json, text/plain, */*" },
+                { "Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7" },
+                    { "Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcmltYXJ5U2lkIjoiMSIsIkd1aWQiOiIzNzE0ZmVmNy02MjgxLTQyYWUtYjBhMC0yMWJjYzBmNGVhMDQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTg3MjUzMjM5M30.cfe23flH9STpd3UHARGZznEjSSJTCCK_nToUGkyuxUQ" },
+                    { "Connection", "keep-alive" },
+                    { "Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1" },
+                    { "Language", "fa" },
+                    { "Referer", $"https://hisofcity.isfahan.ir" },
+                    { "Token", "91b8011e-c5ed-4b7a-bd1c-2e00cad8adc6" },
+                    { "Sec-Fetch-Dest", "empty" },
+                    { "Sec-Fetch-Mode", "cors" },
+                    { "Sec-Fetch-Site", "same-origin" },
+                    { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" },
+                    { "sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"" },
+                    { "sec-ch-ua-mobile", "?0" },
+                    { "sec-ch-ua-platform", "Windows" },
+                },
+        };
+
+        using (var response = await _httpClient.SendAsync(requestData))
+        {
+            response.EnsureSuccessStatusCode();
+            var body = await response.Content.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject<Site.Proxy.Archive.Data>(body);
+
+            if (request.Id is not 0)
+            {
+                var findModel = model.items.SingleOrDefault(t => t.PkFileContent == request.Id);
+                model.items = new List<Site.Proxy.Archive.Item>();
+                model.items.Add(findModel);
+            }
+
+            return Ok(model);
+        }
+    }
 }
 
 
