@@ -20,7 +20,7 @@ namespace FileManager.Controllers
             }
 
 
-            if (folder is not "news" && folder is not "sweeper" && folder is not "gallery" && folder is not "attachment")
+            if (folder is not "news" && folder is not "sweeper" && folder is not "gallery" && folder is not "attachment" )
             {
                 return BadRequest("Invalid Folder Name.");
             }
@@ -63,9 +63,10 @@ namespace FileManager.Controllers
                     file.CopyTo(stream);
                 }
             }
+
             else
             {
-                FileTools.SaveImage(file, imageName, folder, false);
+                FileTools.SaveImage(file, imageName, folder, true);
             }
 
             var imageNameJson = JsonSerializer.Serialize(imageName);

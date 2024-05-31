@@ -15,13 +15,13 @@ public static class FileTools
             profileImage.CopyTo(stream);
         }
 
-        ////save ThumbNail
-        //if (thumbSave)
-        //{
-        //    string thumbImagePath = Path.Combine(Directory.GetCurrentDirectory().Replace("Application\\Cmd.Application\\Tools\\", "EndPoints\\Cms.Endpoints.Site"), $"wwwroot\\img\\{whichFolder}\\Thumb", imageName);
-        //    ImageConvertor imageConvertor = new ImageConvertor();
-        //    imageConvertor.Image_resize(imagePath, thumbImagePath, 213);
-        //}
+        //save ThumbNail
+        if (thumbSave)
+        {
+            string thumbImagePath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\img\\thumb", imageName));
+            ImageConvertor imageConvertor = new ImageConvertor();
+            imageConvertor.Image_resize(imagePath, thumbImagePath, 250);
+        }
     }
     public static bool DeleteFile(string folder, string imageName)
     {
