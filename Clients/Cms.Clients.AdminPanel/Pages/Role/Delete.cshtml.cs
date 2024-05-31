@@ -14,7 +14,7 @@ namespace Cms.Clients.AdminPanel.Pages.Role
             _roleManager = roleManager;
         }
 
-        public async Task<IActionResult> OnGet(string id)
+        public async Task<IActionResult> OnGet(int id)
         {
             var role = _roleManager.Roles.FirstOrDefault(t => t.Id == id);
             await _roleManager.DeleteAsync(role);

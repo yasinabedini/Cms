@@ -33,7 +33,7 @@ namespace Cms.Clients.AdminPanel.Pages.Role
             {
                 return Page();
             }
-            var findRole =await _roleManager.FindByIdAsync(Role.Id);
+            var findRole =await _roleManager.FindByIdAsync(Role.Id.ToString());
 
             findRole.Name = Title;
 

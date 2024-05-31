@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cms.Clients.AdminPanel.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<CustomIdentityUser, CustomIdentityRole, string>
+    public class ApplicationDbContext : IdentityDbContext<CustomIdentityUser, CustomIdentityRole, int>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

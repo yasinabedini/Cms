@@ -22,7 +22,7 @@ namespace Cms.Clients.AdminPanel.Pages.User
             _roleManager = roleManager;
         }
 
-        public async Task OnGet(string id)
+        public async Task OnGet(int id)
         {
             User = _userManager.Users.FirstOrDefault(t => t.Id == id);
 
@@ -32,7 +32,7 @@ namespace Cms.Clients.AdminPanel.Pages.User
 
         public async Task<IActionResult> OnPost()
         {
-            var findUser = _userManager.FindByIdAsync(User.Id).Result;
+            var findUser = _userManager.FindByIdAsync(User.Id.ToString()).Result;
             
             await _userManager.DeleteAsync(findUser);
 

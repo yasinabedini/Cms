@@ -23,10 +23,8 @@ namespace Cms.Clients.AdminPanel.Pages.Role
         }
 
         public async Task<IActionResult> OnPost()
-        {
-
-            var id =Convert.ToInt16((_roleManager.Roles.ToList().OrderBy(t => t.Id).LastOrDefault() ?? new IdentityRole() { Id = "0" }).Id) + 1;
-            var result = await _roleManager.CreateAsync(new CustomIdentityRole { Id = (id).ToString(), Name = Name });
+        {            
+            var result = await _roleManager.CreateAsync(new CustomIdentityRole { Name = Name });
 
             if (result.Succeeded)
             {

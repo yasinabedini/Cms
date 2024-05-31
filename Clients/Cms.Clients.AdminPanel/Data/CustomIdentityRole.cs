@@ -2,7 +2,7 @@
 
 namespace Cms.Clients.AdminPanel.Data
 {
-    public class CustomIdentityRole : IdentityRole
+    public class CustomIdentityRole : IdentityRole<int>
     {
     }
 }
