@@ -19,7 +19,7 @@ namespace Cmd.Application.Models.News.Commands.Create
         public DateTime PublishDate { get; private set; }
         public string Text { get; set; }
         public string Author { get; set; }
-        public string? MainImage { get; set; }
+        public string? MainImage { get; set; }        
         public string? SecondImage { get; set; }
         public string? ThirdImage { get; set; }
 
@@ -34,7 +34,7 @@ namespace Cmd.Application.Models.News.Commands.Create
             MainImage = mainImage;
             SecondImage = secondImage;
             ThirdImage = thirdImage;
-            Author = author;
+            Author = author;            
         }
     }
 }

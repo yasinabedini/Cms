@@ -27,7 +27,7 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
         if (request.LanguageId is not null && request.LanguageId is not 0)
         {
             newsList = newsList.Where(t => t.LanguageId == request.LanguageId).ToList();
-        }        
+        }
         newsList = newsList.Where(t => t.NewsType.IsPage == request.IsPage).ToList();
         int totalCount = newsList.Count;
         newsList = newsList.Skip(request.SkipCount).Take(request.PageSize).ToList();
@@ -43,18 +43,28 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
             NewsTypeId = t.NewsTypeId,
             PublishDate = t.PublishDate,
             Text = t.Text,
-            MainImageName = t.MainImageName.Value,
-            SecondImage = t.SecondImage is not null ? t.SecondImage.Value : "",
-            ThirdImage = t.ThirdImage is not null ? t.ThirdImage.Value : "",
+            MainImageName = t.MainImageName.Value ?? "",
+            SecondImage = t.SecondImage?.Value ?? "",
+            ThirdImage = t.ThirdImage?.Value ?? "",
+            ThumbNailImage = t.ThumbNailImage?.Value ?? "",
             IsEnable = t.IsEnable,
             Author = t.Author,
-            Galleries = new List<Gallery.Queries.Common.GalleryViewModel>()
+            Galleries = new List<Gallery.Queries.Common.GalleryViewModel>(),
+            NewsType = new NewsTypeViewModel
+            {
+                Id = t.NewsType.Id,
+                IsPage = t.NewsType.IsPage,
+                IsEnable = t.NewsType.IsEnable,
+                Name = t.NewsType.Name.Value,
+                LanguageId = (int)t.NewsType.LanguageId,
+                Title = t.NewsType.Title.Value,
+            }
         }).ToList();
         page.PageSize = request.PageSize;
         page.PageNumber = request.PageNumber;
 
         page.TotalCount = totalCount;
-        
+
 
         return Task.FromResult(page);
     }

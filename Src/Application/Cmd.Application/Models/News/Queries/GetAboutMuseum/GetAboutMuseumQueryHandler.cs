@@ -42,7 +42,7 @@ namespace Cmd.Application.Models.News.Queries.GetAboutMuseum
                         {
                             TypeId = (int)id,
                             TypeTitle = allNews.FirstOrDefault(t => t.NewsTypeId == id).NewsType.Title.Value,
-                            NewsViewModel = new NewsViewModel(about.Id, about.Title.Value, about.Introduction.Value, about.LanguageId, about.NewsTypeId, about.PublishDate, about.Text, about.MainImageName.Value, about.SecondImage?.Value, about.ThirdImage?.Value, about.IsEnable, about.Author)
+                            NewsViewModel = new NewsViewModel(about.Id, about.Title.Value, about.Introduction.Value, about.LanguageId, about.NewsTypeId, about.PublishDate, about.Text, about.MainImageName.Value, about.SecondImage?.Value, about.ThirdImage?.Value, about.IsEnable, about.ThumbNailImage.Value, about.Author)
                         });
                     }
                     else

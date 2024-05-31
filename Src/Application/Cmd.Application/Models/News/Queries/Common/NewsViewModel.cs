@@ -20,6 +20,7 @@ namespace Cmd.Application.Models.News.Queries.Common
         public string  Text { get; set; }
         public string Author { get; set; }
         public string MainImageName { get;  set; }
+        public string ThumbNailImage { get;  set; }
         public string? SecondImage { get;  set; }
         public string? ThirdImage { get;  set; }
         public NewsTypeViewModel NewsType { get; set; }
@@ -30,7 +31,7 @@ namespace Cmd.Application.Models.News.Queries.Common
         {
             
         }
-        public NewsViewModel(long id, string title, string introduction, long languageId, long newsTypeId, string publishDate, string text, string mainImageName, string? secondImage, string? thirdImage, bool isEnable, string author)
+        public NewsViewModel(long id, string title, string introduction, long languageId, long newsTypeId, string publishDate, string text, string mainImageName, string? secondImage, string? thirdImage, bool isEnable, string thumbNailImage, string author)
         {
             Id = id;
             Title = title;
@@ -44,6 +45,7 @@ namespace Cmd.Application.Models.News.Queries.Common
             ThirdImage = thirdImage;
             IsEnable = isEnable;
             Author = author;
+            ThumbNailImage = thumbNailImage;
         }
     }
 }

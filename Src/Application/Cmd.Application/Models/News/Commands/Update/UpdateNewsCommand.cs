@@ -19,7 +19,7 @@ namespace Cmd.Application.Models.News.Commands.Update
         public string Text { get; set; }
         public string? MainImage { get; private set; }
         public string? SecondImage { get; private set; }
-        public string? ThirdImage { get; private set; }
+        public string? ThirdImage { get; private set; }        
         public bool IsEnable { get; set; }
 
         public UpdateNewsCommand(long id, string title, string introduction, long languageId, long newsTypeId, string text, string? mainImage, string? secondImage, string? thirdImage, bool isEnable)
@@ -28,12 +28,12 @@ namespace Cmd.Application.Models.News.Commands.Update
             Title = title;
             Introduction = introduction;
             LanguageId = languageId;
-            NewsTypeId = newsTypeId;            
+            NewsTypeId = newsTypeId;
             Text = text;
             MainImage = mainImage;
             SecondImage = secondImage;
             ThirdImage = thirdImage;
-            IsEnable = isEnable;
+            IsEnable = isEnable;            
         }
     }
 }

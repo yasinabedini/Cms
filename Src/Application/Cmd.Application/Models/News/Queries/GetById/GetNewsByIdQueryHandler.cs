@@ -31,7 +31,7 @@ namespace Cmd.Application.Models.News.Queries.GetById
             var news = _repository.GetById(request.Id);
             var newsType = _newsTypeRepository.GetById(news.NewsTypeId);
 
-            var newsViewModel = new NewsViewModel(news.Id, news.Title.Value, news.Introduction.Value, news.LanguageId, news.NewsTypeId, news.PublishDate, news.Text, news.MainImageName.Value, news.SecondImage is not null ? news.SecondImage.Value : "", news.ThirdImage is not null ? news.ThirdImage.Value : "", news.IsEnable, news.Author);
+            var newsViewModel = new NewsViewModel(news.Id, news.Title.Value, news.Introduction.Value, news.LanguageId, news.NewsTypeId, news.PublishDate, news.Text, news.MainImageName.Value, news.SecondImage is not null ? news.SecondImage.Value : "", news.ThirdImage is not null ? news.ThirdImage.Value : "", news.IsEnable,news.ThumbNailImage.Value ,news.Author);
             newsViewModel.NewsType = new NewsTypeViewModel(newsType.Id, newsType.Title.Value, newsType.Name.Value, newsType.IsPage, newsType.IsEnable, (int)newsType.LanguageId);
             
             var galleries = _galleryRepository.GetNewsGalleries(request.Id).Select(g => new Gallery.Queries.Common.GalleryViewModel

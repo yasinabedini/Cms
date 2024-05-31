@@ -51,6 +51,7 @@ namespace Cmd.Application.Models.News.Commands.Update
             news.ChangeLanguageId(request.LanguageId);
             news.ChangeNewsTypeId(request.NewsTypeId);
             news.ChangeIsEnable(request.IsEnable);
+            news.ChangeThumbNailImage(request.MainImage);
             
             _repository.Update(news);            
             _repository.Save();
