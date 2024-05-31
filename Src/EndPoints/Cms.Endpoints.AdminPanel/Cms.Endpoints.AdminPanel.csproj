@@ -1,0 +1,130 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\js\MyUploader.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\ckeditor.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\ckeditor.js.map" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ar.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ast.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\bg.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\cs.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\da.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\de.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\el.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\en-au.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\eo.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\es.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\et.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\eu.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\fi.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\fr.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\gl.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\gu.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\hr.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\hu.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\it.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ja.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\km.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\kn.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ko.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ku.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\nb.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ne.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\nl.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\oc.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\pl.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\pt-br.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\pt.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ro.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ru.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\si.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\sk.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\sq.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\sv.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\tr.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\tt.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\ug.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\uk.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\zh-cn.js" />
+    <Content Remove="wwwroot\vendor\libs\ckeditor\translations\zh.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\MyUploader.js" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IdentityModel" Version="7.0.0" />
+		<PackageReference Include="IdentityServer4" Version="4.1.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="7.5.1" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="ViewModels\User\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\js\MyUploader.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\ckeditor.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\ckeditor.js.map" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ar.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ast.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\bg.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\cs.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\da.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\de.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\el.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\en-au.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\eo.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\es.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\et.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\eu.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\fi.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\fr.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\gl.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\gu.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\hr.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\hu.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\it.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ja.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\km.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\kn.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ko.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ku.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\nb.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ne.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\nl.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\oc.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\pl.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\pt-br.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\pt.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ro.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ru.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\si.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\sk.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\sq.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\sv.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\tr.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\tt.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\ug.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\uk.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\zh-cn.js" />
+	  <None Include="wwwroot\vendor\libs\ckeditor\translations\zh.js" />
+	</ItemGroup>
+	
+</Project>

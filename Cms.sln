@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{AD3B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cms.Clients.AdminPanel", "Clients\Cms.Clients.AdminPanel\Cms.Clients.AdminPanel.csproj", "{A8252784-99FC-474A-8E29-B95D891F2709}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cms.Endpoints.AdminPanel", "Src\EndPoints\Cms.Endpoints.AdminPanel\Cms.Endpoints.AdminPanel.csproj", "{A8B08BA2-0194-4529-8D85-9111B506426A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{A8252784-99FC-474A-8E29-B95D891F2709}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8252784-99FC-474A-8E29-B95D891F2709}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8252784-99FC-474A-8E29-B95D891F2709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B08BA2-0194-4529-8D85-9111B506426A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B08BA2-0194-4529-8D85-9111B506426A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B08BA2-0194-4529-8D85-9111B506426A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B08BA2-0194-4529-8D85-9111B506426A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{BF28DFB5-1C18-4FC5-A3BD-2E99838E5B88} = {2C1E5184-6976-49FE-9261-4DB5DBDEC119}
 		{D9C05A2B-7BF0-4060-B6E8-18ED946BC4C7} = {F828B70C-E015-453A-B4DE-C3CFA8904540}
 		{A8252784-99FC-474A-8E29-B95D891F2709} = {AD3B6E3D-7EA1-4746-88EB-5825F504227F}
+		{A8B08BA2-0194-4529-8D85-9111B506426A} = {003E4F47-5B60-4B5E-8938-7E877B8C9EF9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F21D2FE-DDD8-42A9-91EC-33DA8AE7D4D1}

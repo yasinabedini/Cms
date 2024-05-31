@@ -1,0 +1,135 @@
+@{
+    TempData.Keep();
+    string? currentPage = Convert.ToString(ViewContext.RouteData.Values["Page"]).ToLower()!;
+}
+
+<!-- Menu -->
+@* ! Do this simple *@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+    @* ! Hide app brand if navbar-full *@
+    <div class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
+        <a asp-page="/Index" class="app-brand-link">
+            <span class="app-brand-logo demo">
+                @await Html.PartialAsync("../_Partials/_Macros")
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold">@TempData.Peek("appName")</span>
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+            <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    @* ! Full version menu-items *@
+    <ul class="menu-inner py-1">
+        <!-- Dashboards -->
+        <li class='menu-item@(currentPage.StartsWith("/dashboard") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>پنل مدیریت</div>
+                <div class="badge bg-primary rounded-pill ms-auto">5</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/dashboard/analytics" ? " active" : "")'>
+                    <a href="/Dashboard/analytics" class="menu-link">
+                        <div>داشبورد</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Apps & Pages -->
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">برنامه ها &amp; صفحات</span>
+        </li>
+        <li class='menu-item@(currentPage.StartsWith("/users") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-user"></i>
+                <div>کاربران</div>                
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/users/list" ? " active" : "")'>
+                    <a href="/users/list" class="menu-link">
+                        <div>لیست کاربران</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/users/register" ? " active" : "")'>
+                    <a href="/users/register" class="menu-link">
+                        <div>ثبت کاربر جدید</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class='menu-item@(currentPage.StartsWith("/role") ? " active" : "")'>
+            <a href="/role/list" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-lock"></i>
+                <div>نقش کاربری و دسترسی</div>
+            </a>          
+        </li>
+
+        <li class='menu-item@(currentPage.StartsWith("/sweeper") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-box-multiple"></i>
+                <div>اسلایدر</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/sweeper/list" ? " active" : "")'>
+                    <a href="/sweeper/list" class="menu-link">
+                        <div>لیست اسلایدر ها</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/sweeper/create" ? " active" : "")'>
+                    <a href="/sweeper/create" class="menu-link">
+                        <div>ثبت اسلایدر جدید</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class='menu-item@(currentPage.StartsWith("/news") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-paperclip"></i>
+                <div>اخبار</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/news/list" ? " active" : "")'>
+                    <a href="/news/list" class="menu-link">
+                        <div>لیست خبر ها</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/news/create" ? " active" : "")'>
+                    <a href="/news/create" class="menu-link">
+                        <div>انتشار خبر جدید</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class='menu-item@(currentPage.StartsWith("/activity") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-go-game"></i>
+                <div>برنامه ها</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/activity/list" ? " active" : "")'>
+                    <a href="/activity/list" class="menu-link">
+                        <div>لیست برنامه ها</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/activity/create" ? " active" : "")'>
+                    <a href="/activity/create" class="menu-link">
+                        <div>ایجاد آیتم جدید</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+    </ul>
+
+</aside>
+<!-- / Menu -->

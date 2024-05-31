@@ -1,0 +1,199 @@
+﻿@page "{id}"
+@model Cms.Endpoints.AdminPanel.Pages.Users.DetailsModel
+@{
+    ViewData["Title"] = "User View - Account";
+}
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/datatables-bs5/datatables.bootstrap5.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/animate-css/animate.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/sweetalert2/sweetalert2.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/select2/select2.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/&#64;form-validation/umd/styles/index.min.css" />
+}
+
+@section VendorScripts {
+    <script src="~/vendor/libs/moment/moment.dist.js"></script>
+    <script src="~/vendor/libs/datatables-bs5/datatables-bootstrap5.dist.js"></script>
+    <script src="~/vendor/libs/sweetalert2/sweetalert2.dist.js"></script>
+    <script src="~/vendor/libs/cleavejs/cleave.dist.js"></script>
+    <script src="~/vendor/libs/cleavejs/cleave-phone.dist.js"></script>
+    <script src="~/vendor/libs/select2/select2.dist.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/bundle/popular.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-bootstrap5/index.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-auto-focus/index.min.js"></script>
+}
+@section PageStyles {
+    <link rel="stylesheet" href="~/vendor/css/pages/page-user-view.dist.css" />
+}
+
+@section PageScripts {
+    <script src="~/js/modal-edit-user.dist.js"></script>
+    <script src="~/js/app-user-view.dist.js"></script>
+    <script src="~/js/app-user-view-account.dist.js"></script>
+}
+
+@* ************** Content ************** *@
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">مدیریت کاربران /</span> پنل کاربری
+</h4>
+<div class="row">
+    <!-- User Sidebar -->
+    <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
+        <!-- User Card -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="user-avatar-section">
+                    <div class=" d-flex align-items-center flex-column">
+                        <img class="img-fluid rounded mb-3 pt-1 mt-4" src="~/img/avatars/11.png" height="100" width="100" alt="User avatar" />
+
+                        <div class="user-info text-center">
+                            <h4 class="mb-2">@Model.User.Name</h4>
+                            @if (Model.User.IsActive)
+                            {
+                                <span class="badge bg-label-success mt-1">فعال</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-label-danger mt-1">مسدود</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start flex-wrap mt-3 pt-3 pb-4 border-bottom">
+                    <div class="d-flex align-items-start me-4 mt-3 gap-2">
+                        <span class="badge bg-label-primary p-2 rounded"><i class='ti ti-checkbox ti-sm'></i></span>
+                        <div>
+                            <p class="mb-0 fw-medium">25 خبر</p>
+                            <small>خبر منتشر شده توسط کاربر</small>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-4 small text-uppercase text-muted">مشخصات</p>
+                <div class="info-container">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <span class="fw-medium me-1">نام :</span>
+                            <span>@Model.User.Name</span>
+                        </li>
+                        <li class="mb-2">
+                            <span class="fw-medium me-1">نام کاربری :</span>
+                            <span>@Model.User.UserName</span>
+                        </li>
+                        <li class="mb-2">
+                            <span class="fw-medium me-1">شماره موبایل :</span>
+                            <span>@Model.User.PhoneNumber</span>
+                        </li>
+                        <li class="mb-2">
+                            <span class="fw-medium me-1">ایمیل :</span>
+                            <span>@Model.User.Email</span>
+                        </li>
+                        <li class="mb-2">
+                            <span class="fw-medium me-1">نقش ها :</span>
+                            @foreach (var role in Model.User.Roles)
+                            {
+                                <span class="badge bg-label-secondary mt-1">@role</span>
+                            }
+                        </li>
+
+                    </ul>
+                    <div class="d-flex justify-content-center pt-4 ">
+                        <a href="/users/edit/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-primary me-3">ویرایش</a>
+                        @if (Model.User.IsActive)
+                        {
+                            <a href="/users/changeAccess/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-label-danger">مسدود کردن</a>
+                        }
+                        @if (!Model.User.IsActive)
+                        {
+                            <a href="/users/changeAccess/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-label-danger">رفع مسدودی</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /User Card -->
+        
+    </div>
+    <!--/ User Sidebar -->
+    <!-- User Content -->
+    <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+        <!-- User Pills -->
+        <ul class="nav nav-pills flex-column flex-md-row mb-4">
+            <li class="nav-item"><a class="nav-link active" href="/users/details/@Model.Id"><i class="ti ti-user-check ti-xs me-1"></i>حساب کاربری</a></li>
+            <li class="nav-item"><a class="nav-link" href="/users/Security/@Model.Id"><i class="ti ti-lock ti-xs me-1"></i>امنیت حساب</a></li>
+        </ul>
+        <!--/ User Pills -->
+        <!-- news table -->
+        <div class="card mb-4">
+            <h5 class="card-header">اخبار های منتشر شده توسط کاربر</h5>
+            <div class="table-responsive mb-3">
+                <table class="table datatable-project border-top">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Project</th>
+                            <th class="text-nowrap">Total Task</th>
+                            <th>Progress</th>
+                            <th>Hours</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <!-- /Project table -->
+        <!-- Activity Timeline -->
+        <div class="card mb-4">
+            <h5 class="card-header">فعالیت های اخیر</h5>
+            <div class="card-body pb-0">
+                <ul class="timeline mb-0">
+                    <li class="timeline-item timeline-item-transparent">
+                        <span class="timeline-point timeline-point-primary"></span>
+                        <div class="timeline-event">
+                            <div class="timeline-header mb-1">
+                                <h6 class="mb-0">انتشار خبر</h6>
+                                <small class="text-muted">6 ساعت پیش</small>
+                            </div>
+                            <p class="mb-2">منتشر کردن خبری با عنوان باغ دره زرشک</p>                          
+                        </div>
+                    </li>
+                    <li class="timeline-item timeline-item-transparent">
+                        <span class="timeline-point timeline-point-primary"></span>
+                        <div class="timeline-event">
+                            <div class="timeline-header mb-1">
+                                <h6 class="mb-0">پیوست کردن فایل</h6>
+                                <small class="text-muted">3 روز پیش</small>
+                            </div>
+                            <p class="mb-2">افزودن 1 فایل به پیوست های خبر با آیدی 6</p>
+                            <div class="d-flex">
+                                <a href="javascript:void(0)" class="me-3">
+                                    <img src="~/img/icons/misc/pdf.png" alt="PDF image" width="15" class="me-2">
+                                    <span class="fw-medium text-heading">اسناد موزه.pdf</span>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="timeline-item timeline-item-transparent">
+                        <span class="timeline-point timeline-point-warning"></span>
+                        <div class="timeline-event">
+                            <div class="timeline-header mb-1">
+                                <h6 class="mb-0">ویرایش درباره موزه</h6>
+                                <small class="text-muted">1 هفته پیش</small>
+                            </div>
+                            <p class="mb-2">ویرایش بخش کوشک باغ زرشک (دوره پهلوی اول)</p>                      
+                        </div>
+                    </li>
+                   
+                </ul>
+            </div>
+        </div>
+        <!-- /Activity Timeline -->
+    </div>
+    <!--/ User Content -->
+</div>
+
+<!-- Modal -->
+@await Html.PartialAsync("../_Partials/_Modals/ModalEditUser")
+@await Html.PartialAsync("../_Partials/_Modals/ModalUpgradePlan")
+<!-- /Modal -->

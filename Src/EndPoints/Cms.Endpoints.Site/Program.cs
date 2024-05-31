@@ -28,6 +28,11 @@ try
         t.BaseAddress = new Uri(builder.Configuration.GetSection("AsnadUrl").Value);
     });
 
+    builder.Services.AddHttpClient("Archive", t =>
+    {
+        t.BaseAddress = new Uri(builder.Configuration.GetSection("ArchiveUrl").Value);
+    });
+
 
     // Add services to the container.    
 

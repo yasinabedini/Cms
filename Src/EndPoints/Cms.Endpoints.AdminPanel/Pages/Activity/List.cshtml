@@ -1,0 +1,130 @@
+﻿@page
+@using Cms.Endpoints.AdminPanel.Pages.Common
+@model Cms.Endpoints.AdminPanel.Pages.Activity.ListModel
+@{
+}
+@{
+    ViewData["Title"] = "Order List - eCommerce";
+}
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/datatables-bs5/datatables.bootstrap5.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.dist.css" />
+}
+
+@section VendorScripts {
+    <script src="~/vendor/libs/datatables-bs5/datatables-bootstrap5.dist.js"></script>
+}
+
+@section PageScripts {
+    <script src="~/js/app-ecommerce-order-list.dist.js"></script>
+}
+
+@* ************** Content ************** *@
+
+<h4 class="py-3 mb-2">
+    <span class="text-muted fw-light">برنامه و فعالیت ها /</span> لیست آیتم ها
+</h4>
+
+
+<!-- Order List Table -->
+<div class="card">
+    <div class="card-datatable table-responsive">
+        <table class=" table border-top">
+            <thead>
+                <tr>
+                    <th>فعالیت</th>
+                    <th>عنوان</th>
+                    <th>ایجاد کننده</th>
+                    <th>وضعیت</th>                    
+                    <th>تاریخ رویداد</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tbody>
+                    @foreach (var news in Model.ActivityList)
+                    {
+                    <tr class="odd">
+                        <td class="  control" tabindex="0" style="display: none;"></td>
+
+                        <td>
+                            <a href="/activity/details/@news.Id">
+                                <span>#@news.Id</span>
+                            </a>
+                        </td>
+
+                            @if (news.Title.Length < 25)
+                            {
+                            <td>@news.Title</td>
+                            }
+                            else
+                            {
+                            <td>@news.Title.Substring(0, 23)....</td>
+                            }
+
+                        <td>
+                            <div class="d-flex justify-content-start align-items-center order-name text-nowrap">
+                                <div class="avatar-wrapper">
+                                    <div class="avatar me-3">
+                                        <span class="avatar-initial rounded-circle bg-label-danger">@news.Author.Substring(0, 2)</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <h6 class="m-0">
+                                        <a href="/Pages/Profile/User" class="text-body">@news.Author</a>
+                                    </h6>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                                @if (news.IsEnable)
+                                {
+                                <h6 class="mb-0 align-items-center d-flex w-px-100 text-success">
+                                    <i class="ti ti-circle-filled fs-tiny me-2">
+
+                                    </i>
+                                    فعال
+                                </h6>
+                                }
+                                else
+                                {
+                                <h6 class="mb-0 align-items-center d-flex w-px-100 text-warning">
+                                    <i class="ti ti-circle-filled fs-tiny me-2">
+
+                                    </i>
+                                    غیرفعال
+                                </h6>
+                                }
+                        </td>
+
+                        <td class="sorting_1"><span class="text-nowrap">@DateTime.Parse(news.PublishDate).ToShamsi()</span></td>
+
+                        <td>
+                            <div class="d-flex justify-content-sm-center align-items-sm-center">
+                                <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="ti ti-dots-vertical">
+
+                                    </i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end m-0">
+                                    <a href="/news/details/@news.Id" class="dropdown-item">مشاهده</a>
+                                        @if (news.IsEnable)
+                                        {
+                                        <a href="javascript:0;" class="dropdown-item delete-record">غیرفعال کردن</a>
+                                        }
+                                        else
+                                        {
+                                        <a href="javascript:0;" class="dropdown-item delete-record">فعال کردن</a>
+                                        }
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+            </tbody>
+        </table>
+    </div>
+</div>

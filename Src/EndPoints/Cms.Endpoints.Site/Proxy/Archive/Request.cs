@@ -11,6 +11,10 @@ namespace Cms.Endpoints.Site.Proxy.Archive
         public string Value { get; set; } = "";
         public string Operator { get; set; } = "OR";
 
+        public Request()
+        {
+
+        }
         public Request(int limit, int offset, string key, string value, string @operator)
         {
             Limit = limit;

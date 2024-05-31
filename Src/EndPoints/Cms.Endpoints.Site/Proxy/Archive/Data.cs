@@ -2,7 +2,7 @@
 {
     public class Data
     {
-        public List<Item> items { get; set; }
+        public List<Item> list { get; set; }
         public int totalItems { get; set; }   
 }
 }

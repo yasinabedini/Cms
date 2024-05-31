@@ -1,0 +1,28 @@
+<form method="post" asp-page="Create">
+    <!-- Add Role Modal -->
+    <div class="modal fade" id="addRoleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-add-new-role">
+            <div class="modal-content p-md-5">
+                <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <h3 class=" mb-2">افزودن نقش کاربری</h3>                        
+                    </div>
+                    <!-- Add role form -->
+                    <div id="addRoleForm" class="row g-3" method="post" asp-page="Create">
+                        <div class="col-12 mb-4">
+                            <label class="form-label" for="modalRoleName">عنوان نقش</label>
+                            <input type="text" id="modalRoleName" name="RoleName" class="form-control" placeholder="عنوان نقش را وارد کنید" tabindex="-1" />
+                        </div>
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">افزودن</button>
+                            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">انصراف</button>
+                        </div>
+                    </div>
+                    <!--/ Add role form -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/ Add Role Modal -->
+</form>

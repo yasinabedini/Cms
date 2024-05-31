@@ -8,6 +8,8 @@ using Cms.Endpoints.Site.Proxy.Asnad;
 using Cms.Endpoints.Site.Proxy.Archive;
 using Cms.Domain.Common.ValueObjects;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Text;
+using Microsoft.Net.Http.Headers;
 
 namespace Cms.Endpoints.Site.Controllers;
 
@@ -16,10 +18,12 @@ namespace Cms.Endpoints.Site.Controllers;
 public class MediaController : ControllerBase
 {
     private readonly HttpClient _httpClient;
+    private readonly HttpClient _archiveClient;
 
     public MediaController(IHttpClientFactory factory)
     {
         _httpClient = factory.CreateClient("Asnad");
+        _archiveClient = factory.CreateClient("Archive");
     }
 
 
@@ -306,23 +310,28 @@ public class MediaController : ControllerBase
         return File(imageBytes, "image/jpeg");
     }
 
-    [HttpPost]
+    [HttpPost("GetArchive")]
     public async Task<IActionResult> GetArchive(Request request)
     {
+        var data = new { limit = request.Limit, offset = request.Offset, key = request.Key, value = request.Value, @operator = request.Operator };
+        var jsonInString = JsonConvert.SerializeObject(data);
+        var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+
+
         var requestData = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri($"https://hisofcity.isfahan.ir/api/content/file-list"),
+            RequestUri = new Uri($"{_archiveClient.BaseAddress.AbsoluteUri}api/content/file-list"),
             Headers =
-            {
-                { "Accept", "application/json, text/plain, */*" },
-                { "Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7" },
+                {
+                    { "Accept", "application/json, text/plain, */*" },
+                    { "Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7" },
                     { "Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcmltYXJ5U2lkIjoiMSIsIkd1aWQiOiIzNzE0ZmVmNy02MjgxLTQyYWUtYjBhMC0yMWJjYzBmNGVhMDQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTg3MjUzMjM5M30.cfe23flH9STpd3UHARGZznEjSSJTCCK_nToUGkyuxUQ" },
                     { "Connection", "keep-alive" },
                     { "Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1" },
                     { "Language", "fa" },
-                    { "Referer", $"https://hisofcity.isfahan.ir" },
                     { "Token", "91b8011e-c5ed-4b7a-bd1c-2e00cad8adc6" },
+                    { "Referer", $"{_archiveClient.BaseAddress.AbsoluteUri}" },
                     { "Sec-Fetch-Dest", "empty" },
                     { "Sec-Fetch-Mode", "cors" },
                     { "Sec-Fetch-Site", "same-origin" },
@@ -331,24 +340,28 @@ public class MediaController : ControllerBase
                     { "sec-ch-ua-mobile", "?0" },
                     { "sec-ch-ua-platform", "Windows" },
                 },
+            Content = content
         };
 
-        using (var response = await _httpClient.SendAsync(requestData))
+        using (var response = await _archiveClient.SendAsync(requestData))
         {
+            if (!response.IsSuccessStatusCode)
+            {
+                return Ok("Server Not Respond....");
+            }
+
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync();
-            var model = JsonConvert.DeserializeObject<Site.Proxy.Archive.Data>(body);
+            var model = JsonConvert.DeserializeObject<Proxy.Archive.Data>(body);
 
             if (request.Id is not 0)
             {
-                var findModel = model.items.SingleOrDefault(t => t.PkFileContent == request.Id);
-                model.items = new List<Site.Proxy.Archive.Item>();
-                model.items.Add(findModel);
+                var findModel = model.list.SingleOrDefault(t => t.PkFileContent == request.Id);
+                model.list = new List<Proxy.Archive.Item>();
+                model.list.Add(findModel);
             }
 
             return Ok(model);
         }
     }
 }
-
-
