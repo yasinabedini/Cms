@@ -24,7 +24,7 @@ namespace Cms.Domain.Models.News.Entities
         public Image MainImageName { get; private set; }
         public Image? SecondImage { get; private set; }
         public Image? ThirdImage { get; private set; }
-
+        public Image? ThumbNailImage { get; set; }
         public Language.Entities.Language Language { get; private set; }
         public NewsType NewsType { get; private set; }
         #endregion
@@ -32,7 +32,7 @@ namespace Cms.Domain.Models.News.Entities
         #region Costructors and Factories
         protected News() { }
 
-        public News(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage,string author)
+        public News(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage, string author, Image? thumbNailImage)
         {
             Title = title;
             LanguageId = languageId;
@@ -40,15 +40,16 @@ namespace Cms.Domain.Models.News.Entities
             Author = author;
             PublishDate = publishDate;
             Introduction = introduction;
-            Text = text;            
+            Text = text;
             MainImageName = mainImageName;
             SecondImage = secondImage;
             ThirdImage = thirdImage;
+            ThumbNailImage = thumbNailImage;
         }
 
-        public static News Create(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage,string author)
+        public static News Create(Title title, Description introduction, string text, long languageId, long newsTypeId, string publishDate, Image mainImageName, Image? secondImage, Image? thirdImage, Image tumbNailImage,string author)
         {
-            return new News(title, introduction, text, languageId, newsTypeId, publishDate,mainImageName,secondImage, thirdImage,author);
+            return new News(title, introduction, text, languageId, newsTypeId, publishDate,mainImageName,secondImage, thirdImage,author, tumbNailImage);
         }
         #endregion
 
@@ -85,6 +86,11 @@ namespace Cms.Domain.Models.News.Entities
         public void ChangeThirdImage(string thirdImage)
         {
             ThirdImage = thirdImage;
+            Modified();
+        }
+        public void ChangeThumbNailImage(string thumbNailImage)
+        {
+            ThumbNailImage = thumbNailImage;
             Modified();
         }
         public void ChangeLanguageId(long languageId )
