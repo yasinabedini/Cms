@@ -1,4 +1,5 @@
 ﻿using Cmd.Application.Common.Queries;
+using Cmd.Application.Convertors;
 using Cmd.Application.Models.News.Queries.Common;
 using Cms.Domain.Models.News.Entities;
 using Cms.Domain.Models.News.Repository;
@@ -41,7 +42,7 @@ public class GetAllNewsQueryHandler : IQueryHandler<GetAllNewsQuery, PagedData<N
             Introduction = t.Introduction.Value,
             LanguageId = t.LanguageId,
             NewsTypeId = t.NewsTypeId,
-            PublishDate = t.PublishDate,
+            PublishDate = DateTime.Parse(t.PublishDate).ToShamsi(),
             Text = t.Text,
             MainImageName = t.MainImageName.Value ?? "",
             SecondImage = t.SecondImage?.Value ?? "",

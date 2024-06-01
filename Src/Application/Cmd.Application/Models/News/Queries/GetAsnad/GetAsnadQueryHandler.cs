@@ -1,4 +1,5 @@
 ﻿using Cmd.Application.Common.Queries;
+using Cmd.Application.Convertors;
 using Cmd.Application.Models.News.Queries.Common;
 using Cms.Domain.Common.Repositories;
 using Cms.Domain.Models.Gallery.Repositories;
@@ -57,7 +58,7 @@ namespace Cmd.Application.Models.News.Queries.GetAsnad
                             Introduction = about.Introduction.Value,
                             LanguageId = about.LanguageId,
                             NewsTypeId = about.NewsTypeId,
-                            PublishDate = about.PublishDate,
+                            PublishDate = DateTime.Parse(about.PublishDate).ToShamsi(),
                             Text = about.Text,
                             MainImageName = about.MainImageName.Value,
                             SecondImage = about.SecondImage?.Value,
