@@ -2,24 +2,25 @@
 using Cms.Endpoints.AdminPanel.Pages.Common;
 using Cms.Endpoints.AdminPanel.Pages.Language;
 using Cms.Endpoints.AdminPanel.Pages.News;
-using IdentityModel.Client;
+using Cms.Endpoints.AdminPanel.Pages.NewsType;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace Cms.Endpoints.AdminPanel.Pages.Activity
+namespace Cms.Endpoints.AdminPanel.Pages.Asnad
 {
     #region List
     public class ListModel : PageModel
     {
         private readonly HttpClient _httpClient;
 
-        public List<NewsViewModel> ActivityList { get; set; }
+        public List<NewsViewModel> AsnadList { get; set; }
+
+        public List<NewsTypeViewModel> NewsTypes { get; set; }
         public List<LanguageViewModel> Languages { get; set; }
 
 
@@ -29,39 +30,79 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
         }
 
-        public IActionResult OnGet()
+        public async Task<ActionResult> OnGet()
         {
-            // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
-            var config = (IConfiguration)HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration));
+            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+
 
             #region languages
             var languageData = new { pageNumber = 1, pageSize = 200 };
             var languageJsonInString = JsonConvert.SerializeObject(languageData);
             var languageContent = new StringContent(languageJsonInString, Encoding.UTF8, "application/json");
-            var languageResponse = _httpClient.PostAsync("/api/Language/GetAll", languageContent).Result;
-            var languageResult = languageResponse.Content.ReadAsStringAsync().Result;
+            var languageResponse = await _httpClient.PostAsync("/api/Language/GetAll", languageContent);
+            var languageResult = await languageResponse.Content.ReadAsStringAsync();
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult;
             #endregion
 
-
-            var data = new { pageNumber = 1, pageSize = 200, typeId = config.GetSection("NewsId").GetSection("NewsActivityId").Value, isPage = true }; // Your data object
-
-            var jsonInString = JsonConvert.SerializeObject(data);
+            var newsTypeData = new { pageNumber = 1, pageSize = 200 };
+            var jsonInString = JsonConvert.SerializeObject(newsTypeData);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+            var response = _httpClient.PostAsync("/api/NewsType/GetAll", content).Result;
+            var result = await response.Content.ReadAsStringAsync();
+            NewsTypes = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult.Where(t => t.IsPage).ToList();
 
-            var response = _httpClient.PostAsync("/api/News/GetAll", content).Result;
+
+            var data = new { pageNumber = 1, pageSize = 400, typeId = 0, isPage = true }; // Your data object
+
+            jsonInString = JsonConvert.SerializeObject(data);
+            content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+
+            response = await _httpClient.PostAsync("/api/News/GetAll", content);
 
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest();
             }
-            var result = response.Content.ReadAsStringAsync().Result;
+            result = await response.Content.ReadAsStringAsync();
 
-            ActivityList = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult;
+            AsnadList = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult;
 
             return Page();
         }
     }
+    #endregion
+
+    #region Details
+
+    public class DetailsModel : PageModel
+    {
+        private readonly UserManager<CustomIdentityUser> _userManager;
+
+        private readonly HttpClient _httpClient;
+
+        public NewsViewModel Asnad { get; set; }
+
+        public CustomIdentityUser Author { get; set; }
+
+        public DetailsModel(IHttpClientFactory factory, UserManager<CustomIdentityUser> userManager)
+        {
+            _httpClient = factory.CreateClient("AdminApi");
+            _userManager = userManager;
+        }
+
+        public async void OnGet(int id)
+        {
+            var data = new { id = id };
+            var jsonInString = JsonConvert.SerializeObject(data);
+            var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+            var response = _httpClient.PostAsync("/api/News/GetById", content).Result;
+            var result = await response.Content.ReadAsStringAsync();
+            Asnad = JsonConvert.DeserializeObject<NewsViewModel>(result);
+
+            Author = _userManager.Users.FirstOrDefault(t => t.UserName == Asnad.Author);
+        }
+    }
+
     #endregion
 
     #region Create
@@ -71,12 +112,11 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
 
         [BindProperty]
-        public NewsViewModel Activity { get; set; }
+        public NewsViewModel Asnad { get; set; } = new NewsViewModel();
 
         public List<LanguageViewModel> Languages { get; set; }
 
         [BindProperty]
-        [Required(ErrorMessage = "یک عکس برای فعالیت اپلود کنید")]
         public IFormFile Image { get; set; }
 
         [BindProperty]
@@ -91,15 +131,10 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
             _httpClient = factory.CreateClient("AdminApi");
 
         }
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGet(int typeId)
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
-            IConfiguration config;
-
-            config = HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration)) as IConfiguration;
-
-            ViewData["ActivityId"] = config.GetSection("NewsId")["NewsActivityId"];
 
             #region languages
             var languageData = new { pageNumber = 1, pageSize = 200 };
@@ -109,6 +144,29 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
             var languageResult = await languageResponse.Content.ReadAsStringAsync();
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(languageResult).QueryResult;
             #endregion
+
+            var data = new { pageNumber = 1, pageSize = 200 }; // Your data object
+
+            var jsonInString = JsonConvert.SerializeObject(data);
+            var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("/api/NewsType/GetAll", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return BadRequest();
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            var typeList = JsonConvert.DeserializeObject<PagedData<NewsTypeViewModel>>(result).QueryResult;
+
+            if (!typeList.Any(t => t.Id == typeId))
+            {
+                return BadRequest();
+            }
+
+            Asnad.NewsTypeId = typeId;
 
             return Page();
         }
@@ -122,24 +180,20 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("/api/Language/GetAll", content);
-            var result = await response.Content.ReadAsStringAsync();
+            var result = response.Content.ReadAsStringAsync().Result;
             Languages = JsonConvert.DeserializeObject<PagedData<LanguageViewModel>>(result).QueryResult;
             #endregion
 
             if (!ModelState.IsValid)
             {
+                if (Image is null)
+                {
+                    ModelState.AddModelError("Image", "یک عکس برای آیتم اپلود کنید");
+                }
                 return Page();
             }
-
 
             #region Save Main Image
-
-            if (Path.GetExtension(Image.FileName).ToLower() != ".png" && Path.GetExtension(Image.FileName).ToLower() != ".jpg" && Path.GetExtension(Image.FileName).ToLower() != ".jpeg")
-            {
-                ModelState.AddModelError("Image", "شما فقط مجاز به اپلود عکس با این فرمت ها هستید. (png-jpg)");
-                return Page();
-            }
-
             var requestContent = new MultipartFormDataContent();
             var item = new MemoryStream();
             Image.CopyTo(item);
@@ -149,7 +203,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
             requestContent.Add(imageContent, "file", Path.GetFileName(Image.FileName));
             var imageResponse = await _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent);
 
-            Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
+            Asnad.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             #endregion
 
             #region Save Gallery
@@ -175,7 +229,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(SecondImage.FileName));
                 imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                Activity.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
+                Asnad.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
 
             if (ThirdImage is not null)
@@ -200,13 +254,13 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(ThirdImage.FileName));
                 imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                Activity.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
+                Asnad.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
 
             item.Dispose();
             #endregion
 
-            var modelData = new { Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage, Author = HttpContext.User.GetDisplayName() }; // Your data object
+            var modelData = new { Title = Asnad.Title, Introduction = Asnad.Introduction, LanguageId = Asnad.LanguageId, NewsTypeId = Asnad.NewsTypeId, PublishDate = Asnad.PublishDate, Text = Asnad.Text, MainImage = Asnad.MainImageName, SecondImage = Asnad.SecondImage, ThirdImage = Asnad.ThirdImage, Author = HttpContext.User.GetDisplayName() }; // Your data object
 
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");
@@ -225,46 +279,14 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
     }
     #endregion
 
-    #region Details
-    public class DetailsModel : PageModel
-    {
-        private readonly UserManager<CustomIdentityUser> _userManager;
-
-        private readonly HttpClient _httpClient;
-
-        public NewsViewModel Activity { get; set; }
-
-        public CustomIdentityUser Author { get; set; }
-
-        public DetailsModel(IHttpClientFactory factory, UserManager<CustomIdentityUser> userManager)
-        {
-            _httpClient = factory.CreateClient("AdminApi");
-            _userManager = userManager;
-        }
-
-        public async void OnGet(int id)
-        {
-            var data = new { id = id };
-            var jsonInString = JsonConvert.SerializeObject(data);
-            var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-            var response = _httpClient.PostAsync("/api/News/GetById", content).Result;
-            var result = await response.Content.ReadAsStringAsync();
-            Activity = JsonConvert.DeserializeObject<NewsViewModel>(result);
-
-            Author = _userManager.Users.FirstOrDefault(t => t.UserName == Activity.Author);
-        }
-    }
-    #endregion
-
     #region Edit
-
     public class EditModel : PageModel
     {
         private readonly HttpClient _httpClient;
 
 
         [BindProperty]
-        public NewsViewModel Activity { get; set; }
+        public NewsViewModel Asnad { get; set; }
 
         public List<LanguageViewModel> Languages { get; set; }
         public IFormFile? Image { get; set; }
@@ -308,7 +330,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
             }
             var result = response.Content.ReadAsStringAsync().Result;
 
-            Activity = JsonConvert.DeserializeObject<NewsViewModel>(result);
+            Asnad = JsonConvert.DeserializeObject<NewsViewModel>(result);
 
             return Page();
         }
@@ -346,7 +368,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
                     return Page();
                 }
 
-                var deleteResult = _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.MainImageName}&&folder=news").Result;
+                var deleteResult = _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.MainImageName}&&folder=news").Result;
 
                 var requestContent = new MultipartFormDataContent();
                 var item = new MemoryStream();
@@ -357,7 +379,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
                 requestContent.Add(imageContent, "file", Path.GetFileName(Image.FileName));
                 var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
 
-                Activity.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
+                Asnad.MainImageName = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
 
 
@@ -374,9 +396,9 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
                     return Page();
                 }
 
-                if (!string.IsNullOrEmpty(Activity.SecondImage))
+                if (!string.IsNullOrEmpty(Asnad.SecondImage))
                 {
-                    _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.SecondImage}&&folder=news");
+                    _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.SecondImage}&&folder=news");
                 }
                 var requestContent = new MultipartFormDataContent();
                 var item = new MemoryStream();
@@ -386,7 +408,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(SecondImage.FileName));
                 var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                Activity.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
+                Asnad.SecondImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
 
                 item.Dispose();
             }
@@ -405,9 +427,9 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
                 }
 
 
-                if (!string.IsNullOrEmpty(Activity.ThirdImage))
+                if (!string.IsNullOrEmpty(Asnad.ThirdImage))
                 {
-                    _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Activity.ThirdImage}&&folder=news");
+                    _httpClient.DeleteAsync($"/api/FileManager/Delete?imageName={Asnad.ThirdImage}&&folder=news");
                 }
 
                 var requestContent = new MultipartFormDataContent();
@@ -418,11 +440,11 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
                 imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
                 requestContent.Add(imageContent, "file", Path.GetFileName(ThirdImage.FileName));
                 var imageResponse = _httpClient.PostAsync($"/api/FileManager/upload?folder=news", requestContent).Result;
-                Activity.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
+                Asnad.ThirdImage = imageResponse.Headers.First(t => t.Key == "fileName").Value.First();
             }
             #endregion
 
-            var modelData = new { Id = Activity.Id, Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, IsEnable = Activity.IsEnable, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage };
+            var modelData = new { Id = Asnad.Id, Title = Asnad.Title, Introduction = Asnad.Introduction, LanguageId = Asnad.LanguageId, NewsTypeId = Asnad.NewsTypeId, IsEnable = Asnad.IsEnable, PublishDate = Asnad.PublishDate, Text = Asnad.Text, MainImage = Asnad.MainImageName, SecondImage = Asnad.SecondImage, ThirdImage = Asnad.ThirdImage };
 
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");
@@ -431,14 +453,15 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
             if (methodresponse.IsSuccessStatusCode)
             {
-                return RedirectToPage("Details", new { id = Activity.Id });
+                return RedirectToPage("Details", new { id = Asnad.Id });
             }
             else
             {
                 return Page();
             }
+
         }
     }
-
     #endregion
+
 }

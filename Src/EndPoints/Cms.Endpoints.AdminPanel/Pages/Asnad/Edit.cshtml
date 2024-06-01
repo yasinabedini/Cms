@@ -1,0 +1,301 @@
+﻿@page "{id}"
+@model Cms.Endpoints.AdminPanel.Pages.Asnad.EditModel
+@inject IConfiguration _config;
+@{
+    ViewData["Title"] = "Add - Invoice";
+}
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/quill/typography.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/quill/katex.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/quill/editor.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/select2/select2.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/dropzone/dropzone.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/flatpickr/flatpickr.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/tagify/tagify.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/jstree/jstree.dist.css" />
+
+    <link rel="stylesheet" href="~/vendor/libs/flatpickr/flatpickr.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/jquery-timepicker/jquery-timepicker.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/pickr/pickr-themes.dist.css" />
+}
+<!-- assets/vendor/libs/dropzone/dropzone.dist.css -->
+@section VendorScripts {
+    <script src="~/vendor/libs/quill/katex.dist.js"></script>
+    <script src="~/vendor/libs/quill/quill.dist.js"></script>
+    <script src="~/vendor/libs/select2/select2.dist.js"></script>
+    <script src="~/vendor/libs/dropzone/dropzone.dist.js"></script>
+    <script src="~/vendor/libs/jquery-repeater/jquery-repeater.dist.js"></script>
+    <script src="~/vendor/libs/flatpickr/flatpickr.dist.js"></script>
+    <script src="~/vendor/libs/tagify/tagify.dist.js"></script>
+    <script src="~/vendor/libs/ckeditor/ckeditor.js"></script>
+    <script src="~/vendor/libs/jstree/jstree.dist.js"></script>
+    <script src="~/vendor/libs/pickr/pickr.dist.js"></script>
+    <script src="~/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.dist.js"></script>
+    <script src="~/vendor/libs/flatpickr/flatpickr.dist.js"></script>
+
+}
+
+@section PageScripts {
+    <script src="~/js/app-ecommerce-product-add.dist.js"></script>
+    <script src="~/js/ckEditor.js"></script>
+    <script src="~/js/MyUploader.js"></script>
+    <script src="~/js/extended-ui-treeview.dist.js"></script>
+    <script src="~/js/forms-pickers.dist.js"></script>
+}
+
+@* ************** Content ************** *@
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Asnad.Id" />
+    <input type="hidden" asp-for="Asnad.NewsTypeId" />
+    <input type="hidden" asp-for="Asnad.Title" />
+    <input type="hidden" asp-for="Asnad.MainImageName" />
+    <input type="hidden" asp-for="Asnad.SecondImage" />
+    <input type="hidden" asp-for="Asnad.ThirdImage" />
+    <input type="hidden" asp-for="Asnad.PublishDate" />
+    <input type="hidden" asp-for="Asnad.Author" />
+    <input type="hidden" asp-for="Asnad.Introduction" />
+
+    <div class="row invoice-add">
+        <!-- News Add-->
+        <div class="col-lg-9 col-12 mb-lg-0 mb-4">
+            <div class="card invoice-preview-card">
+                <div class="card-body">
+                    <div class="row m-sm-4 m-0">
+                        <div class="col-md-7 mb-md-0 mb-4">
+                            <div class="d-flex svg-illustration mb-3 gap-2 align-items-center">
+
+                                <span class="app-brand-text fw-bold">
+                                    ویرایش آیتم
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <dl class="row mb-2">
+                                <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
+                                    <span class="h4 text-capitalize mb-0 text-nowrap">آیتم</span>
+                                </dt>
+                                <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
+                                    <div class="input-group input-group-merge disabled w-px-150">
+                                        <span class="input-group-text">#</span>
+                                        <input type="text" class="form-control p-2" disabled placeholder="@Model.Asnad.Id" value="@Model.Asnad.Id" id="invoiceId" />
+                                    </div>
+                                </dd>
+                                <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
+                                    <span class="fw-normal">تاریخ سند:</span>
+                                </dt>
+                                <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
+                                    <input type="text" class="form-control" asp-for="Asnad.PublishDate" value="@DateTime.Parse(Model.Asnad.PublishDate)" placeholder="YYYY-MM-DD" id="flatpickr-date" />
+                                </dd>
+                                <span asp-validation-for="Asnad.PublishDate" class="text-danger"></span>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <hr class="my-3 mx-n4" />
+
+                    <div class="row p-sm-4 p-0">
+                        <div class="app-ecommerce">
+                            <div class="row">
+
+                                <!-- First column-->
+                                <div class="col-12 col-lg-12">
+                                    <!-- Product Information -->
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h5 class="card-tile mb-0">جزئیات آیتم</h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div class="mb-3">
+                                                <label class="form-label" for="ecommerce-sweeper-link">متن</label>
+                                                <div class="col-md-12">
+                                                    <div class="mb-3 mt-3">
+                                                        <textarea id="editor1" asp-for="Asnad.Text" style="width: 100%">لطفا متن مورد نظر خودتان را وارد کنید</textarea>
+                                                        <span asp-validation-for="Asnad.Text" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Product Information -->
+                                    <!-- Media -->
+                                    <!-- /Media -->
+                                </div>
+                                <!-- /Second column -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <!-- Basic  -->
+                        <div class="card mb-4">
+                            <h5 class="card-header">تصویر اصلی سند</h5>
+                            <div class="card-body">
+                                <div class="dz-preview dz-processing dz-image-preview dz-complete" id="preview">
+                                    <div class="dz-details">
+                                        <div class="dz-thumbnail">
+                                            @{
+                                                string imageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.Asnad.MainImageName}&&folder=news";
+                                            }
+                                            <img id="imageBox" src="@imageAddress">
+                                            <span class="dz-nopreview">No preview</span>
+                                            <div class="dz-success-mark"></div>
+                                            <div class="dz-error-mark"></div>
+                                            <div class="dz-error-message"><span data-dz-errormessage=""></span></div>
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress="" style="width: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a class="dz-remove" onclick="clearFileInput('image','imageBox')" data-dz-remove="">Remove file</a>
+
+                                </div>
+                                <div class="col-12">
+                                    <div class="card-body demo-vertical-spacing demo-only-element">
+                                        <div class="input-group">
+                                            <input type="file" class="form-control" asp-for="Image" id="image">
+                                            <label class="input-group-text" for="mainImage">Upload</label>
+                                        </div>
+                                        <span asp-validation-for="Image" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Basic  -->
+                        <!-- Multi  -->
+                        <div class="card mb-4">
+                            <h5 class="card-header">تصاویر جانبی سند</h5>
+                            <div class="card-body">
+
+                                <div class="dz-preview dz-processing dz-image-preview dz-complete" id="secondPreview">
+                                    <div class="dz-details">
+                                        <div class="dz-thumbnail">
+                                            @{
+                                                string secondImageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.Asnad.SecondImage}&&folder=news";
+                                            }
+                                            <img id="secondImageBox" src="@secondImageAddress">
+                                            <span class="dz-nopreview">No preview</span>
+                                            <div class="dz-success-mark"></div>
+                                            <div class="dz-error-mark"></div>
+                                            <div class="dz-error-message"><span data-dz-errormessage=""></span></div>
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress="" style="width: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a class="dz-remove" onclick="clearFileInput('newsSecondImage','secondImageBox','secondPreview')" data-dz-remove="">Remove file</a>
+
+                                </div>
+
+                                <div class="dz-preview dz-processing dz-image-preview dz-complete" id="thirdPreview">
+                                    <div class="dz-details">
+                                        <div class="dz-thumbnail">
+                                            @{
+                                                string thirdImageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.Asnad.ThirdImage}&&folder=news";
+                                            }
+                                            <img id="thirdImageBox" src="@thirdImageAddress">
+                                            <span class="dz-nopreview">No preview</span>
+                                            <div class="dz-success-mark"></div>
+                                            <div class="dz-error-mark"></div>
+                                            <div class="dz-error-message"><span data-dz-errormessage=""></span></div>
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress="" style="width: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a class="dz-remove" onclick="clearFileInput('newsThirdImage','thirdImageBox','thirdPreview')" data-dz-remove="">Remove file</a>
+
+                                </div>
+                                <div class="col-12">
+                                    <div class="card-body demo-vertical-spacing demo-only-element">
+                                        <div class="input-group">
+                                            <input type="file" class="form-control" asp-for="SecondImage" id="newsSecondImage">
+                                            <label class="input-group-text" for="mainImage">Upload</label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Asnad.SecondImage" class="text-danger"></span>
+                                    <div class="card-body demo-vertical-spacing demo-only-element">
+                                        <div class="input-group">
+                                            <input type="file" class="form-control" asp-for="ThirdImage" id="newsThirdImage">
+                                            <label class="input-group-text" for="mainImage">Upload</label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Asnad.ThirdImage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Multi  -->
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- /Invoice Add-->
+        <!-- Invoice Actions -->
+        <div class="col-lg-3 col-12 invoice-actions">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <button type="submit" class="btn btn-primary d-grid w-100 mb-2">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-send ti-xs me-2"></i>ویرایش سند</span>
+                    </button>
+                    <a href="/news/list" class="btn btn-label-secondary d-grid w-100">بازگشت</a>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+
+                <div class="card-body">
+                    <p class="mb-2">محتوای سند به چه زبانی است؟</p>
+                    <select class="form-select mb-4" asp-for="Asnad.LanguageId">
+                        @foreach (var language in Model.Languages)
+                        {
+                            <option value="@language.Id">@language.Title</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Asnad.LanguageId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Basic -->
+            <div class="card mb-4">
+                <h5 class="card-header">آدرس فیزیکی تصاویر اسناد</h5>
+                <div class="card-body">
+                    <div id="jstree-basic">
+                        <ul>
+                            <li class="jstree-open" data-jstree='{"icon" : "ti ti-folder"}'>
+                                File Manager
+                                <ul data-jstree='{"icon" : "ti ti-folder"}'>
+                                    <li class="jstree-open" data-jstree='{"icon" : "ti ti-folder"}'>
+                                        Img
+                                        <ul>
+                                            <li class="jstree-open" data-jstree='{"icon" : "ti ti-folder"}'>
+                                                News
+                                            </li>
+
+                                            <li class="jstree-open " data-jstree='{"icon" : "ti ti-folder"}'>
+                                                Thumb
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Basic -->
+
+
+        </div>
+        <!-- /Invoice Actions -->
+
+    </div>
+</form>

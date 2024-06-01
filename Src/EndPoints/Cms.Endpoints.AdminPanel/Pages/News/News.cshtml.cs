@@ -220,7 +220,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
             item.Dispose();
             #endregion
 
-            var modelData = new { Title = News.Title, Introduction = News.Introduction, LanguageId = News.LanguageId, NewsTypeId = News.NewsTypeId, PublishDate = News.PublishDate, Text = News.Text, MainImage = News.MainImageName, SecondImage = News.SecondImage, ThirdImage = News.ThirdImage, Author = "نیاز به ویرایش" }; // Your data object
+            var modelData = new { Title = News.Title, Introduction = News.Introduction, LanguageId = News.LanguageId, NewsTypeId = News.NewsTypeId, PublishDate = News.PublishDate, Text = News.Text, MainImage = News.MainImageName, SecondImage = News.SecondImage, ThirdImage = News.ThirdImage, Author = HttpContext.User.GetDisplayName() }; // Your data object
 
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");

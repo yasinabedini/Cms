@@ -226,7 +226,7 @@ public class CreateModel : PageModel
         item.Dispose();
         #endregion
 
-        var modelData = new { Title = About.Title, Introduction = About.Introduction, LanguageId = About.LanguageId, NewsTypeId = About.NewsTypeId, PublishDate = About.PublishDate, Text = About.Text, MainImage = About.MainImageName, SecondImage = About.SecondImage, ThirdImage = About.ThirdImage, Author = "نیاز به ویرایش" }; // Your data object
+        var modelData = new { Title = About.Title, Introduction = About.Introduction, LanguageId = About.LanguageId, NewsTypeId = About.NewsTypeId, PublishDate = About.PublishDate, Text = About.Text, MainImage = About.MainImageName, SecondImage = About.SecondImage, ThirdImage = About.ThirdImage, Author = HttpContext.User.GetDisplayName() }; // Your data object
 
         var modelJsonInString = JsonConvert.SerializeObject(modelData);
         var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");

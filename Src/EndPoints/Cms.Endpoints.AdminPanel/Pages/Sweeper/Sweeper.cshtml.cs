@@ -181,7 +181,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
         public async Task<IActionResult> OnPost()
         {
-           // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
 
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
@@ -192,6 +192,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
             if (!ModelState.IsValid)
             {
+
                 return Page();
             }
 

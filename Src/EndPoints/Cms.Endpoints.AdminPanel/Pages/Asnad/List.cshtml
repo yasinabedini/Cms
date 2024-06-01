@@ -1,18 +1,33 @@
 ﻿@page
-@using Cms.Endpoints.AdminPanel.Pages.Common
 @inject IConfiguration _config;
-@model Cms.Endpoints.AdminPanel.Pages.AboutUs.ListModel
+@using Cms.Endpoints.AdminPanel.Pages.Common
+@model Cms.Endpoints.AdminPanel.Pages.Asnad.ListModel
 @{
 }
 @{
-    ViewData["Title"] = "Collapse - UI elements";
+    ViewData["Title"] = "Order List - eCommerce";
 }
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/datatables-bs5/datatables.bootstrap5.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.dist.css" />
+}
+
+@section VendorScripts {
+    <script src="~/vendor/libs/datatables-bs5/datatables-bootstrap5.dist.js"></script>
+}
+
+@section PageScripts {
+    <script src="~/js/app-ecommerce-order-list.dist.js"></script>
+}
+
 @* ************** Content ************** *@
 
-<h4 class="py-3 mb-4"><span class="text-muted fw-light">درباره موزه /</span> لیست آیتم ها</h4>
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">گنجینه اسناد /</span> لیست آیتم ها</h4>
 
 <!-- Collapse -->
-<h5>درباره موزه</h5>
+<h5>گنجینه اسناد</h5>
 <div class="row">
     <div class="col-12">
 
@@ -22,40 +37,40 @@
                 نمایش آیتم ها
             </button>
         </p>
-        @for (int i = 1; i <= _config.GetSection("AboutUs").GetChildren().ToList().Count; i++)
+        @for (int i = 1; i <= _config.GetSection("Asnad").GetChildren().ToList().Count; i++)
         {
-            long newsTypeId = @Convert.ToInt32(_config.GetSection("AboutUs")[$"item{i}"]);
+            long newsTypeId = @Convert.ToInt32(_config.GetSection("Asnad")[$"item{i}"]);
 
             <div class="col-12">
                 <div class="card mb-4">
                     <h5 class="card-header">@Model.NewsTypes.FirstOrDefault(t => t.Id == newsTypeId).Title</h5>
                     <div class="card-body">
                         <div class="collapse" id="collapseExample">
-                            <a href="/AboutUs/Create?typeId=@newsTypeId" class="btn btn-success m-3" >
+                            <a href="/Asnad/Create?typeId=@newsTypeId" class="btn btn-success m-3">
                                 ایجاد آیتم جدید
                             </a>
                             <div class="card-datatable table-responsive">
                                 <table class=" table border-top">
                                     <thead>
                                         <tr>
-                                            <th>خبر</th>
+                                            <th>سند</th>
                                             <th>عنوان</th>
-                                            <th>نویسنده</th>
+                                            <th>ایجاد کننده</th>
                                             <th>وضعیت</th>
                                             <th>نوع آیتم</th>
-                                            <th>تاریخ انتشار</th>
+                                            <th>تاریخ سند</th>
                                             <th>actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <tbody>
-                                            @foreach (var news in Model.AboutList.Where(t => t.NewsTypeId == newsTypeId))
+                                            @foreach (var news in Model.AsnadList.Where(t => t.NewsTypeId == newsTypeId))
                                             {
                                             <tr class="odd">
                                                 <td class="  control" tabindex="0" style="display: none;"></td>
 
                                                 <td>
-                                                    <a href="/aboutUs/details/@news.Id">
+                                                    <a href="/asnad/details/@news.Id">
                                                         <span>#@news.Id</span>
                                                     </a>
                                                 </td>
