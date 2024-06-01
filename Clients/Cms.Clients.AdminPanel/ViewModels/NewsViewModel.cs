@@ -14,6 +14,7 @@ public class NewsViewModel
     public string? SecondImage { get;  set; }
     public string? ThirdImage { get;  set; }    
     public bool IsEnable { get; set; }
+    public NewsTypeViewModel NewsType { get; set; }
 
     public NewsViewModel()
     {

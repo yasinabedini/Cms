@@ -1,5 +1,6 @@
 ﻿@page
 @using Cms.Clients.AdminPanel.Pages.News
+@using Cms.Clients.AdminPanel.Tools
 @inject IConfiguration _config;
 @model IndexModel
 @{
@@ -54,7 +55,7 @@
                         @foreach (var news in Model.NewsList.QueryResult.ToList())
                         {
                             <tr id="news[@news.Id]">
-                                <td>@news.Title</td>
+                                <td><a href="/news/details/@news.Id">@news.Title</a></td>
                                 <td>
                                     @news.Author
                                 </td>

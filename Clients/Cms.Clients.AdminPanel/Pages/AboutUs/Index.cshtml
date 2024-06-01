@@ -19,7 +19,7 @@
                         <li class="nav-item has-treeview">
                             <a class="nav-link d-block">
                                 <h4>
-                                    @Model.NewsTypes.SingleOrDefault(t=>t.Id==newsTypeId).Title
+                                    @Model.NewsTypes.SingleOrDefault(t => t.Id == newsTypeId).Title
                                     <i class="fa fa-angle-left right"></i>
                                 </h4>
                             </a>
@@ -42,12 +42,16 @@
                                                     @if (aboutUs.Text.Length <= 40)
                                                     {
                                                         <td>
-                                                            @Html.Raw(aboutUs.Text)
+                                                            <a href="/aboutus/details/@aboutUs.Id">@Html.Raw(aboutUs.Text)</a>
                                                         </td>
                                                     }
                                                     else
                                                     {
-                                                        <td>@Html.Raw(aboutUs.Text.Substring(0, 39))</td>
+                                                        <td>
+                                                            <a href="/aboutus/details/@aboutUs.Id">
+                                                                @Html.Raw(aboutUs.Text.Substring(0, 39))....
+                                                            </a>
+                                                        </td>
                                                     }
                                                     <td>
                                                         @Model.Languages.FirstOrDefault(t => t.Id == aboutUs.LanguageId).Name

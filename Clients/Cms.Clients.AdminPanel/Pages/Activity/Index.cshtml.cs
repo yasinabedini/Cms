@@ -23,7 +23,7 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
 
         }
 
-        public ActionResult OnGet()
+        public ActionResult OnGet(string searchText = "", int orderById = 0)
         {
             // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
             var config = (IConfiguration)HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration));
@@ -52,6 +52,15 @@ namespace Cms.Clients.AdminPanel.Pages.Activity
             var result = response.Content.ReadAsStringAsync().Result;
 
             ActivityList = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult;
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                ActivityList = ActivityList.Where(t => t.Title.Contains(searchText) || t.Text.Contains(searchText)).ToList();
+            }
+            if (orderById == 1)
+            {
+                ActivityList = ActivityList.OrderBy(t => t.Title).ToList();
+            }
 
             return Page();
         }

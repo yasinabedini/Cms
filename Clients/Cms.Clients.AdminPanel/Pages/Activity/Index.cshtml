@@ -9,6 +9,23 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
+            <div class="row">
+                <div class="card-body">
+                    <div class="col-sm-12 col-md-12 p-3 text-center">
+                        <form method="get">
+                            <input name="searchText" type="text" value="@HttpContext.Request.Query["searchText"].ToString()" placeholder="خبر مورد نظر خود را جستحو کنید" class="form-control col-md-5 m-3 d-inline float-right" />
+                            <div class="form-group d-inline">
+                                <label class="m-3">مرتب سازی بر اساس : </label>
+                                <select name="orderById" class="form-control d-inline col-md-2 m-3">
+                                    <option selected value="0">همه</option>
+                                    <option selected value="1">عنوان</option>
+                                </select>
+                            </div>
+                            <input type="submit" value="جستجو" class="btn btn-success float-left d-inline m-3" />
+                        </form>
+                    </div>
+                </div>
+            </div>
             <!-- /.card-header -->
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -24,7 +41,20 @@
                         @foreach (var activity in Model.ActivityList)
                         {
                             <tr id="activity[@activity.Id]">
-                                <td>@activity.Title</td>
+                                @if (activity.Text.Length <= 40)
+                                {
+                                    <td>
+                                        <a href="/activity/details/@activity.Id">@Html.Raw(activity.Text)</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a href="/activity/details/@activity.Id">
+                                            @Html.Raw(activity.Text.Substring(0, 39))....
+                                        </a>
+                                    </td>
+                                }
                                 <td>
                                     @Model.Languages.FirstOrDefault(t => t.Id == activity.LanguageId).Name
                                 </td>
