@@ -75,10 +75,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModels\User\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Include="wwwroot\js\MyUploader.js" />
 	  <None Include="wwwroot\vendor\libs\ckeditor\ckeditor.js" />
 	  <None Include="wwwroot\vendor\libs\ckeditor\ckeditor.js.map" />

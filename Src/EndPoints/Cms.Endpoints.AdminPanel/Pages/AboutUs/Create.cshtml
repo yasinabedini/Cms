@@ -1,11 +1,7 @@
-﻿@page "{id}"
-@model Cms.Endpoints.AdminPanel.Pages.Activity.EditModel
+﻿@page
+@model Cms.Endpoints.AdminPanel.Pages.AboutUs.CreateModel
 @{
 }
-@inject IConfiguration _config;
-@{
-}
-
 @{
     ViewData["Title"] = "Add - Invoice";
 }
@@ -53,14 +49,9 @@
 
 @* ************** Content ************** *@
 <form method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Activity.Id" />
-    <input type="hidden" asp-for="Activity.NewsTypeId" />
-    <input type="hidden" asp-for="Activity.MainImageName" />
-    <input type="hidden" asp-for="Activity.SecondImage" />
-    <input type="hidden" asp-for="Activity.ThirdImage" />
-    <input type="hidden" asp-for="Activity.Introduction" />    
-    <input type="hidden" asp-for="Activity.Author" />
-
+    <input type="hidden" asp-for="About.NewsTypeId" />
+    <input type="hidden" asp-for="About.Title" value="بدون عنوان" />
+    <input type="hidden" asp-for="About.Introduction" value="بدون مقدمه" />
     <div class="row invoice-add">
         <!-- News Add-->
         <div class="col-lg-9 col-12 mb-lg-0 mb-4">
@@ -71,28 +62,29 @@
                             <div class="d-flex svg-illustration mb-3 gap-2 align-items-center">
 
                                 <span class="app-brand-text fw-bold">
-                                    ویرایش برنامه
+                                    ایجاد آیتم برای درباره موزه
                                 </span>
                             </div>
+                            <p class="mb-2">ایجاد محتوا برای موضوعات موجود در صفحه ی درباره موزه</p>
                         </div>
                         <div class="col-md-5">
                             <dl class="row mb-2">
                                 <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
-                                    <span class="h4 text-capitalize mb-0 text-nowrap">برنامه</span>
+                                    <span class="h4 text-capitalize mb-0 text-nowrap">آیتم</span>
                                 </dt>
                                 <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
                                     <div class="input-group input-group-merge disabled w-px-150">
                                         <span class="input-group-text">#</span>
-                                        <input type="text" class="form-control p-2" disabled placeholder="@Model.Activity.Id" value="@Model.Activity.Id" id="invoiceId" />
+                                        <input type="text" class="form-control p-2" disabled placeholder="3905" value="3905" id="invoiceId" />
                                     </div>
                                 </dd>
                                 <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
-                                    <span class="fw-normal">تاریخ رویداد:</span>
+                                    <span class="fw-normal">تاریخ انتشار:</span>
                                 </dt>
                                 <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
-                                    <input type="text" class="form-control" asp-for="Activity.PublishDate" value="@DateTime.Parse(Model.Activity.PublishDate)" placeholder="YYYY-MM-DD" id="flatpickr-date" />
+                                    <input type="text" class="form-control" asp-for="About.PublishDate" placeholder="YYYY-MM-DD" id="flatpickr-date" />
                                 </dd>
-                                <span asp-validation-for="Activity.PublishDate" class="text-danger"></span>
+                                <span asp-validation-for="About.PublishDate" class="text-danger"></span>
                             </dl>
                         </div>
                     </div>
@@ -108,27 +100,15 @@
                                     <!-- Product Information -->
                                     <div class="card mb-4">
                                         <div class="card-header">
-                                            <h5 class="card-tile mb-0">جزئیات برنامه</h5>
+                                            <h5 class="card-tile mb-0">جزئیات خبر</h5>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="ecommerce-news-title">عنوان</label>
-                                                <input type="text" class="form-control" id="ecommerce-news-title" placeholder="عنوان برنامه" asp-for="Activity.Title" aria-label="News title">
-                                                <span asp-validation-for="Activity.Title" class="text-danger"></span>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label" for="ecommerce-news-introduction">مقدمه</label>
-                                                <input type="text" class="form-control" id="ecommerce-news-introduction" placeholder="مقدمه برنامه" asp-for="Activity.Introduction" aria-label="News introduction">
-                                                <span asp-validation-for="Activity.Introduction" class="text-danger"></span>
-                                            </div>
-                                            <!-- Description -->
-
+                                        <div class="card-body">                                 
                                             <div class="mb-3">
                                                 <label class="form-label" for="ecommerce-sweeper-link">متن</label>
                                                 <div class="col-md-12">
                                                     <div class="mb-3 mt-3">
-                                                        <textarea id="editor1" asp-for="Activity.Text" style="width: 100%">لطفا متن مورد نظر خودتان را وارد کنید</textarea>
-                                                        <span asp-validation-for="Activity.Text" class="text-danger"></span>
+                                                        <textarea id="editor1" asp-for="About.Text" style="width: 100%">لطفا متن مورد نظر خودتان را وارد کنید</textarea>
+                                                        <span asp-validation-for="About.Text" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,15 +127,12 @@
 
                         <!-- Basic  -->
                         <div class="card mb-4">
-                            <h5 class="card-header">تصویر اصلی برنامه</h5>
+                            <h5 class="card-header">تصویر اصلی خبر</h5>
                             <div class="card-body">
                                 <div class="dz-preview dz-processing dz-image-preview dz-complete" id="preview">
                                     <div class="dz-details">
                                         <div class="dz-thumbnail">
-                                            @{
-                                                string imageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.Activity.MainImageName}&&folder=news";
-                                            }
-                                            <img id="imageBox" src="@imageAddress">
+                                            <img id="imageBox">
                                             <span class="dz-nopreview">No preview</span>
                                             <div class="dz-success-mark"></div>
                                             <div class="dz-error-mark"></div>
@@ -183,16 +160,13 @@
                         <!-- /Basic  -->
                         <!-- Multi  -->
                         <div class="card mb-4">
-                            <h5 class="card-header">تصاویر جانبی برنامه</h5>
+                            <h5 class="card-header">تصاویر جانبی خبر</h5>
                             <div class="card-body">
 
                                 <div class="dz-preview dz-processing dz-image-preview dz-complete" id="secondPreview">
                                     <div class="dz-details">
                                         <div class="dz-thumbnail">
-                                            @{
-                                                string secondImageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.Activity.SecondImage}&&folder=news";
-                                            }
-                                            <img id="secondImageBox" src="@secondImageAddress">
+                                            <img id="secondImageBox">
                                             <span class="dz-nopreview">No preview</span>
                                             <div class="dz-success-mark"></div>
                                             <div class="dz-error-mark"></div>
@@ -210,10 +184,7 @@
                                 <div class="dz-preview dz-processing dz-image-preview dz-complete" id="thirdPreview">
                                     <div class="dz-details">
                                         <div class="dz-thumbnail">
-                                            @{
-                                                string thirdImageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.Activity.ThirdImage}&&folder=news";
-                                            }
-                                            <img id="thirdImageBox" src="@thirdImageAddress">
+                                            <img id="thirdImageBox">
                                             <span class="dz-nopreview">No preview</span>
                                             <div class="dz-success-mark"></div>
                                             <div class="dz-error-mark"></div>
@@ -234,14 +205,14 @@
                                             <label class="input-group-text" for="mainImage">Upload</label>
                                         </div>
                                     </div>
-                                    <span asp-validation-for="Activity.SecondImage" class="text-danger"></span>
+                                    <span asp-validation-for="SecondImage" class="text-danger"></span>
                                     <div class="card-body demo-vertical-spacing demo-only-element">
                                         <div class="input-group">
                                             <input type="file" class="form-control" asp-for="ThirdImage" id="newsThirdImage">
                                             <label class="input-group-text" for="mainImage">Upload</label>
                                         </div>
                                     </div>
-                                    <span asp-validation-for="Activity.ThirdImage" class="text-danger"></span>
+                                    <span asp-validation-for="ThirdImage" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -258,29 +229,28 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <button type="submit" class="btn btn-primary d-grid w-100 mb-2">
-                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-send ti-xs me-2"></i>ویرایش برنامه</span>
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-send ti-xs me-2"></i>انتشار خبر</span>
                     </button>
                     <a href="/news/list" class="btn btn-label-secondary d-grid w-100">بازگشت</a>
                 </div>
             </div>
 
-            <div class="card mb-4">
-              
+            <div class="card mb-4">             
                 <div class="card-body">
-                    <p class="mb-2">محتوای برنامه به چه زبانی است؟</p>
-                    <select class="form-select mb-4" asp-for="Activity.LanguageId">
+                    <p class="mb-2">محتوای خبر به چه زبانی است؟</p>
+                    <select class="form-select mb-4" asp-for="About.LanguageId">
                         @foreach (var language in Model.Languages)
                         {
                             <option value="@language.Id">@language.Title</option>
                         }
                     </select>
-                    <span asp-validation-for="Activity.LanguageId" class="text-danger"></span>
+                    <span asp-validation-for="About.LanguageId" class="text-danger"></span>
                 </div>
             </div>
 
             <!-- Basic -->
             <div class="card mb-4">
-                <h5 class="card-header">آدرس فیزیکی تصاویر برنامه</h5>
+                <h5 class="card-header">آدرس فیزیکی تصاویر آیتم</h5>
                 <div class="card-body">
                     <div id="jstree-basic">
                         <ul>

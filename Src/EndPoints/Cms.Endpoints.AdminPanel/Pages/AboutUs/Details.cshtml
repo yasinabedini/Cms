@@ -1,0 +1,113 @@
+﻿@page "{id}"
+@using Cms.Endpoints.AdminPanel.Pages.Common
+@model Cms.Endpoints.AdminPanel.Pages.AboutUs.DetailsModel
+@{
+}
+@inject IConfiguration _config;
+@{
+    ViewData["Title"] = "Academy - My Courses - App";
+    string imageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.AboutUs.MainImageName}&&folder=news";
+}
+
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/plyr/plyr.dist.css" />
+}
+
+@section VendorScripts {
+    <script src="~/vendor/libs/plyr/plyr.dist.js"></script>
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/vendor/css/pages/app-academy-details.dist.css" />
+}
+
+@section PageScripts {
+    <script src="~/js/app-academy-course-details.dist.js"></script>
+}
+
+@* ************** Content ************** *@
+
+<h4 class="pt-3 mb-0">
+    <span class="text-muted fw-light">درباره موزه /</span> جزئیات آیتم
+</h4>
+
+<div class="card g-3 mt-5">
+    <div class="card-body row g-3">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-2 gap-1">
+                <div class="me-1">
+                    <h5 class="mb-1">@Model.AboutUs.Title</h5>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-label-danger">@Model.AboutUs.NewsType.Title</span>
+                </div>
+            </div>
+            <div class="card academy-content shadow-none border">
+                <div class="p-2">
+                    <div class="cursor-pointer">
+                        <img src="@imageAddress" class="w-100" />
+                    </div>
+                </div>
+                <div class="card-body">
+                    @Html.Raw(Model.AboutUs.Text)
+
+                    <hr class="my-4">
+                    <h5>تاریخ انتشار</h5>
+                    <div class="d-flex justify-content-start align-items-center user-name">
+                        <div class="d-flex flex-column">
+                            <span class="fw-medium">@DateTime.Parse(Model.AboutUs.PublishDate).ToShamsi()</span>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <a href="#" class="btn btn-danger d-grid w-100 mb-2">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-trash ti-xs me-2"></i>حذف آیتم</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <button type="submit" class="btn btn-primary d-grid w-100 mb-2">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-book ti-xs me-2"></i>گالری و پیوست ها</span>
+                    </button>
+                    <a href="/AboutUs/list" class="btn btn-label-secondary d-grid w-100">بازگشت</a>
+                </div>
+            </div>
+
+
+            <div class="accordion stick-top accordion-bordered" id="courseContent">
+                <div class="accordion-item active mb-0">
+                    <div class="accordion-header" id="headingOne">
+                        <button type="button" class="accordion-button bg-lighter rounded-0" data-bs-toggle="collapse" data-bs-target="#chapterOne" aria-expanded="true" aria-controls="chapterOne">
+                            <span class="d-flex flex-column">
+                                <span class="h5 mb-1">ایجاد کننده</span>
+                                <span class="fw-normal text-body">@Model.Author.Name</span>
+                            </span>
+                        </button>
+                    </div>
+                    <div id="chapterOne" class="accordion-collapse collapse show" data-bs-parent="#courseContent">
+                        <div class="accordion-body py-3 border-top">
+                            <p class="text-nowrap"><i class='ti ti-user ti-sm me-2 mt-n2'></i>نام کاربری: @Model.Author.UserName</p>
+                            <p class="text-nowrap"><i class='ti ti-user ti-sm me-2 mt-n2'></i>نام : @Model.Author.Name</p>
+                            <p class="text-nowrap"><i class='ti ti-user ti-sm me-2 mt-n2'></i>شماره موبایل: @Model.Author.PhoneNumber</p>
+                            <p class="text-nowrap"><i class='ti ti-user ti-sm me-2 mt-n2'></i>ایمیل: @Model.Author.Email</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <a href="/AboutUs/edit/@Model.AboutUs.Id" class="btn btn-primary d-grid w-100 mb-2">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-lock ti-xs me-2"></i>ویرایش</span>
+                    </a>
+                    <a href="#" class="btn btn-secondary d-grid w-100 mb-2">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-lock ti-xs me-2"></i>غیر فعال کردن</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

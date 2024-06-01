@@ -1,0 +1,145 @@
+﻿@page
+@using Cms.Endpoints.AdminPanel.Pages.Common
+@inject IConfiguration _config;
+@model Cms.Endpoints.AdminPanel.Pages.AboutUs.ListModel
+@{
+}
+@{
+    ViewData["Title"] = "Collapse - UI elements";
+}
+@* ************** Content ************** *@
+
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">درباره موزه /</span> لیست آیتم ها</h4>
+
+<!-- Collapse -->
+<h5>درباره موزه</h5>
+<div class="row">
+    <div class="col-12">
+
+
+        <p class="demo-inline-spacing">
+            <button class="btn btn-primary me-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                نمایش آیتم ها
+            </button>
+        </p>
+        @for (int i = 1; i <= _config.GetSection("AboutUs").GetChildren().ToList().Count; i++)
+        {
+            long newsTypeId = @Convert.ToInt32(_config.GetSection("AboutUs")[$"item{i}"]);
+
+            <div class="col-12">
+                <div class="card mb-4">
+                    <h5 class="card-header">@Model.NewsTypes.FirstOrDefault(t => t.Id == newsTypeId).Title</h5>
+                    <div class="card-body">
+                        <div class="collapse" id="collapseExample">
+                            <a href="/AboutUs/Create?typeId=@newsTypeId" class="btn btn-success m-3" >
+                                ایجاد آیتم جدید
+                            </a>
+                            <div class="card-datatable table-responsive">
+                                <table class=" table border-top">
+                                    <thead>
+                                        <tr>
+                                            <th>خبر</th>
+                                            <th>عنوان</th>
+                                            <th>نویسنده</th>
+                                            <th>وضعیت</th>
+                                            <th>نوع آیتم</th>
+                                            <th>تاریخ انتشار</th>
+                                            <th>actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tbody>
+                                            @foreach (var news in Model.AboutList.Where(t => t.NewsTypeId == newsTypeId))
+                                            {
+                                            <tr class="odd">
+                                                <td class="  control" tabindex="0" style="display: none;"></td>
+
+                                                <td>
+                                                    <a href="/aboutUs/details/@news.Id">
+                                                        <span>#@news.Id</span>
+                                                    </a>
+                                                </td>
+
+                                                    @if (news.Title.Length < 25)
+                                                    {
+                                                    <td>@news.Title</td>
+                                                    }
+                                                    else
+                                                    {
+                                                    <td>@news.Title.Substring(0, 23)....</td>
+                                                    }
+
+                                                <td>
+                                                    <div class="d-flex justify-content-start align-items-center order-name text-nowrap">
+                                                        <div class="avatar-wrapper">
+                                                            <div class="avatar me-3">
+                                                                <span class="avatar-initial rounded-circle bg-label-danger">@news.Author.Substring(0, 2)</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                            <h6 class="m-0">
+                                                                <a href="/Pages/Profile/User" class="text-body">@news.Author</a>
+                                                            </h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                        @if (news.IsEnable)
+                                                        {
+                                                        <h6 class="mb-0 align-items-center d-flex w-px-100 text-success">
+                                                            <i class="ti ti-circle-filled fs-tiny me-2">
+
+                                                            </i>
+                                                            فعال
+                                                        </h6>
+                                                        }
+                                                        else
+                                                        {
+                                                        <h6 class="mb-0 align-items-center d-flex w-px-100 text-warning">
+                                                            <i class="ti ti-circle-filled fs-tiny me-2">
+
+                                                            </i>
+                                                            غیرفعال
+                                                        </h6>
+                                                        }
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge px-2 bg-label-primary" text-capitalized="">@news.NewsType.Title</span>
+                                                </td>
+
+                                                <td class="sorting_1"><span class="text-nowrap">@DateTime.Parse(news.PublishDate).ToShamsi()</span></td>
+
+                                                <td>
+                                                    <div class="d-flex justify-content-sm-center align-items-sm-center">
+                                                        <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                            <i class="ti ti-dots-vertical">
+
+                                                            </i>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-end m-0">
+                                                            <a href="/news/details/@news.Id" class="dropdown-item">مشاهده</a>
+                                                                @if (news.IsEnable)
+                                                                {
+                                                                <a href="javascript:0;" class="dropdown-item delete-record">غیرفعال کردن</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                <a href="javascript:0;" class="dropdown-item delete-record">فعال کردن</a>
+                                                                }
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

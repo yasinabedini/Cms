@@ -9,8 +9,10 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // Add services to the container.
 builder.Services.AddRazorPages(t =>
 {
-    t.Conventions.AddPageRoute("/Dashboard/Analytics", "");
+    t.Conventions.AddPageRoute("/Dashboard/Analytics", "");    
 });
+
+builder.Services.AddMvc();
 
 #region APIs
 builder.Services.AddHttpClient("AdminApi", option =>
@@ -25,11 +27,13 @@ builder.Services.AddHttpClient("FileManager", option =>
 #endregion
 
 #region Authentication
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;    
 }).AddCookie(options =>
 {
     options.LoginPath = new PathString("/Account/Login");
@@ -43,6 +47,10 @@ builder.Services.AddAuthentication(options =>
         SameSite = SameSiteMode.None
     };
 });
+
+
+
+builder.Services.AddAuthorization();
 #endregion
 
 #region Identity
@@ -55,8 +63,6 @@ builder.Services.AddIdentity<CustomIdentityUser, CustomIdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 #endregion
-
-builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -73,8 +79,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.MapRazorPages().RequireAuthorization();
+app.MapDefaultControllerRoute();
 
 app.Run();
