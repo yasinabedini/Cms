@@ -3,7 +3,7 @@
 @model Cms.Endpoints.AdminPanel.Pages.News.ListModel
 
 @{
-    ViewData["Title"] = "Order List - eCommerce";
+    ViewData["Title"] = "اخبار - لیست اخبار";
 }
 
 @section VendorStyles {
@@ -35,7 +35,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
                         <div>
-                            <h4 class="mb-2">56</h4>
+                            <h4 class="mb-2">@ViewData["newsCount"]</h4>
                             <p class="mb-0 fw-medium">اخبار</p>
                         </div>
                         <span class="avatar me-sm-4">
@@ -49,7 +49,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
                         <div>
-                            <h4 class="mb-2">12,689</h4>
+                            <h4 class="mb-2">@ViewData["notificationCount"]</h4>
                             <p class="mb-0 fw-medium">اطلاعیه ها</p>
                         </div>
                         <span class="avatar p-2 me-lg-4">
@@ -61,7 +61,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
                         <div>
-                            <h4 class="mb-2">124</h4>
+                            <h4 class="mb-2">@ViewData["eventCount"]</h4>
                             <p class="mb-0 fw-medium">رویداد ها</p>
                         </div>
                         <span class="avatar p-2 me-sm-4">
@@ -72,7 +72,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h4 class="mb-2">32</h4>
+                            <h4 class="mb-2">@ViewData["disableNews"]</h4>
                             <p class="mb-0 fw-medium">اخبار غیرفعال</p>
                         </div>
                         <span class="avatar p-2">
@@ -87,8 +87,54 @@
 
 <!-- Order List Table -->
 <div class="card">
+    <div class="card-header border-bottom">
+        <form method="get">
+            <h5 class="card-title mb-3">Search Filter</h5>
+            <div class="d-flex justify-content-around align-items-center row pb-2 gap-3 gap-md-0">
+                <div class="col-md-4 user_role">
+                    <input type="text" class="text-capitalize form-control" name="searchText" value="@HttpContext.Request.Query["searchText"].ToString()" placeholder="Search..." />
+                </div>
+                <div class="col-md-2 user_role">
+                    <label class="float-end">مرتب سازی بر اساس : </label>
+                </div>
+                <div class="col-md-2 user_role">
+                    <select id="UserRole" name="orderBy" class="form-select text-capitalize">
+                        <option selected value="0">همه</option>                        
+
+                        <option value="1">آیدی</option>
+                        <option value="2">نام نویسنده</option>
+                        <option value="3">عنوان</option>
+                        <option value="4">نوع خبر</option>
+                     
+                    </select>
+                </div>
+                <div class="col-md-1 user_role">
+                    <label class="float-end">نوع خبر : </label>
+                </div>
+                <div class="col-md-2 user_role">
+                    <select id="UserRole" name="typeId" class="form-select text-capitalize">
+                        <option selected value="0">همه</option>
+                        @foreach (var type in Model.NewsTypes)
+                        {
+                            if (HttpContext.Request.Query["typeId"].ToString() == type.Id.ToString())
+                            {
+                                <option selected value="@type.Id">@type.Title</option>
+                            }
+                            else
+                            {
+                                <option value="@type.Id">@type.Title</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-success align-content-center">جستجو</button>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="card-datatable table-responsive">
-        <table class=" table border-top">
+        <table class=" table ">
             <thead>
                 <tr>
                     <th>خبر</th>
@@ -104,7 +150,7 @@
             <tbody>
                     @foreach (var news in Model.NewsList.QueryResult)
                     {
-                    <tr class="odd">
+                    <tr>
                         <td class="  control" tabindex="0" style="display: none;"></td>
 
                         <td>
@@ -175,18 +221,52 @@
                                     <a href="/news/details/@news.Id" class="dropdown-item">مشاهده</a>
                                         @if (news.IsEnable)
                                         {
-                                        <a href="javascript:0;" class="dropdown-item delete-record">غیرفعال کردن</a>
+                                        <a href="/News/ChangeAvailibility/@news.Id?redirectTo=/news/list" class="dropdown-item delete-record">غیرفعال کردن</a>
                                         }
                                         else
                                         {
-                                        <a href="javascript:0;" class="dropdown-item delete-record">فعال کردن</a>
+                                        <a href="/News/ChangeAvailibility/@news.Id?redirectTo=/news/list" class="dropdown-item delete-record">فعال کردن</a>
                                         }
                                 </div>
                             </div>
-                        </td>
-                    </tr>
+                        </td>                        
+                    </tr>                                        
                     }
             </tbody>
         </table>
+        <hr class="p-2" />
+        <nav aria-label="Page navigation" class="d-flex align-items-center justify-content-center">
+            @{
+                int currentPageNumber = 1;
+                bool success = int.TryParse(HttpContext.Request.Query["pageNumber"].ToString(), out currentPageNumber);
+                if (!success) currentPageNumber = 1;
+                string searchText = HttpContext.Request.Query["searchText"].ToString();
+                int typeId = 0;
+                success = int.TryParse(HttpContext.Request.Query["typeId"].ToString(), out typeId);
+                if (!success) typeId = 0;
+            }
+            <ul class="pagination">
+                <li class="page-item prev">
+                    <a class="page-link" asp-page="list" asp-route-searchText="@searchText" asp-route-typeId="@typeId" asp-route-pageNumber="@((currentPageNumber>1)?$"{currentPageNumber-1}":$"{currentPageNumber}")"><i class="ti ti-chevron-left ti-xs scaleX-n1-rtl"></i></a>
+                </li>
+                @for (int i = 1; i <= Model.NewsList.calculatePageCount(); i++)
+                {
+                    @if (HttpContext.Request.Query["pageNumber"].ToString() == "" && i == 1)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" asp-page="list" asp-route-pageNumber="@i">1</a>
+                        </li>
+
+                        continue;
+                    }
+                    <li class="page-item @((HttpContext.Request.Query["pageNumber"].ToString()==i.ToString())?"active":"")">
+                        <a class="page-link" asp-page="list" asp-route-pageNumber="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item next">
+                    <a class="page-link" asp-page="list" asp-route-searchText="@searchText" asp-route-typeId="@typeId" asp-route-pageNumber="@((Model.NewsList.calculatePageCount()>currentPageNumber)?$"{currentPageNumber+1}":$"{currentPageNumber}")"><i class="ti ti-chevron-right ti-xs scaleX-n1-rtl"></i></a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>

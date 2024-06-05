@@ -4,17 +4,20 @@
 @model ListModel
 
 @{
-    ViewData["Title"] = "My Courses - Academy";
+    ViewData["Title"] = "اسلایدر - جزئیات";
 }
 
 @section VendorStyles {
     <link rel="stylesheet" href="~/vendor/libs/select2/select2.dist.css" />
     <link rel="stylesheet" href="~/vendor/libs/plyr/plyr.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/animate-css/animate.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/sweetalert2/sweetalert2.dist.css" />
 }
 
 @section VendorScripts {
     <script src="~/vendor/libs/select2/select2.dist.js"></script>
-    <script src="~/vendor/libs/plyr/plyr.dist.js"></script>
+    <script src="~/vendor/libs/plyr/plyr.dist.js"></script>    
+    <script src="~/vendor/libs/sweetalert2/sweetalert2.dist.js"></script>
 }
 
 @section PageStyles {
@@ -23,6 +26,8 @@
 
 @section PageScripts {
     <script src="~/js/app-academy-course.dist.js"></script>
+    <script src="~/js/extended-ui-sweetalert2.dist.js"></script>
+    <script src="~/js/delete-model.js"></script>
 }
 
 @* ************** Content ************** *@
@@ -59,7 +64,10 @@
                                 <p class="mt-2">@Html.Raw(sweeper.Text)</p>
                                 <p class="d-flex align-items-center"><i class="ti ti-clock me-2 mt-n1"></i>1403/05/04</p>
                                 <div class="d-flex flex-column flex-md-row gap-2 text-nowrap">
-                                    <a class="app-academy-md-50 btn btn-label-danger me-md-2 d-flex align-items-center" href="CourseDetails">
+                                    @{
+                                        string domain = @_config.GetSection("DomainAddress").Value.ToString();
+                                    }
+                                    <a href="#" onclick="deleteItem('@domain/sweeper/delete/@sweeper.Id','@domain/sweeper/list')" class="app-academy-md-50 btn btn-label-danger me-md-2 d-flex align-items-center">
                                         <i class="ti ti-trash align-middle scaleX-n1-rtl  me-2 mt-n1 ti-sm"></i><span>حذف</span>
                                     </a>
                                     <a class="app-academy-md-50 btn btn-label-primary d-flex align-items-center" href="/sweeper/edit/@sweeper.Id">
@@ -70,32 +78,7 @@
                         </div>
                     </div>
                 }
-            </div>
-            <nav aria-label="Page navigation" class="d-flex align-items-center justify-content-center">
-                <ul class="pagination">
-                    <li class="page-item prev">
-                        <a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-left ti-xs scaleX-n1-rtl"></i></a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="javascript:void(0);">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="javascript:void(0);">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="javascript:void(0);">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="javascript:void(0);">4</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="javascript:void(0);">5</a>
-                    </li>
-                    <li class="page-item next">
-                        <a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-right ti-xs scaleX-n1-rtl"></i></a>
-                    </li>
-                </ul>
-            </nav>
+            </div>            
         </div>
     </div>
 

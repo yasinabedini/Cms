@@ -3,17 +3,20 @@
 @model Cms.Endpoints.AdminPanel.Pages.Activity.DetailsModel
 @inject IConfiguration _config;
 @{
-    ViewData["Title"] = "Academy - My Courses - App";
+    ViewData["Title"] = "برنامه ها - جزئیات";
     string imageAddress = _config.GetSection("ApiUrl").Value + $"/api/fileManager/getimage?imageName={Model.Activity.MainImageName}&&folder=news";
 }
 
 
 @section VendorStyles {
     <link rel="stylesheet" href="~/vendor/libs/plyr/plyr.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/animate-css/animate.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/sweetalert2/sweetalert2.dist.css" />
 }
 
 @section VendorScripts {
     <script src="~/vendor/libs/plyr/plyr.dist.js"></script>
+    <script src="~/vendor/libs/sweetalert2/sweetalert2.dist.js"></script>
 }
 
 @section PageStyles {
@@ -22,6 +25,8 @@
 
 @section PageScripts {
     <script src="~/js/app-academy-course-details.dist.js"></script>
+    <script src="~/js/extended-ui-sweetalert2.dist.js"></script>
+    <script src="~/js/delete-model.js"></script>
 }
 
 @* ************** Content ************** *@
@@ -58,18 +63,23 @@
                         </div>
                     </div>
                     <hr class="my-4">
-                    <a href="#" class="btn btn-danger d-grid w-100 mb-2">
-                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-trash ti-xs me-2"></i>حذف برنامه</span>
-                    </a>
+                    @{
+                        string domainName = _config.GetSection("DomainAddress").Value.ToString();
+                        long activityId = Model.Activity.Id;
+                    }
+                    <button type="button" class="btn btn-danger" onclick="deleteNews('@domainName/news/delete/@activityId','@domainName/Activity/list')">
+                        حذف فعالیت
+                    </button>
                 </div>
             </div>
         </div>
         <div class="col-lg-4">
             <div class="card mb-4">
                 <div class="card-body">
-                    <button type="submit" class="btn btn-primary d-grid w-100 mb-2">
-                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-book ti-xs me-2"></i>گالری و پیوست ها</span>
-                    </button>
+
+                    <a class="btn btn-primary d-grid w-100 mb-2" href="/news/gallery/@Model.Activity.Id??pageName=activity">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-photo-scan ti-xs me-2"></i>گالری و پیوست ها</span>
+                    </a>
                     <a href="/activity/list" class="btn btn-label-secondary d-grid w-100">بازگشت</a>
                 </div>
             </div>
@@ -101,9 +111,18 @@
                     <a href="/activity/edit/@Model.Activity.Id" class="btn btn-primary d-grid w-100 mb-2">
                         <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-lock ti-xs me-2"></i>ویرایش</span>
                     </a>
-                    <a href="#" class="btn btn-secondary d-grid w-100 mb-2">
-                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-lock ti-xs me-2"></i>غیر فعال کردن</span>
-                    </a>
+                   @if (Model.Activity.IsEnable)
+                    {
+                        <a href="/News/ChangeAvailibility/@Model.Activity.Id?redirectTo=/activity/details/@Model.Activity.Id" class="btn btn-secondary d-grid w-100 mb-2">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-lock ti-xs me-2"></i>غیر فعال کردن</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="/News/ChangeAvailibility/@Model.Activity.Id?redirectTo=/activity/details/@Model.Activity.Id" class="btn btn-secondary d-grid w-100 mb-2">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-lock ti-xs me-2"></i>فعال کردن</span>
+                        </a>
+                    }
                 </div>
             </div>
         </div>

@@ -1,0 +1,92 @@
+﻿@page 
+
+@model Cms.Endpoints.AdminPanel.Pages.Profile.EditModel
+
+@{
+    ViewData["Title"] = "ویرایش مشخصات کاربری";
+}
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/quill/typography.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/quill/katex.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/quill/editor.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/select2/select2.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/dropzone/dropzone.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/flatpickr/flatpickr.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/tagify/tagify.dist.css" />
+}
+<!-- assets/vendor/libs/dropzone/dropzone.dist.css -->
+@section VendorScripts {
+    <script src="~/vendor/libs/quill/katex.dist.js"></script>
+    <script src="~/vendor/libs/quill/quill.dist.js"></script>
+    <script src="~/vendor/libs/select2/select2.dist.js"></script>
+    <script src="~/vendor/libs/dropzone/dropzone.dist.js"></script>
+    <script src="~/vendor/libs/jquery-repeater/jquery-repeater.dist.js"></script>
+    <script src="~/vendor/libs/flatpickr/flatpickr.dist.js"></script>
+    <script src="~/vendor/libs/tagify/tagify.dist.js"></script>
+
+}
+
+@* ************** Content ************** *@
+<h4 class="py-3 mb-0">
+    <span class="text-muted fw-light">پنل کاربری / </span><span class="fw-medium">ویرایش ویرایش مشخصات کاربری</span>
+</h4>
+
+<form method="post" enctype="multipart/form-data" asp-page="Edit">
+    <div class="app-ecommerce">
+        <input type="hidden" asp-for="User.Id" />
+        <input type="hidden" asp-for="ReturnUrl" />
+        <!-- Add User -->
+        <div class="d-flex flex-column flex-md-row justify-content-start align-items-start align-items-md-center mb-3">
+            <div class="d-flex align-content-center flex-wrap gap-3">
+                <button type="submit" class="btn btn-primary">ویرایش مشخصات</button>
+                <div class="d-flex gap-3">
+                    <a href="/profile/myprofile" class="btn btn-label-secondary">بازگشت</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!-- First column-->
+            <div class="col-12 col-lg-12">
+                <!-- User Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">پروفایل من</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label" for="ecommerce-user-name">نام کاربر</label>
+                                <input type="text" class="form-control" id="ecommerce-user-name" placeholder="نام کاربر" asp-for="User.Name" aria-label="user name">
+                                <span asp-validation-for="User.Name" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="ecommerce-user-userName">نام کاربری</label>
+                                <input disabled type="text" class="form-control" id="ecommerce-user-userName" placeholder="نام کاربری" asp-for="User.UserName" aria-label="user name">
+                                <input asp-for="User.UserName" type="hidden"/>
+                                <span asp-validation-for="User.UserName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label" for="ecommerce-user-phone">شماره موبایل</label>
+                                <input type="text" class="form-control" id="ecommerce-user-phone" placeholder="شماره موبایل" asp-for="User.PhoneNumber" aria-label="User Phone">
+                                <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="ecommerce-user-email">ایمیل</label>
+                                <input type="text" class="form-control" id="ecommerce-user-email" placeholder="ایمیل" asp-for="User.Email" aria-label="Product barcode">
+                                <span asp-validation-for="User.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Product Information -->
+            </div>
+            <!-- /Second column -->         
+        </div>
+    </div>
+</form>

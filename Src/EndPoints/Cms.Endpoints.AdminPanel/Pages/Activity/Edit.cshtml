@@ -7,7 +7,7 @@
 }
 
 @{
-    ViewData["Title"] = "Add - Invoice";
+    ViewData["Title"] = "برنامه ها - ویرایش";
 }
 
 @section VendorStyles {
@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="~/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.dist.css" />
     <link rel="stylesheet" href="~/vendor/libs/jquery-timepicker/jquery-timepicker.dist.css" />
     <link rel="stylesheet" href="~/vendor/libs/pickr/pickr-themes.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/summernote/summernote-lite.css" />
 }
 <!-- assets/vendor/libs/dropzone/dropzone.dist.css -->
 @section VendorScripts {
@@ -40,7 +41,8 @@
     <script src="~/vendor/libs/pickr/pickr.dist.js"></script>
     <script src="~/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.dist.js"></script>
     <script src="~/vendor/libs/flatpickr/flatpickr.dist.js"></script>
-
+    <script src="~/vendor/libs/summernote/summernote-lite.js"></script>
+    <script src="~/vendor/js/textEditor.js"></script>
 }
 
 @section PageScripts {
@@ -127,7 +129,7 @@
                                                 <label class="form-label" for="ecommerce-sweeper-link">متن</label>
                                                 <div class="col-md-12">
                                                     <div class="mb-3 mt-3">
-                                                        <textarea id="editor1" asp-for="Activity.Text" style="width: 100%">لطفا متن مورد نظر خودتان را وارد کنید</textarea>
+                                                        <textarea id="summernote" asp-for="Activity.Text"></textarea>
                                                         <span asp-validation-for="Activity.Text" class="text-danger"></span>
                                                     </div>
                                                 </div>

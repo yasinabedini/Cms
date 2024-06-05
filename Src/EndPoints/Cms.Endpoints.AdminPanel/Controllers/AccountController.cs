@@ -70,7 +70,7 @@ namespace Cms.Endpoints.AdminPanel.Controllers
 
                 var claims = new List<Claim>()
                     {
-                        new Claim(ClaimTypes.Name,user.NormalizedUserName),
+                        new Claim(ClaimTypes.Name,user.UserName),
                     };
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);

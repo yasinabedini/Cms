@@ -1,0 +1,129 @@
+﻿@page "{id}"
+@model Cms.Endpoints.AdminPanel.Pages.Role.EditModel
+@{
+    ViewData["Title"] = "نقش کاربری - ویرایش";
+}
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/quill/typography.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/quill/katex.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/quill/editor.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/select2/select2.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/dropzone/dropzone.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/flatpickr/flatpickr.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/tagify/tagify.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/jstree/jstree.dist.css" />
+
+    <link rel="stylesheet" href="~/vendor/libs/flatpickr/flatpickr.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/jquery-timepicker/jquery-timepicker.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/pickr/pickr-themes.dist.css" />
+}
+<!-- assets/vendor/libs/dropzone/dropzone.dist.css -->
+@section VendorScripts {
+    <script src="~/vendor/libs/quill/katex.dist.js"></script>
+    <script src="~/vendor/libs/quill/quill.dist.js"></script>
+    <script src="~/vendor/libs/select2/select2.dist.js"></script>
+    <script src="~/vendor/libs/dropzone/dropzone.dist.js"></script>
+    <script src="~/vendor/libs/jquery-repeater/jquery-repeater.dist.js"></script>
+    <script src="~/vendor/libs/flatpickr/flatpickr.dist.js"></script>
+    <script src="~/vendor/libs/tagify/tagify.dist.js"></script>
+    <script src="~/vendor/libs/ckeditor/ckeditor.js"></script>
+    <script src="~/vendor/libs/jstree/jstree.dist.js"></script>
+    <script src="~/vendor/libs/pickr/pickr.dist.js"></script>
+    <script src="~/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.dist.js"></script>
+    <script src="~/vendor/libs/flatpickr/flatpickr.dist.js"></script>
+
+}
+
+@section PageScripts {
+    <script src="~/js/app-ecommerce-product-add.dist.js"></script>
+    <script src="~/js/ckEditor.js"></script>
+    <script src="~/js/MyUploader.js"></script>
+    <script src="~/js/extended-ui-treeview.dist.js"></script>
+    <script src="~/js/forms-pickers.dist.js"></script>
+}
+
+@* ************** Content ************** *@
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Role.Id" />
+    <input type="hidden" asp-for="Role.NormalizedName" />
+    <input type="hidden" asp-for="Role.ConcurrencyStamp" />
+
+    <!-- News Add-->
+    <div class="col-lg-9 col-12 mb-lg-0 mb-4">
+        <div class="card invoice-preview-card">
+            <div class="card-body">
+                <div class="row m-sm-4 m-0">
+                    <div class="col-md-7 mb-md-0 mb-4">
+                        <div class="d-flex svg-illustration mb-3 gap-2 align-items-center">
+
+                            <span class="app-brand-text fw-bold">
+                                ویرایش نقش کاربری
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <dl class="row mb-2">
+                            <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
+                                <span class="h4 text-capitalize mb-0 text-nowrap">نقش کاربری</span>
+                            </dt>
+                            <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
+                                <div class="input-group input-group-merge disabled w-px-150">
+                                    <span class="input-group-text">#</span>
+                                    <input type="text" class="form-control p-2" disabled placeholder="@Model.Role.Id" value="3905" id="invoiceId" />
+                                </div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <hr class="my-3 mx-n4" />
+
+                <div class="row p-sm-4 p-0">
+                    <div class="app-ecommerce">
+                        <div class="row">
+
+                            <!-- First column-->
+                            <div class="col-12 col-lg-12">
+                                <!-- Product Information -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="card-tile mb-0">جزئیات نقش </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="ecommerce-news-title">عنوان</label>
+                                            <input type="text" class="form-control" id="ecommerce-news-title" placeholder="عنوان تایپ خبری" asp-for="Title" aria-label="News title">
+                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Product Information -->
+                            </div>
+                            <!-- /Second column -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Invoice Add-->
+    <!-- Invoice Actions -->
+    <div class="col-lg-3 col-12 invoice-actions">
+        <div class="card mb-4">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary d-grid w-100 mb-2">
+                    <span class="d-flex align-items-center justify-content-center text-nowrap">
+                        <i class="ti ti-send ti-xs me-2"></i>ویرایش نقش
+                    </span>
+                </button>
+
+                <a href="/newstype/list" class="btn btn-label-secondary d-grid w-100">بازگشت</a>
+            </div>
+        </div>
+    </div>
+    <!-- /Invoice Actions -->
+
+</form>

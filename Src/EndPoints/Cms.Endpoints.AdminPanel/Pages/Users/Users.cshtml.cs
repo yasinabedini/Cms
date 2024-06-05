@@ -2,28 +2,37 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Text;
 using Cms.Endpoints.AdminPanel.Data;
+using Cms.Endpoints.AdminPanel.Pages.Common;
+using Cms.Endpoints.AdminPanel.Pages.News;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace Cms.Endpoints.AdminPanel.Pages.Users;
 
 #region List
 public class UsersListModel : PageModel
 {
-    public List<UserViewModel> Users { get; set; } = new List<UserViewModel>();
+    public PagedData<UserViewModel> Users { get; set; } = new PagedData<UserViewModel>();
     private readonly UserManager<CustomIdentityUser> _userManager;
+    private readonly RoleManager<CustomIdentityRole> _roleManager;
+    public List<CustomIdentityRole> Roles { get; set; }
 
-    public UsersListModel(UserManager<CustomIdentityUser> userManager)
+    public UsersListModel(UserManager<CustomIdentityUser> userManager, RoleManager<CustomIdentityRole> roleManager)
     {
         _userManager = userManager;
+        _roleManager = roleManager;
     }
 
-    public async Task OnGet()
+    public async Task OnGet(string searchText = "", string role = "", int statusId = 0, int pageNumber = 1)
     {
         var userList = _userManager.Users.OrderByDescending(t => t.Id).ToList();
+        Roles = _roleManager.Roles.ToList();
+        Users.QueryResult = new List<UserViewModel>();
 
         foreach (var user in userList)
         {
@@ -31,7 +40,7 @@ public class UsersListModel : PageModel
             {
                 Id = user.Id,
                 Email = user.Email ?? "",
-                IsActive = !user.LockoutEnabled,
+                LockoutEnabled = !user.LockoutEnabled,
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
                 UserName = user.UserName,
@@ -39,9 +48,59 @@ public class UsersListModel : PageModel
 
             userModel.Roles = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().ToList();
 
-
-            Users.Add(userModel);
+            Users.QueryResult.Add(userModel);
         }
+
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            Users.QueryResult = Users.QueryResult.Where(t => t.Name.Contains(searchText) || t.UserName.Contains(searchText) || t.Email.Contains(searchText) || t.PhoneNumber.Contains(searchText)).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(role))
+        {
+            var usersInRole = await _userManager.GetUsersInRoleAsync(role);
+
+            Users.QueryResult = new List<UserViewModel>();
+
+            foreach (var user in usersInRole)
+            {
+                var userModel = new UserViewModel
+                {
+                    Id = user.Id,
+                    Email = user.Email ?? "",
+                    LockoutEnabled = !user.LockoutEnabled,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber,
+                    UserName = user.UserName,
+                };
+
+                userModel.Roles = _userManager.GetRolesAsync(user).GetAwaiter().GetResult().ToList();
+
+                Users.QueryResult.Add(userModel);
+            }
+        }
+
+        if (statusId != 0)
+        {
+            if (statusId == 1)
+            {
+                Users.QueryResult = Users.QueryResult.Where(t => !t.LockoutEnabled).ToList();
+            }
+            else
+            {
+                Users.QueryResult = Users.QueryResult.Where(t => t.LockoutEnabled).ToList();
+            }
+        }
+
+        ViewData["totalUser"] = Users.QueryResult.Count;
+        ViewData["activeUser"] = Users.QueryResult.Count(t=>!t.LockoutEnabled);
+        ViewData["notActiveUser"] = Users.QueryResult.Count(t=>t.LockoutEnabled);
+
+        int pageSize = 25;
+        Users.PageNumber = pageNumber;
+        Users.PageSize = pageSize;
+        Users.TotalCount = Users.QueryResult.Count;
+        Users.QueryResult = Users.QueryResult.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
     }
 }
 #endregion
@@ -159,7 +218,7 @@ public class EditModel : PageModel
         _roleManager = roleManager;
     }
 
-    public async Task OnGet(int id,string returnUrl)
+    public async Task OnGet(int id, string returnUrl)
     {
         ReturnUrl = returnUrl;
 
@@ -250,14 +309,18 @@ public class EditModel : PageModel
 public class DetailsModel : PageModel
 {
     private readonly UserManager<CustomIdentityUser> _userManager;
+    private readonly HttpClient _httpClient;
 
+
+    public List<NewsViewModel> News { get; set; }
     public UserViewModel User { get; set; }
 
     public int Id;
 
-    public DetailsModel(UserManager<CustomIdentityUser> userManager)
+    public DetailsModel(UserManager<CustomIdentityUser> userManager, IHttpClientFactory factory)
     {
         _userManager = userManager;
+        _httpClient = factory.CreateClient("AdminApi");
     }
 
     public async Task OnGet(int id)
@@ -273,11 +336,21 @@ public class DetailsModel : PageModel
             Id = user.Id,
             Name = user.Name,
             Email = user?.Email,
-            IsActive = !user.LockoutEnabled,
+            LockoutEnabled = !user.LockoutEnabled,
             PhoneNumber = user.PhoneNumber,
             UserName = user.UserName,
             Roles = roles
         };
+
+        var data = new { pageNumber = 1, pageSize = 200, typeId = 0, languageId = 0, isPage = false }; // Your data object
+        var jsonInString = JsonConvert.SerializeObject(data);
+        var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync("/api/News/GetAll", content);
+
+        var result = await response.Content.ReadAsStringAsync();
+
+        News = JsonConvert.DeserializeObject<PagedData<NewsViewModel>>(result).QueryResult;
+
     }
 }
 #endregion
@@ -320,7 +393,7 @@ public class SecurityModel : PageModel
             Id = user.Id,
             Name = user.Name,
             Email = user?.Email,
-            IsActive = !user.LockoutEnabled,
+            LockoutEnabled = !user.LockoutEnabled,
             PhoneNumber = user.PhoneNumber,
             UserName = user.UserName,
             Roles = roles
@@ -338,7 +411,7 @@ public class SecurityModel : PageModel
             Id = user.Id,
             Name = user.Name,
             Email = user?.Email,
-            IsActive = !user.LockoutEnabled,
+            LockoutEnabled = !user.LockoutEnabled,
             PhoneNumber = user.PhoneNumber,
             UserName = user.UserName,
             Roles = roles
@@ -381,7 +454,7 @@ public class ChangeAccessModel : PageModel
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> OnGet(int id,string returnUrl)
+    public async Task<IActionResult> OnGet(int id, string returnUrl)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
 
@@ -397,6 +470,29 @@ public class ChangeAccessModel : PageModel
         await _userManager.UpdateAsync(user);
 
         return LocalRedirect(returnUrl);
+    }
+}
+#endregion
+
+#region Delete
+public class DeleteModel : PageModel
+{
+    private readonly UserManager<CustomIdentityUser> _userManager;
+
+    [BindProperty]
+    public CustomIdentityUser User { get; set; }
+
+
+    public DeleteModel(UserManager<CustomIdentityUser> userManager)
+    {
+        _userManager = userManager;
+    }
+
+    public async Task OnGet(int id)
+    {
+        var findUser = _userManager.Users.FirstOrDefault(t => t.Id == id);
+
+        await _userManager.DeleteAsync(findUser);
     }
 }
 #endregion

@@ -1,7 +1,7 @@
 ﻿@page "{id}"
 @model Cms.Endpoints.AdminPanel.Pages.Users.DetailsModel
 @{
-    ViewData["Title"] = "User View - Account";
+    ViewData["Title"] = "کاربران - جزئیات";
 }
 
 @section VendorStyles {
@@ -47,11 +47,11 @@
             <div class="card-body">
                 <div class="user-avatar-section">
                     <div class=" d-flex align-items-center flex-column">
-                        <img class="img-fluid rounded mb-3 pt-1 mt-4" src="~/img/avatars/11.png" height="100" width="100" alt="User avatar" />
+                        <img class="img-fluid rounded mb-3 pt-1 mt-4" src="~/img/avatars/7222220.png" height="100" width="100" alt="User avatar" />
 
                         <div class="user-info text-center">
                             <h4 class="mb-2">@Model.User.Name</h4>
-                            @if (Model.User.IsActive)
+                            @if (!Model.User.LockoutEnabled)
                             {
                                 <span class="badge bg-label-success mt-1">فعال</span>
                             }
@@ -66,7 +66,7 @@
                     <div class="d-flex align-items-start me-4 mt-3 gap-2">
                         <span class="badge bg-label-primary p-2 rounded"><i class='ti ti-checkbox ti-sm'></i></span>
                         <div>
-                            <p class="mb-0 fw-medium">25 خبر</p>
+                            <p class="mb-0 fw-medium">@Model.News.Count خبر</p>
                             <small>خبر منتشر شده توسط کاربر</small>
                         </div>
                     </div>
@@ -101,11 +101,11 @@
                     </ul>
                     <div class="d-flex justify-content-center pt-4 ">
                         <a href="/users/edit/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-primary me-3">ویرایش</a>
-                        @if (Model.User.IsActive)
+                        @if (!Model.User.LockoutEnabled)
                         {
                             <a href="/users/changeAccess/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-label-danger">مسدود کردن</a>
                         }
-                        @if (!Model.User.IsActive)
+                        else
                         {
                             <a href="/users/changeAccess/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-label-danger">رفع مسدودی</a>
                         }
@@ -114,7 +114,7 @@
             </div>
         </div>
         <!-- /User Card -->
-        
+
     </div>
     <!--/ User Sidebar -->
     <!-- User Content -->
@@ -127,19 +127,71 @@
         <!--/ User Pills -->
         <!-- news table -->
         <div class="card mb-4">
-            <h5 class="card-header">اخبار های منتشر شده توسط کاربر</h5>
+            <h5 class="card-header">آخرین اخبار منتشر شده توسط کاربر</h5>
             <div class="table-responsive mb-3">
-                <table class="table datatable-project border-top">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Project</th>
-                            <th class="text-nowrap">Total Task</th>
-                            <th>Progress</th>
-                            <th>Hours</th>
-                        </tr>
-                    </thead>
-                </table>
+                <div id="" class=" dt-bootstrap5 no-footer">
+                    <table class="table border-top dataTable no-footer dtr-column"  style="width: 797px;">
+                        <thead>
+                            <tr>
+                                <th>خبر</th>
+                                <th>عنوان</th>
+                                <th>وضعیت</th>
+                                <th>نوع خبر</th>
+                                <th>تاریخ انتشار</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tbody>
+                                @foreach (var news in Model.News.Take(10))
+                                {
+                                <tr class="odd">
+
+                                    <td>
+                                        <a href="/news/details/@news.Id">
+                                            <span>#@news.Id</span>
+                                        </a>
+                                    </td>
+
+                                        @if (news.Title.Length < 25)
+                                        {
+                                        <td>@news.Title</td>
+                                        }
+                                        else
+                                        {
+                                        <td>@news.Title.Substring(0, 23)....</td>
+                                        }
+
+                                    <td>
+                                            @if (news.IsEnable)
+                                            {
+                                            <h6 class="mb-0 align-items-center d-flex w-px-100 text-success">
+                                                <i class="ti ti-circle-filled fs-tiny me-2">
+
+                                                </i>
+                                                فعال
+                                            </h6>
+                                            }
+                                            else
+                                            {
+                                            <h6 class="mb-0 align-items-center d-flex w-px-100 text-warning">
+                                                <i class="ti ti-circle-filled fs-tiny me-2">
+
+                                                </i>
+                                                غیرفعال
+                                            </h6>
+                                            }
+                                    </td>
+
+                                    <td>
+                                        <span class="badge px-2 bg-label-primary" text-capitalized="">@news.NewsType.Title</span>
+                                    </td>
+
+                                    <td class="sorting_1"><span class="text-nowrap">@news.PublishDate</span></td>
+                                </tr>
+                                }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- /Project table -->
@@ -155,7 +207,7 @@
                                 <h6 class="mb-0">انتشار خبر</h6>
                                 <small class="text-muted">6 ساعت پیش</small>
                             </div>
-                            <p class="mb-2">منتشر کردن خبری با عنوان باغ دره زرشک</p>                          
+                            <p class="mb-2">منتشر کردن خبری با عنوان باغ دره زرشک</p>
                         </div>
                     </li>
                     <li class="timeline-item timeline-item-transparent">
@@ -181,10 +233,10 @@
                                 <h6 class="mb-0">ویرایش درباره موزه</h6>
                                 <small class="text-muted">1 هفته پیش</small>
                             </div>
-                            <p class="mb-2">ویرایش بخش کوشک باغ زرشک (دوره پهلوی اول)</p>                      
+                            <p class="mb-2">ویرایش بخش کوشک باغ زرشک (دوره پهلوی اول)</p>
                         </div>
                     </li>
-                   
+
                 </ul>
             </div>
         </div>

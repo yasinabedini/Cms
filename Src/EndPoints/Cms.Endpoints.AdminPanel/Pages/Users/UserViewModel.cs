@@ -27,7 +27,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Users
         public string PhoneNumber { get; set; }
 
         [DisplayName("وضعیت")]
-        public bool IsActive { get; set; }
+        public bool LockoutEnabled { get; set; }
 
         [DisplayName("نقش کاربری")]
         public List<string>? Roles { get; set; }

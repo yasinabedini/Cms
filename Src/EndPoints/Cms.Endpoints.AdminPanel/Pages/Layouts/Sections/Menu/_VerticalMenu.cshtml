@@ -107,6 +107,11 @@
                         <div>انتشار خبر جدید</div>
                     </a>
                 </li>
+                <li class='menu-item@(currentPage == "/newsType/list" ? " active" : "")'>
+                    <a href="/newsType/list" class="menu-link">
+                        <div>مدیریت تایپ های خبری</div>
+                    </a>
+                </li>
             </ul>
         </li>
 
@@ -157,6 +162,19 @@
             </ul>
         </li>
 
+        <li class='menu-item@(currentPage.StartsWith("/language") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-language"></i>
+                <div>زبان ها</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/language/list" ? " active" : "")'>
+                    <a href="/language/list" class="menu-link">
+                        <div>لیست زبان ها</div>
+                    </a>
+                </li>           
+            </ul>
+        </li>
     </ul>
 
 </aside>

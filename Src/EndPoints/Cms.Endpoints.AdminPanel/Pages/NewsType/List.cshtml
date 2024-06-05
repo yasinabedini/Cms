@@ -1,0 +1,82 @@
+﻿@page
+@using Cms.Endpoints.AdminPanel.Pages.NewsType
+@inject IConfiguration _config;
+@model ListModel
+@{
+    ViewData["Title"] = "تایپ های خبری";
+}
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/datatables-bs5/datatables.bootstrap5.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/&#64;form-validation/umd/styles/index.min.css" />
+    <link rel="stylesheet" href="~/vendor/libs/animate-css/animate.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/sweetalert2/sweetalert2.dist.css" />
+}
+
+@section VendorScripts {
+    <script src="~/vendor/libs/datatables-bs5/datatables-bootstrap5.dist.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/bundle/popular.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-bootstrap5/index.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-auto-focus/index.min.js"></script>
+    <script src="~/vendor/libs/plyr/plyr.dist.js"></script>
+    <script src="~/vendor/libs/sweetalert2/sweetalert2.dist.js"></script>
+}
+
+@section PageScripts {
+    <script src="~/js/app-access-roles.dist.js"></script>
+    <script src="~/js/modal-add-role.dist.js"></script>
+    <script src="~/js/extended-ui-sweetalert2.dist.js"></script>
+    <script src="~/js/delete-model.js"></script>
+}
+
+@* ************** Content ************** *@
+<h4 class="mb-4">تایپ های خبری</h4>
+
+<!-- Role cards -->
+<div class="row g-4">
+
+    @foreach (var newsType in Model.NewsTypeList)
+    {
+        <div class="col-xl-4 col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="fw-normal mb-2">(@(newsType.IsEnable ? "فعال" : "غیرفعال"))</h6>
+                        <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
+                        </ul>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-end mt-1">
+                        <div class="role-heading">
+                            <h4 class="mb-1">@newsType.Title</h4>
+                            <a href="/newsType/edit/@newsType.Id" class="role-edit-modal"><span>ویرایش</span></a>
+                        </div>
+                        @{
+                            string domain = @_config.GetSection("DomainAddress").Value.ToString();
+                        }
+                        <a href="#" onclick="deleteItem('@domain/newstype/delete/@newsType.Id','@domain/newstype/list')"><i class="ti ti-trash ti-md"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="col-xl-4 col-lg-6 col-md-6">
+        <div class="card h-100">
+            <div class="row h-100">
+                <div class="col-sm-5">
+                    <div class="d-flex align-items-end h-100 justify-content-center mt-sm-0 mt-3">
+                        <img src="~/img/illustrations/add-new-roles.png" class="img-fluid mt-sm-4 mt-md-0" alt="add-new-roles" width="83">
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="card-body text-sm-end text-center ps-sm-0">
+                        <a href="/newstype/create" class="btn btn-primary mb-2 text-nowrap add-new-role">افزودن تایپ جدید</a>
+                        <p class="mb-0 mt-1">نوع خبری جدید بسازید!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ Role cards -->

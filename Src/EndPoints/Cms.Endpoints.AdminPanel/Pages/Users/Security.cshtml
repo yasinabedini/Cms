@@ -1,7 +1,7 @@
 ﻿@page "{id}"
 @model Cms.Endpoints.AdminPanel.Pages.Users.SecurityModel
 @{
-    ViewData["Title"] = "User View - Account";
+    ViewData["Title"] = "کاربران - امنیت";
 }
 
 @section VendorStyles {
@@ -47,10 +47,10 @@
             <div class="card-body">
                 <div class="user-avatar-section">
                     <div class=" d-flex align-items-center flex-column">
-                        <img class="img-fluid rounded mb-3 pt-1 mt-4" src="~/img/avatars/15.png" height="100" width="100" alt="User avatar" />
+                        <img class="img-fluid rounded mb-3 pt-1 mt-4" src="~/img/avatars/7222220.png" height="100" width="100" alt="User avatar" />
                         <div class="user-info text-center">
                             <h4 class="mb-2">@Model.User.Name</h4>
-                            @if (Model.User.IsActive)
+                            @if (!Model.User.LockoutEnabled)
                             {
                                 <span class="badge bg-label-success mt-1">فعال</span>
                             }
@@ -62,11 +62,8 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-start flex-wrap mt-3 pt-3 pb-4 border-bottom">
-                    <div class="d-flex align-items-start me-4 mt-3 gap-2">
-                        <span class="badge bg-label-primary p-2 rounded"><i class='ti ti-checkbox ti-sm'></i></span>
-                        <div>
-                            <p class="mb-0 fw-medium">25 خبر</p>
-                            <small>خبر منتشر شده توسط کاربر</small>
+                    <div class="d-flex align-items-start me-4 mt-3 gap-2">                        
+                        <div>                                                        
                         </div>
                     </div>
                 </div>
@@ -99,14 +96,14 @@
 
                     </ul>
                     <div class="d-flex justify-content-center pt-4 ">
-                        <a href="/users/edit/@Model.User.Id" class="btn btn-primary me-3" >ویرایش</a>
-                        @if (Model.User.IsActive)
+                        <a href="/users/edit/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-primary me-3">ویرایش</a>
+                        @if (!Model.User.LockoutEnabled)
                         {
-                            <a href="/users/changeAccess/@Model.User.Id?returnUrl=~/users/security/@Model.User.Id" class="btn btn-label-danger">مسدود کردن</a>
+                            <a href="/users/changeAccess/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-label-danger">مسدود کردن</a>
                         }
-                        @if (!Model.User.IsActive)
+                        else
                         {
-                            <a href="/users/changeAccess/@Model.User.Id?returnUrl=~/users/security/@Model.User.Id" class="btn btn-label-danger">رفع مسدودی</a>
+                            <a href="/users/changeAccess/@Model.User.Id?returnUrl=~/users/details/@Model.User.Id" class="btn btn-label-danger">رفع مسدودی</a>
                         }
                     </div>
                 </div>

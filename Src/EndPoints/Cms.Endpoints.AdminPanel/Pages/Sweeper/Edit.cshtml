@@ -2,7 +2,7 @@
 @inject IConfiguration _config;
 @model Cms.Endpoints.AdminPanel.Pages.Sweeper.EditModel
 @{
-    ViewData["Title"] = "Add - Invoice";
+    ViewData["Title"] = "اسلایدر - ویرایش";
 }
 
 @section VendorStyles {
@@ -58,7 +58,7 @@
                                 <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
                                     <div class="input-group input-group-merge disabled w-px-150">
                                         <span class="input-group-text">#</span>
-                                        <input type="text" class="form-control" disabled placeholder="@Model.Sweeper.Id" value="3905" id="invoiceId" />
+                                        <input type="text" class="form-control ps-3" disabled placeholder="@Model.Sweeper.Id" value="@Model.Sweeper.Id" id="invoiceId" />
                                     </div>
                                 </dd>
                             </dl>
@@ -150,6 +150,14 @@
                     <button onclick="text" class="btn btn-primary d-grid w-100 mb-2" type="submit">
                         <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-send ti-xs me-2"></i>ویرایش اسلایدر</span>
                     </button>
+                    @if (Model.Sweeper.IsEnable)
+                    {
+                        <a href="/sweeper/ChangeAvailability/@Model.Sweeper.Id" class="btn btn-label-secondary d-grid w-100 mb-2">غیرفعال کردن</a>
+                    }
+                    else
+                    {
+                        <a href="/sweeper/ChangeAvailability/@Model.Sweeper.Id" class="btn btn-label-secondary d-grid w-100 mb-2">فعال کردن</a>
+                    }
                     <a href="/sweeper/list" class="btn btn-label-secondary d-grid w-100">بازگشت</a>
                 </div>
             </div>
