@@ -18,17 +18,21 @@ public class PagedData<T>
             PageNumber = 1;
             PageSize = 20;
         }
-        int pageCount = TotalCount / PageSize;
-        if (pageCount <= 1)
+
+        double pageCount;
+
+        pageCount = TotalCount / PageSize;
+
+        if (pageCount < 0)
         {
             pageCount = 1;
         }
-        if (TotalCount % PageSize > 0)
+        else if (TotalCount % PageSize != 0)
         {
-            pageCount++;
+            pageCount = pageCount + 1;
         }
 
-        return pageCount;
+        return (int)pageCount;
     }
 
 }
