@@ -23,6 +23,16 @@ public static class FileTools
             imageConvertor.Image_resize(imagePath, thumbImagePath, 250);
         }
     }
+
+    public static void SaveGalleryImageThumb(string imageName)
+    {
+        string imagePath = imagePath = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\img\\attachment\\image", imageName);
+     
+        string thumbImagePath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\img\\thumb", imageName));
+        ImageConvertor imageConvertor = new ImageConvertor();
+        imageConvertor.Image_resize(imagePath, thumbImagePath, 250);
+    }
+
     public static bool DeleteFile(string folder, string imageName)
     {
         string path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot\\img\\{folder}", imageName);

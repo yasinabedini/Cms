@@ -62,6 +62,11 @@ namespace FileManager.Controllers
                 {
                     file.CopyTo(stream);
                 }
+
+                if (type is "image")
+                {
+                    FileTools.SaveGalleryImageThumb(imageName);
+                }
             }
 
             else
