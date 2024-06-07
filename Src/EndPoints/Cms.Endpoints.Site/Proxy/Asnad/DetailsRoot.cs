@@ -1,10 +1,8 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Cms.Endpoints.Site.Proxy.Asnad
+﻿namespace Cms.Endpoints.Site.Proxy.Asnad
 {
-    public class Root<T>
+    public class DetailsRoot
     {
-        public T data { get; set; }
+        public Details data { get; set; }
         public bool isSuccess { get; set; }
         public int statusCode { get; set; }
         public string messages { get; set; }

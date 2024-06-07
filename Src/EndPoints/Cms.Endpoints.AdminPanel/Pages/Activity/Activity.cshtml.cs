@@ -108,8 +108,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
             config = HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration)) as IConfiguration;
 
-            ViewData["ActivityId"] = config.GetSection("NewsId")["NewsActivityId"];
-
+            
             #region languages
             var languageData = new { pageNumber = 1, pageSize = 200 };
             var languageJsonInString = JsonConvert.SerializeObject(languageData);
@@ -215,7 +214,13 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
             item.Dispose();
             #endregion
 
-            var modelData = new { Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = Activity.NewsTypeId, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage, Author = HttpContext.User.GetDisplayName() }; // Your data object
+            IConfiguration config;
+
+            config = HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration)) as IConfiguration;
+
+            int typeId = int.Parse(config.GetSection("NewsId")["NewsActivityId"]);
+
+            var modelData = new { Title = Activity.Title, Introduction = Activity.Introduction, LanguageId = Activity.LanguageId, NewsTypeId = typeId, PublishDate = Activity.PublishDate, Text = Activity.Text, MainImage = Activity.MainImageName, SecondImage = Activity.SecondImage, ThirdImage = Activity.ThirdImage, Author = HttpContext.User.GetDisplayName() }; // Your data object
 
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
             var modelContent = new StringContent(modelJsonInString, Encoding.UTF8, "application/json");

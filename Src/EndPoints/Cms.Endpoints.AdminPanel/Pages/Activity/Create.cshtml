@@ -53,7 +53,7 @@
 
 @* ************** Content ************** *@
 <form method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Activity.NewsTypeId" value="@ViewData["ActivityId"]" />
+    <input type="hidden" asp-for="Activity.NewsTypeId" value="0" />
     <div class="row invoice-add">
 
         <!-- News Add-->
@@ -244,7 +244,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <button type="submit" class="btn btn-primary d-grid w-100 mb-2">
-                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-send ti-xs me-2"></i>انتشار خبر</span>
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="ti ti-send ti-xs me-2"></i>ایجاد برنامه</span>
                     </button>
                     <a href="/news/list" class="btn btn-label-secondary d-grid w-100">بازگشت</a>
                 </div>
