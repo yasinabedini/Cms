@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 using System.Text;
+using Cms.Endpoints.AdminPanel.Auth;
 
 namespace Cms.Endpoints.AdminPanel.Pages.News
 {
@@ -32,7 +33,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async Task<IActionResult> OnGet(int pageNumber = 1, int typeId = 0, int LanguageId = 0, string searchText = "",int orderBy=0)
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var newsTypeData = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(newsTypeData);
@@ -119,6 +120,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async void OnGet()
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -136,7 +139,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async Task<IActionResult> OnPost()
         {
-            // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             #region Fill Data
             var data = new { pageNumber = 1, pageSize = 200 };
@@ -284,6 +287,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async void OnGet(int id)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var data = new { id = id };
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -325,7 +330,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public void OnGet(int id)
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             #region Fill News
             var modelData = new { Id = id };
@@ -356,7 +361,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async Task<IActionResult> OnPost()
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             #region Languages And NewsTypes
             var data = new { pageNumber = 1, pageSize = 200 };
@@ -510,6 +515,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
         }
         public async Task<IActionResult> OnGet(int id, string pageName)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             Id = id;
             PageName = pageName;
             var data = new { id = id };
@@ -525,6 +532,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async Task<IActionResult> OnPost()
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var data = new { id = Id };
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -675,6 +684,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async Task OnGet(int id)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var result = await _httpClient.DeleteAsync($"/api/News/Delete?id={id}");
             Console.WriteLine(result.IsSuccessStatusCode);
         }
@@ -696,6 +707,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async Task<IActionResult> OnGet(int id,string redirectTo="")
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             #region Fill News
             var modelData = new { Id = id };
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
@@ -747,6 +760,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
 
         public async Task<IActionResult> OnGet(string fileName, string pageAddress, int newsId)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var result = await _httpClient.DeleteAsync($"/api/Gallery/DeleteFile?fileName={fileName}");
             return RedirectToPage("Gallery", new { id = newsId, pageName = pageAddress });
         }

@@ -1,5 +1,6 @@
 ﻿using Cmd.Application.Models.News.Queries.GetActivity;
 using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace Cms.Endpoints.Site.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowSpecific")]
     public class ActivityController : ControllerBase
     {
         private readonly ISender _sender;

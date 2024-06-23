@@ -23,14 +23,7 @@ internal static class HostingExtensions
 
         builder.Services.AddIdentityServer(options =>
             {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-
-                options.EmitStaticAudienceClaim = true;
-                options.KeyManagement.Enabled = true;                
-                options.PushedAuthorization.AllowUnregisteredPushedRedirectUris = true;
+                
             })                        
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)

@@ -1,7 +1,10 @@
+using System.Text;
 using Cmd.Application;
 using Cms.Endpoints.Admin;
+using Cms.Endpoints.Admin.Token;
 using Cms.Infra.Contexts;
 using Cms.Infra.Identity.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -20,18 +23,25 @@ try
 
     // Add services to the container.
 
-    builder.Services.AddAuthentication("Bearer")
-        .AddJwtBearer("Bearer", options =>
-        {
-            options.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                SaveSigninToken = true,
-                ValidateAudience = false
-            };
-        });
 
-    builder.Services.AddAuthorization();    
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = "JwtBearer";
+        options.DefaultChallengeScheme = "JwtBearer";
+    }).AddJwtBearer("JwtBearer",options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = builder.Configuration.GetSection("Jwt").GetSection("Issuer").Value,
+            ValidAudience = builder.Configuration.GetSection("Jwt").GetSection("Audience").Value,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt").GetSection("Key").Value))
+        };
+    });
+
+    builder.Services.AddAuthorization();
 
     builder.Services.AddApplication();
 
@@ -42,7 +52,7 @@ try
         t.BaseAddress = new Uri(builder.Configuration["FileManagerUrl"]);
     });
 
-    
+
     builder.Host.UseSerilog((ctx, lc) =>
     {
         lc.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
@@ -53,6 +63,8 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
     var app = builder.Build();
+
+    app.UseMiddleware<CheckJwtAlready>();
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -102,7 +114,7 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers();
+    app.MapControllers()/*.RequireAuthorization()*/;
 
     app.Run();
 }

@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Cms.Endpoints.Admin.Controllers
@@ -71,6 +72,7 @@ namespace Cms.Endpoints.Admin.Controllers
         }
 
         [HttpGet("GetImage")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetImage(string imageName, string folder)
         {
             var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetImage?imageName={imageName}&&folder={folder}");

@@ -1,0 +1,100 @@
+﻿@page
+@inject IConfiguration _config;
+@model Cms.Endpoints.AdminPanel.Pages.Setting.LinksModel
+@{
+}
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/select2/select2.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/&#64;form-validation/umd/styles/index.min.css" />
+    <link rel="stylesheet" href="~/vendor/libs/animate-css/animate.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/sweetalert2/sweetalert2.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/datatables-bs5/datatables.bootstrap5.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.dist.css">
+    <link rel="stylesheet" href="~/vendor/libs/&#64;form-validation/umd/styles/index.min.css" />
+    <link rel="stylesheet" href="~/vendor/libs/animate-css/animate.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/sweetalert2/sweetalert2.dist.css" />
+}
+
+@section VendorScripts {
+    <script src="~/vendor/libs/select2/select2.dist.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/bundle/popular.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-bootstrap5/index.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-auto-focus/index.min.js"></script>
+    <script src="~/vendor/libs/cleavejs/cleave.dist.js"></script>
+    <script src="~/vendor/libs/cleavejs/cleave-phone.dist.js"></script>
+    <script src="~/vendor/libs/sweetalert2/sweetalert2.dist.js"></script>
+    <script src="~/vendor/libs/datatables-bs5/datatables-bootstrap5.dist.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/bundle/popular.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-bootstrap5/index.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-auto-focus/index.min.js"></script>
+    <script src="~/vendor/libs/plyr/plyr.dist.js"></script>
+    <script src="~/vendor/libs/sweetalert2/sweetalert2.dist.js"></script>
+}
+
+@section PageScripts {
+    <script src="~/js/pages-account-settings-account.dist.js"></script>
+    <script src="~/js/app-access-roles.dist.js"></script>
+    <script src="~/js/modal-add-role.dist.js"></script>
+    <script src="~/js/extended-ui-sweetalert2.dist.js"></script>
+    <script src="~/js/delete-model.js"></script>
+}
+
+@* ************** Content ************** *@
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">تنظیمات /</span> پیوندها
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-4">
+            <li class="nav-item"><a class="nav-link " href="/setting/infolist"><i class="ti-xs ti ti-settings me-1"></i> اطلاعات</a></li>
+            <li class="nav-item"><a class="nav-link active" href="#"><i class="ti-xs ti ti-link me-1"></i> پیوندها</a></li>
+        </ul>
+
+        <div class="row g-4">
+            @foreach (var link in Model.Links)
+            {
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="fw-normal mb-2">@link.Title</h6>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h6 class="fw-normal mb-2"><a href="@link.Link">@link.Link</a></h6>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-end mt-1">
+                                <div class="role-heading">
+                                    <a href="/setting/updateLink/@link.Id" class="role-edit-modal"><span>ویرایش</span></a>
+                                </div>
+                                @{
+                                    string domain = @_config.GetSection("DomainAddress").Value.ToString();
+                                }
+                                <a href="#" onclick="deleteItem('@domain/setting/DeleteLink/@link.Id','@domain/setting/links')"><i class="ti ti-trash ti-md"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card h-100">
+                    <div class="row h-100">
+                        <div class="col-sm-5">
+                            <div class="d-flex align-items-end h-100 justify-content-center mt-sm-0 mt-3">
+                                <img src="~/img/illustrations/add-new-roles.png" class="img-fluid mt-sm-4 mt-md-0" alt="add-new-roles" width="83">
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="card-body text-sm-end text-center ps-sm-0">
+                                <a href="/setting/addLink" class="btn btn-primary mb-2 text-nowrap add-new-role">افزودن لینک</a>
+                                <p class="mb-0 mt-1">لینک جدید بسازید!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

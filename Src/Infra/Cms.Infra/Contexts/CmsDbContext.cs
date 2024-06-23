@@ -6,6 +6,7 @@ using Cms.Domain.Models.Info.Entities;
 using Cms.Domain.Models.Language.Entities;
 using Cms.Domain.Models.News.Entities;
 using Cms.Domain.Models.Sweeper.Entities;
+using Cms.Domain.Models.User.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -18,12 +19,14 @@ namespace Cms.Infra.Contexts
         {
         }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Sweeper> Sweepers { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<NewsType> NewsTypes { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Info> Info { get; set; }
+        public DbSet<InfoLink> InfoLink { get; set; }
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<Domain.Models.File.Entities.File> Files { get; set; }
         public DbSet<Domain.Models.File.Entities.FileType> FileTypes { get; set; }

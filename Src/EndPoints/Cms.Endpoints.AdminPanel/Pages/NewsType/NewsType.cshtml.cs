@@ -1,9 +1,11 @@
 ﻿using Cms.Endpoints.AdminPanel.Pages.Common;
 using Cms.Endpoints.AdminPanel.Pages.Language;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text;
+using Cms.Endpoints.AdminPanel.Auth;
 
 namespace Cms.Endpoints.AdminPanel.Pages.NewsType
 {
@@ -21,6 +23,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.NewsType
 
         public IActionResult OnGet()
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var data = new { pageNumber = 1, pageSize = 200 }; // Your data object
 
             var jsonInString = JsonConvert.SerializeObject(data);
@@ -58,6 +62,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.NewsType
         }
         public void OnGet()
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -68,6 +74,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.NewsType
 
         public IActionResult OnPost()
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -117,6 +125,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.NewsType
 
         public async Task<IActionResult> OnGet(int id)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var data = new { id = id };
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -136,6 +146,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.NewsType
 
         public async Task<IActionResult> OnPost()
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var languageData = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(languageData);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -182,6 +194,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.NewsType
 
         public async Task OnGet(int id)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var result = await _httpClient.DeleteAsync($"/api/NewsType/Delete?id={id}");
             Console.WriteLine(result.IsSuccessStatusCode);
         }

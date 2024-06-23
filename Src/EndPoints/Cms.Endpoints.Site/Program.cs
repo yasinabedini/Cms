@@ -1,12 +1,15 @@
 using Cmd.Application;
 using Cms.Endpoints.Site;
+using Cms.Endpoints.Site.Proxy.Common;
 using Cms.Infra.Contexts;
 using Cms.Infra.Identity.Entities;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
+using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
@@ -16,6 +19,8 @@ Log.Information("Starting Up");
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+
+    
 
     builder.Services.AddHttpClient("FileManager", t =>
     {
@@ -36,15 +41,17 @@ try
 
     // Add services to the container.    
 
-    builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", option =>
+    builder.Services.AddCors(options =>
     {
-        option.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
-        option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        options.AddPolicy("AllowSpecific", builder =>
         {
-            SaveSigninToken = true,
-            ValidateAudience = false
-        };
+            builder.WithOrigins("https://demo-isfahan.pajal.net/")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
     });
+
+    builder.Services.AddAuthorization();
 
 
     builder.Services.AddApplication();
@@ -64,6 +71,8 @@ try
 
     var app = builder.Build();
 
+    app.UseMiddleware<CheckAsnadAlready>();
+
 
     if (!app.Environment.IsDevelopment())
     {
@@ -73,7 +82,7 @@ try
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-               
+
                 context.Response.ContentType = Text.Plain;
 
                 await context.Response.WriteAsync("An exception was thrown.");
@@ -105,11 +114,14 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-    
+
+
     app.UseHttpsRedirection();
+
+    app.UseCors("AllowSpecific");
     
-    app.UseAuthentication();
-    app.UseAuthorization();    
+    app.UseAuthorization();
+
     app.MapControllers();
 
     app.Run();

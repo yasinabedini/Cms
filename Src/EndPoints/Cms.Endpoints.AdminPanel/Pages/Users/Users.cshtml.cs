@@ -93,8 +93,8 @@ public class UsersListModel : PageModel
         }
 
         ViewData["totalUser"] = Users.QueryResult.Count;
-        ViewData["activeUser"] = Users.QueryResult.Count(t=>!t.LockoutEnabled);
-        ViewData["notActiveUser"] = Users.QueryResult.Count(t=>t.LockoutEnabled);
+        ViewData["activeUser"] = Users.QueryResult.Count(t => !t.LockoutEnabled);
+        ViewData["notActiveUser"] = Users.QueryResult.Count(t => t.LockoutEnabled);
 
         int pageSize = 25;
         Users.PageNumber = pageNumber;
@@ -496,4 +496,29 @@ public class DeleteModel : PageModel
     }
 }
 #endregion
+
+public class SiteUserModel : PageModel
+{
+    private readonly HttpClient _httpClient;
+
+    public PagedData<SiteUserViewModel> Users { get; set; }
+
+
+    public SiteUserModel(IHttpClientFactory factory)
+    {
+        _httpClient = factory.CreateClient("AdminApi");        
+    }
+
+
+    public async Task OnGet(int pageNumber)
+    {
+        var users = new { pageNumber = 1, pageSize = 30 };
+        var jsonInString = JsonConvert.SerializeObject(users);
+        var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync("/api/User/GetAllUser", content);
+        var result = await response.Content.ReadAsStringAsync();
+        Users = JsonConvert.DeserializeObject<PagedData<SiteUserViewModel>>(result);
+    }
+}
+
 

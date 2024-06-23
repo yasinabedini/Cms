@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 using System.Text;
+using Cms.Endpoints.AdminPanel.Auth;
 
 namespace Cms.Endpoints.AdminPanel.Pages.Activity
 {
@@ -31,7 +32,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
         public IActionResult OnGet(string searchText = "", int orderBy = 0)
         {
-            // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
             var config = (IConfiguration)HttpContext.RequestServices.GetRequiredService(typeof(IConfiguration));
 
             #region languages
@@ -102,7 +103,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
         }
         public async Task<IActionResult> OnGet()
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             IConfiguration config;
 
@@ -123,7 +124,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
         public async Task<IActionResult> OnPost()
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             #region languages
             var data = new { pageNumber = 1, pageSize = 200 };
@@ -258,6 +259,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
         public async void OnGet(int id)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var data = new { id = id };
             var jsonInString = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
@@ -297,7 +300,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
         public IActionResult OnGet(int id)
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             #region languages
             var languageData = new { pageNumber = 1, pageSize = 200 };
@@ -329,7 +332,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
 
         public async Task<IActionResult> OnPost()
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             #region languages
             var languageData = new { pageNumber = 1, pageSize = 200 };

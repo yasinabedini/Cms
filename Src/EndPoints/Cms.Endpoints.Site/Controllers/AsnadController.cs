@@ -1,6 +1,7 @@
 ﻿using Cmd.Application.Models.News.Queries.GetAboutWithFilter;
 using Cmd.Application.Models.News.Queries.GetAsnad;
 using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace Cms.Endpoints.Site.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowSpecific")]
     public class AsnadController : ControllerBase
     {
 

@@ -24,22 +24,7 @@ public static class Config
     {
         var clientList = new Client[]
             {
-                new Client
-                {
-                    ClientId = "adminPanel",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Code,
-                    AllowedScopes=
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "api.admin"
-                    },
-                    RedirectUris = {$"{configuration.GetSection("AdminPanelUrl").Value}/signin-oidc"},
-                    PostLogoutRedirectUris ={ $"{configuration.GetSection("AdminPanelUrl").Value}/signout-callback-oidc"},
-                    AllowOfflineAccess = true,
-                },
-
+                
                   new Client
                 {
                     ClientId="admin",
@@ -54,23 +39,7 @@ public static class Config
                     ClientSecrets = {new Secret("secret".Sha256())},
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes={"api.site"}
-                },
-
-                  new Client
-                {
-                    ClientId = "userPanel",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Code,
-                    AllowedScopes=
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "api.admin"
-                    },
-                    RedirectUris = { $"{configuration.GetSection("SiteUrl").Value}/signin-oidc"},
-                    PostLogoutRedirectUris ={ $"{configuration.GetSection("SiteUrl").Value}/signout-callback-oidc"},
-                    AllowOfflineAccess = true,
-                },
+                }
             };
 
         return clientList;

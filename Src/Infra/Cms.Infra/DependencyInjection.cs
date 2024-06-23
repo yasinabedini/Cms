@@ -22,6 +22,8 @@ using Cms.Domain.Models.File.Repositories;
 using Cms.Infra.Models.File.Repositories;
 using Cms.Domain.Models.Gallery.Repositories;
 using Cms.Infra.Models.Gallery.Repositories;
+using Cms.Domain.Models.User.Repositories;
+using Cms.Infra.Models.User.Repositories;
 
 namespace Cms.Infra;
 
@@ -41,9 +43,11 @@ public static class DependencyInjection
         services.AddTransient<INewsTypeRepository, NewsRepository>();        
         services.AddTransient<IContactRepository, ContactRepository>();
         services.AddTransient<IInfoRepository, InfoRepository>();
+        services.AddTransient<IInfoLinkRepository, InfoRepository>();
         services.AddTransient<IFileRepository, FileRepository>();
         services.AddTransient<IGalleryRepository, GalleryRepository>();
-
+        services.AddTransient<IUserRepository, UserRepository>();
+        
 
         return services;
     }

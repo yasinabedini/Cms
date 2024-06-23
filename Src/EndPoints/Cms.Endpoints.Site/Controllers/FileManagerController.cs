@@ -4,11 +4,14 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Permissions;
+using Cmd.Application.Security;
+using Microsoft.AspNetCore.Cors;
 
 namespace Cms.Endpoints.Site.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowSpecific")]
     public class FileManagerController : ControllerBase
     {
         private readonly HttpClient _FileManager;
@@ -22,6 +25,7 @@ namespace Cms.Endpoints.Site.Controllers
         [HttpGet("GetImage")]
         public async Task<IActionResult> GetImage(string imageName, string folder)
         {
+            imageName = InputSanitizer.SanitizeInput(imageName);
             var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetImage?imageName={imageName}&&folder={folder}");
             byte[] imageBytes = response;
 
@@ -31,6 +35,8 @@ namespace Cms.Endpoints.Site.Controllers
         [HttpGet("GetFile")]
         public async  Task<IActionResult> GetFile(string fileName, int type)
         {
+            fileName = InputSanitizer.SanitizeInput(fileName);
+
             var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetFile?fileName={fileName}&&type={type}");
             byte[] imageBytes = response;
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text;
+using Cms.Endpoints.AdminPanel.Auth;
 
 namespace Cms.Endpoints.AdminPanel.Pages.Language
 {
@@ -21,7 +22,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Language
 
         public async void OnGet()
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var data = new { pageNumber = 1, pageSize = 200, }; // Your data object
 
@@ -55,7 +56,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Language
 
         public async Task<IActionResult> OnPost()
         {
-            // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var modelData = new { Title = Language.Title, Name = Language.Name, Rtl = Language.Rtl, Region = Language.Region };
 
@@ -91,7 +92,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Language
 
         public async Task OnGet(int id)
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var modelData = new { Id = id };
             var modelJsonInString = JsonConvert.SerializeObject(modelData);
@@ -104,7 +105,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Language
 
         public async Task<IActionResult> OnPost(int id)
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var defaultModelData = new { Id = id };
             var modelJsonInString = JsonConvert.SerializeObject(defaultModelData);
@@ -151,6 +152,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.Language
 
         public async Task OnGet(int id)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var result = await _httpClient.DeleteAsync($"/api/Language/Delete?id={id}");
             Console.WriteLine(result.IsSuccessStatusCode);
         }

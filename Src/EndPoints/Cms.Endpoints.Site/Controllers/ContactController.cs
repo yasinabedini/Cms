@@ -2,6 +2,7 @@
 using Cmd.Application.Models.Info.Queries.GetById;
 using Cmd.Application.Models.Info.Queries.GetByLanguageId;
 using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace Cms.Endpoints.Site.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowSpecific")]
     public class ContactController : ControllerBase
     {
         private readonly ISender _sender;

@@ -1,0 +1,85 @@
+﻿@page
+@model Cms.Endpoints.AdminPanel.Pages.Setting.CreateInfoModel
+@{
+}
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/libs/select2/select2.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/&#64;form-validation/umd/styles/index.min.css" />
+    <link rel="stylesheet" href="~/vendor/libs/animate-css/animate.dist.css" />
+    <link rel="stylesheet" href="~/vendor/libs/sweetalert2/sweetalert2.dist.css" />
+}
+
+@section VendorScripts {
+    <script src="~/vendor/libs/select2/select2.dist.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/bundle/popular.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-bootstrap5/index.min.js"></script>
+    <script src="~/vendor/libs/&#64;form-validation/umd/plugin-auto-focus/index.min.js"></script>
+    <script src="~/vendor/libs/cleavejs/cleave.dist.js"></script>
+    <script src="~/vendor/libs/cleavejs/cleave-phone.dist.js"></script>
+    <script src="~/vendor/libs/sweetalert2/sweetalert2.dist.js"></script>
+}
+
+@section PageScripts {
+    <script src="~/js/pages-account-settings-account.dist.js"></script>
+}
+
+@* ************** Content ************** *@
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">تنظیمات /</span> افزودن اطلاعات
+</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h5 class="card-header">اطلاعات</h5>
+            <!-- Account -->
+            <hr class="my-0">
+            <form method="post">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="mb-3 col-md-12">
+                            <label for="firstName" class="form-label">آدرس</label>
+                            <textarea class="form-control" asp-for="Info.Address"></textarea>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="lastName" class="form-label">زبان</label>
+                            <select class="form-control" asp-for="Info.LanguageId">
+                                @foreach (var language in Model.Languages)
+                                {
+                                    <option value="@language.Id">@language.Title</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="lastName" class="form-label">ساعت کاری</label>
+                            <input class="form-control" type="text" asp-for="Info.WorkTime" />
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="email" class="form-label">ایمیل</label>
+                            <input class="form-control" type="text" asp-for="Info.EmailAddress" placeholder="john.doe&#64;example.com" />
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="organization" class="form-label">شماره تلفن</label>
+                            <input type="text" class="form-control" asp-for="Info.PhoneNumber" />
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="organization" class="form-label">آدرس اینستاگرام</label>
+                            <input type="text" class="form-control" asp-for="Info.InstagramAddress" />
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="organization" class="form-label">آدرس ایتا</label>
+                            <input type="text" class="form-control" asp-for="Info.EitaaAddress" />
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2">افزودن اطلاعات</button>
+                    </div>
+
+                </div>
+            </form>
+
+            <!-- /Account -->
+        </div>
+    </div>
+</div>

@@ -42,7 +42,7 @@ namespace Cmd.Application.Models.News.Commands.Update
 
             var news = _repository.GetById(request.Id);
 
-            news.ChangeText(newsContent);
+            news.ChangeText(request.Text);
             news.ChangeTitle(request.Title);
             news.ChangeIntroduction(request.Introduction);
             news.ChangeMainImage(request.MainImage);

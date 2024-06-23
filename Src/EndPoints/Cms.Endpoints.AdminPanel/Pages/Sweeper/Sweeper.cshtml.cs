@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
+using Cms.Endpoints.AdminPanel.Auth;
 
 namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 {
@@ -23,7 +24,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
         public async void OnGet(int pageNumber = 1, int LanguageId = 0)
         {
-            // _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+           _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var data = new { pageNumber = pageNumber, pageSize = 300, languageId = LanguageId }; // Your data object
 
@@ -60,7 +61,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
         public void OnGet()
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
@@ -73,7 +74,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
         public IActionResult OnPost()
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
@@ -157,7 +158,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
         public void OnGet(int id)
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             #region Fill Sweeper
             var modelData = new { Id = id };
@@ -181,7 +182,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
         public async Task<IActionResult> OnPost()
         {
-            //_httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result.AccessToken);
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
 
             var data = new { pageNumber = 1, pageSize = 200 };
             var jsonInString = JsonConvert.SerializeObject(data);
@@ -246,6 +247,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
         public async Task OnGet(int id)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             var result = await _httpClient.DeleteAsync($"/api/Sweeper/Delete?id={id}");
             Console.WriteLine(result.IsSuccessStatusCode);
         }
@@ -269,6 +272,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.Sweeper
 
         public async Task<IActionResult> OnGet(int id)
         {
+            _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+
             #region Fill Sweeper
             var modelData = new { Id = id };
             var modelJsonInString = JsonConvert.SerializeObject(modelData);

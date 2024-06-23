@@ -175,6 +175,25 @@
                 </li>           
             </ul>
         </li>
+
+        <li class='menu-item@(currentPage.StartsWith("/setting") ? " active open" : "")'>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-settings"></i>
+                <div>تنطیمات</div>
+            </a>
+            <ul class="menu-sub">
+                <li class='menu-item@(currentPage == "/setting/infolist" ? " active" : "")'>
+                    <a href="/setting/infolist" class="menu-link">
+                        <div>مشاهده اطلاعات</div>
+                    </a>
+                </li>
+                <li class='menu-item@(currentPage == "/setting/links" ? " active" : "")'>
+                    <a href="/setting/links" class="menu-link">
+                        <div>پیوند ها</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
 
 </aside>

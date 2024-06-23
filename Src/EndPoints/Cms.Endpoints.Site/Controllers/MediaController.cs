@@ -9,12 +9,15 @@ using Cms.Endpoints.Site.Proxy.Archive;
 using Cms.Domain.Common.ValueObjects;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Text;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.Net.Http.Headers;
+using Item = Cms.Endpoints.Site.Proxy.Archive.Item;
 
 namespace Cms.Endpoints.Site.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[EnableCors("AllowSpecific")]
 public class MediaController : ControllerBase
 {
     private readonly HttpClient _httpClient;
@@ -143,7 +146,6 @@ public class MediaController : ControllerBase
         _httpClient.DefaultRequestHeaders.Add("sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"");
         _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
         _httpClient.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
-
 
         var response = await _httpClient.GetAsync("api/Media/GetMediaPlaces");
         response.EnsureSuccessStatusCode();
@@ -287,6 +289,42 @@ public class MediaController : ControllerBase
                 model.data.items = new List<Site.Proxy.Asnad.Item>();
                 model.data.items.Add(findModel);
             }
+
+            return Ok(model);
+        }
+    }
+
+    [HttpGet("GetTopMedia")]
+    public async Task<IActionResult> GetTopMedia(int count)
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}api/Mediamanagement/GetMostVisitedMedia?top={count}"),
+            Headers =
+                {
+                    { "Accept", "application/json, text/plain, */*" },
+                    { "Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7" },
+                    { "Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzOGM3MTljNy0wYTRlLTE5MTItMzI4ZC0wMDdiMTgzZmRiYTMiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxLyIsImlhdCI6MTcwMDExNTg3MiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Ik5pa2FuIiwiRGlzcGxheU5hbWUiOiLZhdiv24zYsduM2Kog2b7amNmI2YfYtNiMINiu2YTYp9mC24zYqiDZiCDZgdmG2KfZiNix24zigIzZh9in24wg2YbZiNuM2YYiLCJyZWplY3REZXNyaXB0aW9uIjoiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9zZXJpYWxudW1iZXIiOiI0OGFhNDcyNDY3MTg0YjliOGRhZTNlZDY2NzRjNjM2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvdXNlcmRhdGEiOiIxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjpbIkFkbWluIiwiQ2l0aXplbiIsIkNvbXBhbnkiLCJHdWFyZCIsIlVzZXIiXSwibmJmIjoxNzAwMTE1ODcyLCJleHAiOjE3MDAxMTYxNzIsImF1ZCI6IkFueSJ9.Yx7wJly8u9DStfOYDKUrnVsTKj2JezOpwdFuNtqXLVE" },
+                    { "Connection", "keep-alive" },
+                    { "Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1" },
+                    { "Language", "fa" },
+                    { "Referer", $"https://asnad.isfahan.ir/home/document-list" },
+                    { "Sec-Fetch-Dest", "empty" },
+                    { "Sec-Fetch-Mode", "cors" },
+                    { "Sec-Fetch-Site", "same-origin" },
+                    { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" },
+                    { "sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"" },
+                    { "sec-ch-ua-mobile", "?0" },
+                    { "sec-ch-ua-platform", "Windows" },
+                },
+        };
+
+        using (var response = await _httpClient.SendAsync(request))
+        {
+            response.EnsureSuccessStatusCode();
+            var body = await response.Content.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject <Root<Proxy.Asnad.Item[]>>(body);
 
             return Ok(model);
         }

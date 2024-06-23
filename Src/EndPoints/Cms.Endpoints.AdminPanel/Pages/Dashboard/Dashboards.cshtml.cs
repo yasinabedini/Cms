@@ -1,13 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Cms.Endpoints.AdminPanel.Auth;
 using Cms.Endpoints.AdminPanel.Data;
 using Cms.Endpoints.AdminPanel.Pages.Common;
 using Cms.Endpoints.AdminPanel.Pages.News;
 using Cms.Endpoints.AdminPanel.Pages.Users;
+using IdentityModel.Client;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Token = Cms.Endpoints.AdminPanel.Auth.Token;
 
 namespace Cms.Endpoints.AdminPanel.Pages.Dashboard
 {
@@ -34,6 +39,8 @@ namespace Cms.Endpoints.AdminPanel.Pages.Dashboard
 
         public async Task OnGet()
         {
+             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);
+             
             Users = _userManager.Users.Select(t => new UserViewModel
             {
                 UserName = t.UserName,

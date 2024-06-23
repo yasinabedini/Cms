@@ -2,12 +2,14 @@
 using Cmd.Application.Models.Sweeper.Queries.GetAll;
 using Cmd.Application.Models.Sweeper.Queries.GetById;
 using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cms.Endpoints.Site.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowSpecific")]
     public class SweeperController : ControllerBase
     {
         private readonly ISender _sender;

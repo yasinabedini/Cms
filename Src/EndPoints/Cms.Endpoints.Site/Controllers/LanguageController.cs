@@ -2,12 +2,14 @@
 using Cmd.Application.Models.Language.Queries.GetAll;
 using Cmd.Application.Models.Language.Queries.GetById;
 using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cms.Endpoints.Site.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowSpecific")]
     public class LanguageController : ControllerBase
     {
         private readonly ISender _sender;

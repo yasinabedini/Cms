@@ -5,12 +5,14 @@ using Cmd.Application.Models.News.Commands.Update;
 using Cmd.Application.Models.News.Queries.GetAll;
 using Cmd.Application.Models.News.Queries.GetById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cms.Endpoints.Admin.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]   
+    [ApiController]
+    [Authorize]
     public class NewsController : ControllerBase
     {
         private readonly ISender _sender;

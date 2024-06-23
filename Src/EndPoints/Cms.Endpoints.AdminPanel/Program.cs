@@ -1,3 +1,4 @@
+using Cms.Endpoints.AdminPanel.Auth;
 using Cms.Endpoints.AdminPanel.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,8 @@ builder.Services.AddIdentity<CustomIdentityUser, CustomIdentityRole>()
 #endregion
 
 var app = builder.Build();
+
+app.UseMiddleware<AuthCheckAlready>();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
