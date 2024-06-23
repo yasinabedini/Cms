@@ -16,8 +16,9 @@ namespace Cmd.Application.Models.Info.Commands.Create
         public string EmailAddress { get; private set; }
         public string InstagramAddress { get; private set; }
         public long LanguageId { get; set; }
+        public string EitaaAddress { get; set; }
 
-        public CreateInfoCommand(string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress, long languageId)
+        public CreateInfoCommand(string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress, long languageId, string eitaaAddress)
         {
             Address = address;
             WorkTime = workTime;
@@ -25,6 +26,7 @@ namespace Cmd.Application.Models.Info.Commands.Create
             EmailAddress = emailAddress;
             InstagramAddress = instagramAddress;
             LanguageId = languageId;
+            EitaaAddress = eitaaAddress;
         }
     }
 }

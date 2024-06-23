@@ -22,7 +22,7 @@ namespace Cmd.Application.Models.Info.Queries.GetById
         {
             var info = _repository.GetById(request.Id);
 
-            return Task.FromResult(new InfoViewModel(info.Address, info.WorkTime, info.PhoneNumber, info.EmailAddress, info.InstagramAddress,info.LanguageId));
+            return Task.FromResult(new InfoViewModel(info.Id, info.Address, info.WorkTime, info.PhoneNumber, info.EmailAddress, info.InstagramAddress,info.LanguageId, info.EitaaAddress));
         }
     }
 }

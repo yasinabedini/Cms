@@ -14,11 +14,12 @@ namespace Cmd.Application.Models.Info.Commands.Update
         public string WorkTime { get; private set; }
         public string PhoneNumber { get; private set; }
         public string EmailAddress { get; private set; }
+        public string EitaaAddress { get; set; }
         public string InstagramAddress { get; private set; }
         public long LanguageId { get; set; }
         public bool IsEnable { get; set; }
 
-        public UpdateInfoCommand(long id, string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress, long languageId, bool isEnable)
+        public UpdateInfoCommand(long id, string address, string workTime, string phoneNumber, string emailAddress, string instagramAddress, long languageId, bool isEnable, string eitaaAddress)
         {
             Id = id;
             Address = address;
@@ -28,6 +29,7 @@ namespace Cmd.Application.Models.Info.Commands.Update
             InstagramAddress = instagramAddress;
             LanguageId = languageId;
             IsEnable = isEnable;
+            EitaaAddress = eitaaAddress;
         }
     }
 }

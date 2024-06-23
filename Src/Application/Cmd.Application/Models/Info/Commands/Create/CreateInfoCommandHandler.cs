@@ -28,7 +28,7 @@ namespace Cmd.Application.Models.Info.Commands.Create
             }
 
 
-            _repository.Add(Cms.Domain.Models.Info.Entities.Info.Create(request.Address, request.WorkTime, request.PhoneNumber, request.EmailAddress, request.InstagramAddress, request.LanguageId));
+            _repository.Add(Cms.Domain.Models.Info.Entities.Info.Create(request.Address, request.WorkTime, request.PhoneNumber, request.EmailAddress, request.InstagramAddress, request.LanguageId,request.EitaaAddress));
             _repository.Save();
 
             return Task.CompletedTask;

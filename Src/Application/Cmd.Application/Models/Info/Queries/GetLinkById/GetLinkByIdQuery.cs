@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.Info.Queries.GetAll
+namespace Cmd.Application.Models.Info.Queries.GetLinkById
 {
-    public class GetAllInfoQuery:PageQuery<PagedData<InfoViewModel>>
+    public class GetLinkByIdQuery:IQuery<InfoLinkViewModel>
     {
-        public long LanguageId { get; set; }
+        public long Id { get; set; }
     }
 }

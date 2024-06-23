@@ -31,6 +31,7 @@ namespace Cmd.Application.Models.Info.Commands.Update
             info.ChangeEmailAddress(request.EmailAddress);
             info.ChangeWorkTime(request.WorkTime);
             info.ChangeIsEnable(request.IsEnable);            
+            info.ChangeEitaaAddress(request.EitaaAddress);
 
             _repository.Update(info);
             _repository.Save();

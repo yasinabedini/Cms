@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cmd.Application.Models.Info.Queries.GetAll
+namespace Cmd.Application.Models.Info.Queries.GetAllLinks
 {
-    public class GetAllInfoQuery:PageQuery<PagedData<InfoViewModel>>
+    public class GetAllLinksQuery:PageQuery<List<InfoLinkViewModel>>
     {
         public long LanguageId { get; set; }
     }
