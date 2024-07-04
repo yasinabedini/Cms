@@ -15,7 +15,7 @@ namespace Cms.Domain.Models.File.Entities
 
         public FileType()
         {
-            
+                
         }
         public FileType(long? parentId, string title, FileType parent)
         {

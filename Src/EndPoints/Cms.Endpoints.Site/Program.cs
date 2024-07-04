@@ -1,8 +1,12 @@
 using Cmd.Application;
+using Cmd.Application.Security.Auth;
+using Cmd.Application.Tools.Email;
 using Cms.Endpoints.Site;
 using Cms.Endpoints.Site.Proxy.Common;
 using Cms.Infra.Contexts;
 using Cms.Infra.Identity.Entities;
+using DotNet8WebAPI.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +24,13 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    
+    builder.Services.AddOptions();
+    builder.Services.Configure<EmailOp>(
+        builder.Configuration.GetSection("MailSettings"));
+
+    builder.Services.Configure<JwtOptions>(
+      builder.Configuration.GetSection("Jwt"));
+
 
     builder.Services.AddHttpClient("FileManager", t =>
     {
@@ -51,7 +61,16 @@ try
         });
     });
 
-    builder.Services.AddAuthorization();
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            
+        };
+    });
 
 
     builder.Services.AddApplication();
@@ -72,6 +91,8 @@ try
     var app = builder.Build();
 
     app.UseMiddleware<CheckAsnadAlready>();
+
+    app.UseMiddleware<JwtMiddleware>();
 
 
     if (!app.Environment.IsDevelopment())
@@ -120,6 +141,7 @@ try
 
     app.UseCors("AllowSpecific");
     
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

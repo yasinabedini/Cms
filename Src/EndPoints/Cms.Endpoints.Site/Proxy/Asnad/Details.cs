@@ -1,13 +1,6 @@
 ﻿namespace Cms.Endpoints.Site.Proxy.Asnad
 {
-    public class Location
-    {
-        public int id { get; set; }
-        public string text { get; set; }
-        public object value { get; set; }
-    }
-
-    public class MediaType
+    public class DatailsItem
     {
         public int id { get; set; }
         public string text { get; set; }
@@ -67,13 +60,13 @@
         public string thumbnailUrl { get; set; }
         public object waterMarkImageUrl { get; set; }
         public object personnel { get; set; }
-        public List<object> personnels { get; set; }
+        public List<DatailsItem> personnels { get; set; }
         public object personnelIDs { get; set; }
-        public List<Location> locations { get; set; }
-        public List<object> thematicCategories { get; set; }
-        public List<object> appendicesMedia { get; set; }
-        public List<MediaType> mediaTypes { get; set; }
-        public List<object> meidaFields { get; set; }
+        public List<DatailsItem> locations { get; set; }
+        public List<DatailsItem> thematicCategories { get; set; }
+        public List<DatailsItem> appendicesMedia { get; set; }
+        public List<DatailsItem> mediaTypes { get; set; }
+        public List<DatailsItem> meidaFields { get; set; }
         public object lastModifiedOnDate { get; set; }
         public string createdOnDate { get; set; }
     }

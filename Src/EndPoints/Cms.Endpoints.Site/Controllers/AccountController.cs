@@ -1,4 +1,6 @@
-﻿using Cmd.Application.Models.Sms.Commands;
+﻿using Cmd.Application.Models.Email.Commands.SendEmail;
+using Cmd.Application.Models.Sms.Commands;
+using Cmd.Application.Models.User.Commands.Authenticate;
 using Cmd.Application.Models.User.Commands.ConfirmPhone;
 using Cmd.Application.Models.User.Commands.Login;
 using Cmd.Application.Models.User.Commands.Register;
@@ -49,6 +51,29 @@ namespace Cms.Endpoints.Site.Controllers
             await _sender.Send(command);
 
             return Ok("Sms Send Successfully...");
+        }
+
+        [HttpPost("Auth_Otp")]
+        public async Task<IActionResult> Auth_Otp(AuthenticateCommand command)
+        {
+            var result = await _sender.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpPost("SendEmail")]
+        public async Task<IActionResult> SendEmail(SendEmailCommand command)
+        {
+            try
+            {
+                await _sender.Send(command);
+                return Ok("Email Send Successfully...");
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);                
+            }
         }
     }
 }

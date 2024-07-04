@@ -12,6 +12,8 @@ using System.Text;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Net.Http.Headers;
 using Item = Cms.Endpoints.Site.Proxy.Archive.Item;
+using Microsoft.AspNetCore.Authorization;
+using Cms.Endpoints.Site.Atteribute;
 
 namespace Cms.Endpoints.Site.Controllers;
 
@@ -257,7 +259,7 @@ public class MediaController : ControllerBase
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}api/Mediamanagement/SearchMediaItemsForView?offset={offset}&count={count}&tag={tag}"),
+            RequestUri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}api/Mediamanagement/GetPagedMediaItemsForView?thematicCategoriesId={thematicCategoriesId}&mediaPlaceId={mediaPlaceId}&mediaStructureId={mediaStructureId}&mediaSourceId={mediaSourceId}&typeWritingLineId={typeWritingLineId}&historicalPeriodId={historicalPeriodId}&mediaPersonelId={mediaPersonelId}&mediaLanguageId={mediaLanguageId}&relatedMediaId={relatedMediaId}&mediaTypeId={mediaTypeId}&title={title}&tag={tag}&offset={offset}&count={count}"),
             Headers =
                 {
                     { "Accept", "application/json, text/plain, */*" },
@@ -324,7 +326,7 @@ public class MediaController : ControllerBase
         {
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync();
-            var model = JsonConvert.DeserializeObject <Root<Proxy.Asnad.Item[]>>(body);
+            var model = JsonConvert.DeserializeObject<Root<Proxy.Asnad.Item[]>>(body);
 
             return Ok(model);
         }
@@ -361,12 +363,13 @@ public class MediaController : ControllerBase
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync();
             var model = JsonConvert.DeserializeObject<Root<Details>>(body);
-    
+
             return Ok(model);
         }
     }
 
     [HttpGet("GetAttachments")]
+    [AuthorizeToken]
     public async Task<IActionResult> GetAttachments(string attachmentGroup)
     {
         var request = new HttpRequestMessage
@@ -472,6 +475,15 @@ public class MediaController : ControllerBase
             }
 
             return Ok(model);
-        }
+        }        
+    }
+
+    [HttpGet("GetArchiveImage")]
+    public async Task<IActionResult> GetArchiveImage(string url)
+    {
+        var response = await _archiveClient.GetByteArrayAsync(url);
+        byte[] imageBytes = response;
+
+        return File(imageBytes, "image/jpeg");
     }
 }
