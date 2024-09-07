@@ -3,7 +3,13 @@ using Cmd.Application.Models.Sms.Commands;
 using Cmd.Application.Models.User.Commands.Authenticate;
 using Cmd.Application.Models.User.Commands.ConfirmPhone;
 using Cmd.Application.Models.User.Commands.Login;
+using Cmd.Application.Models.User.Commands.RefreshToken;
 using Cmd.Application.Models.User.Commands.Register;
+using Cmd.Application.Models.User.Commands.SetPassword;
+using Cmd.Application.Models.User.Queries.GetAccountInfo;
+using Cmd.Application.Models.User.Queries.GetAllDegree;
+using Cmd.Application.Models.User.Queries.Inquire;
+using Cms.Endpoints.Site.Atteribute;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,39 +28,88 @@ namespace Cms.Endpoints.Site.Controllers
             _sender = sender;
         }
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegisterCommand command)
+        [HttpPost("Inquire")]
+        public async Task<IActionResult> Inquire(InquireUserQuery query)
         {
-            var result = await _sender.Send(command);
-            if (result) return Ok("User Registration Is Successfully");
-            else return BadRequest("User Registration Is Failed ): Maybe a user has already registered with this mobile phone");
-        }
+            var result = await _sender.Send(query);
 
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login(LoginCommand command)
-        {
-            var result = await _sender.Send(command);
+            if (result.ResponseCode == 400)
+            {
+                Response.StatusCode = 400;
 
-            return Ok(new { result = result.Item1, message = result.Item2 });
-        }
+                return BadRequest(result.Message);
+            }
 
-        [HttpPost("ConfirmPhoneNumber")]
-        public async Task<IActionResult> ConfirmPhoneNumber(ConfirmPhoneCommand command)
-        {
-            var result = await _sender.Send(command);
             return Ok(result);
         }
 
-        [HttpPost("SendSms")]
-        public async Task<IActionResult> SendSms(SendSmsCommand command)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(RegisterCommand command)
+        {
+            var result = _sender.Send(command);
+
+            if (result.Result.ResponseCode == 400)
+            {
+                Response.StatusCode = 400;
+
+                return BadRequest(result.Result.Message);
+            }
+
+            return Ok(result.Result);
+        }
+
+        [HttpPost("LoginPassword")]
+        public async Task<IActionResult> LoginPassword(LoginCommand command)
+        {
+            var result = await _sender.Send(command);
+
+            if (result.ResponseCode == 400)
+            {
+                HttpContext.Response.StatusCode = 400;
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("SetPassword")]
+        [AuthorizeToken]
+        public async Task<IActionResult> SetPassword(SetPasswordCommand command)
         {
             await _sender.Send(command);
 
-            return Ok("Sms Send Successfully...");
+
+            return Ok("پسورد با موفقیت تنظیم شد.");
         }
 
-        [HttpPost("Auth_Otp")]
-        public async Task<IActionResult> Auth_Otp(AuthenticateCommand command)
+        [HttpGet("GetAccountInfo")]
+        [AuthorizeToken]
+        public async Task<IActionResult> GetAccountInfo()
+        {
+            var query = new GetAccountInfoQuery()
+            {
+                Token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim()
+            };
+
+            var result = await _sender.Send(query);
+
+            return Ok(result);
+        }
+
+        [HttpPost("LoginOtp")]
+        public async Task<IActionResult> LoginOtp(AuthenticateCommand command)
+        {
+            var result = await _sender.Send(command);
+            if (result.ResponseCode == 400)
+            {
+                HttpContext.Response.StatusCode = 400;
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("RefreshToken")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenCommand command)
         {
             var result = await _sender.Send(command);
 
@@ -72,8 +127,20 @@ namespace Cms.Endpoints.Site.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(ex.Message);                
+                return Ok(ex.Message);
             }
+        }
+
+        [HttpGet("GetAllDegree")]
+        public async Task<IActionResult> GetAllDegree(GetAllDegreeQuery query)
+        {
+            var result = await _sender.Send(query);
+            if (!result.QueryResult.Any())
+            {
+                return NotFound("هیچ مدرک تحصیلی یافن نشد");
+            }
+
+            return Ok(result);
         }
     }
 }

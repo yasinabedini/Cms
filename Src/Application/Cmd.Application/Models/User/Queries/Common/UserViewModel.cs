@@ -13,8 +13,8 @@ namespace Cmd.Application.Models.User.Queries.Common
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public bool PhoneConfirmed { get; set; }
-        public bool IsBlocked { get; private set; }
-        public DateTime? LastLoginDate { get; private set; }
+        public bool IsBlocked { get;  set; }
+        public DateTime? LastLoginDate { get;  set; }
 
         public UserViewModel()
         {

@@ -1,5 +1,4 @@
 ﻿using Cmd.Application.Convertors;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
 using System.IO.Pipelines;
 using System.Net;

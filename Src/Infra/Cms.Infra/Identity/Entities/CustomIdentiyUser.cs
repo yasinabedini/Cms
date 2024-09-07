@@ -7,7 +7,5 @@ using System.Threading.Tasks;
 
 namespace Cms.Infra.Identity.Entities
 {
-    public class CustomIdentityUser:IdentityUser
-    {
-    }
+ 
 }

@@ -1,5 +1,4 @@
 ﻿using Cms.Domain.Models.News.Entities;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;

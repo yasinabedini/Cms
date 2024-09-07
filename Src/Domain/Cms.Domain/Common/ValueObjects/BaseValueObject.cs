@@ -14,7 +14,7 @@ public abstract class BaseValueObject<TValueObject> : IEquatable<TValueObject> w
     {
         if (!rule.HasValidRule())
         {
-            throw new BusinessRuleValidationException(rule);
+           
         }
     }
 

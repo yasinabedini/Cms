@@ -22,11 +22,11 @@ namespace Cmd.Application.Models.User.Queries.GetAll
         {
             var user = _repository.GetList();
 
-            var userList = user.Skip(request.SkipCount).Take(request.PageSize).Select(t => new UserViewModel(t.Id, t.FirstName.Value, t.LastName.Value, t.PhoneNumber.Value, t.PhoneConfirmed,t.IsBlocked,t.LastLoginDate)).ToList();
+            //var userList = user.Skip(request.SkipCount).Take(request.PageSize).Select(t => new UserViewModel(t.Id, t.FirstName.Value, t.LastName.Value, t.PhoneNumber.Value, t.PhoneConfirmed,t.IsBlocked,t.LastLoginDate)).ToList();
 
             return Task.FromResult(new PagedData<UserViewModel>
             {
-                QueryResult = userList,
+             
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
                 TotalCount = user.Count,

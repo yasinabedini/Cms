@@ -1,15 +1,11 @@
 using Cmd.Application;
-using Cmd.Application.Security.Auth;
 using Cmd.Application.Tools.Email;
 using Cms.Endpoints.Site;
 using Cms.Endpoints.Site.Proxy.Common;
-using Cms.Infra.Contexts;
-using Cms.Infra.Identity.Entities;
 using DotNet8WebAPI.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
@@ -24,11 +20,18 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder1 => builder1.WithOrigins(builder.Configuration.GetValue<string>("origins")!).AllowAnyMethod().AllowAnyHeader()));
+
+
     builder.Services.AddOptions();
     builder.Services.Configure<EmailOp>(
         builder.Configuration.GetSection("MailSettings"));
 
-    builder.Services.Configure<JwtOptions>(
+    builder.Services.Configure<Cms.Infra.Common.Auth.JwtOptions>(
+      builder.Configuration.GetSection("Jwt"));
+
+
+    builder.Services.Configure<Cmd.Application.Security.Auth.JwtOptions>(
       builder.Configuration.GetSection("Jwt"));
 
 
@@ -49,35 +52,30 @@ try
     });
 
 
-    // Add services to the container.    
-
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("AllowSpecific", builder =>
-        {
-            builder.WithOrigins("https://demo-isfahan.pajal.net/")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-    });
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.Authority = builder.Configuration.GetSection("AuthorityUrl").Value;
+   .AddJwtBearer(o =>
+   {
+       var Key = Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JWT").GetSection("Secret").Value);
+       o.SaveToken = true;
+       o.TokenValidationParameters = new TokenValidationParameters
+       {
+           ValidateIssuer = false,
+           ValidateAudience = false,
+           ValidateLifetime = true,
+           ValidateIssuerSigningKey = true,
+           ValidIssuer = builder.Configuration.GetSection("JWT").GetSection("Issuer").Value,
+           ValidAudience = builder.Configuration.GetSection("JWT").GetSection("Audience").Value,
+           IssuerSigningKey = new SymmetricSecurityKey(Key),
+           ClockSkew = TimeSpan.Zero
+       };
+   });
 
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            
-        };
-    });
-
+    builder.Services.AddAuthorization();
 
     builder.Services.AddApplication();
 
     builder.Services.AddEndpoints();
-
-    builder.Services.AddIdentity<CustomIdentityUser, IdentityRole>().AddEntityFrameworkStores<CmsDbContext>();
 
     builder.Host.UseSerilog((ctx, lc) =>
     {
@@ -86,9 +84,13 @@ try
         sinkOptions: new MSSqlServerSinkOptions { TableName = "WebLogTable", AutoCreateSqlTable = true }).Enrich.FromLogContext();
     });
 
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
     var app = builder.Build();
+
+    app.UseCors("CorsPolicy");
+
 
     app.UseMiddleware<CheckAsnadAlready>();
 
@@ -139,9 +141,8 @@ try
 
     app.UseHttpsRedirection();
 
-    app.UseCors("AllowSpecific");
-    
     app.UseAuthentication();
+
     app.UseAuthorization();
 
     app.MapControllers();

@@ -1,13 +1,8 @@
 ﻿using Cms.Domain;
 using Cms.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Cms.Infra.Identity.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNet.Identity;
-using System.Runtime.CompilerServices;
 using Cms.Domain.Models.Sweeper.Repositories;
 using Cms.Infra.Models.Sweeper.Repositories;
 using Cms.Domain.Models.Language.Repositories;
@@ -24,6 +19,10 @@ using Cms.Domain.Models.Gallery.Repositories;
 using Cms.Infra.Models.Gallery.Repositories;
 using Cms.Domain.Models.User.Repositories;
 using Cms.Infra.Models.User.Repositories;
+using Cms.Domain.Models.Token.Repositories;
+using Cms.Infra.Models.Token.Repositories;
+using Cms.Domain.Models.Sms.Repositories;
+using Cms.Infra.Models.Sms.Repositories;
 
 namespace Cms.Infra;
 
@@ -36,18 +35,21 @@ public static class DependencyInjection
         services.AddDomain();
 
         services.AddDbContext<CmsDbContext>(c => c.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString")));
-
+        
+       
         services.AddTransient<ISweeperRepository, SweeperRepository>();
-        services.AddTransient<ILanguageRepository, LanguageRepository>();        
+        services.AddTransient<ILanguageRepository, LanguageRepository>();
         services.AddScoped<INewsRepository, NewsRepository>();
-        services.AddTransient<INewsTypeRepository, NewsRepository>();        
+        services.AddTransient<INewsTypeRepository, NewsRepository>();
         services.AddTransient<IContactRepository, ContactRepository>();
         services.AddTransient<IInfoRepository, InfoRepository>();
         services.AddTransient<IInfoLinkRepository, InfoRepository>();
         services.AddTransient<IFileRepository, FileRepository>();
         services.AddTransient<IGalleryRepository, GalleryRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
-        
+        services.AddTransient<ITokenRepository, TokenRepository>();
+        services.AddTransient<ISmsRepository, SmsRepository>();
+
 
         return services;
     }

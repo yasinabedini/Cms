@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Net;
 using System.Net.Mail;
 
 
@@ -16,30 +17,30 @@ public class SendEmail
 
     public void Send(string To, string Subject, string Body)
     {
+        MailAddress toEmail = new MailAddress(To);
+        MailAddress from = new MailAddress(_appSettings.Email);
+
+        MailMessage email = new MailMessage(from, toEmail)
+        {
+            Subject = Subject,
+            Body = Body
+        };
+
+        SmtpClient smtp = new SmtpClient(_appSettings.MailServer)
+        {
+            Port = 25,
+            Credentials = new NetworkCredential(_appSettings.Email, _appSettings.Password),
+            EnableSsl = true
+        };
+
         try
         {
-            MailMessage mail = new MailMessage();
-            SmtpClient SmtpServer = new SmtpClient(_appSettings.MailServer);
-            mail.From = new MailAddress(_appSettings.Email, _appSettings.EmailSubject);
-            mail.To.Add(To);
-            mail.Subject = Subject;
-            mail.Body = Body;
-            mail.IsBodyHtml = true;
-
-            //System.Net.Mail.Attachment attachment;
-            // attachment = new System.Net.Mail.Attachment("c:/textfile.txt");
-            // mail.Attachments.Add(attachment);
-            SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
-            SmtpServer.UseDefaultCredentials = true;
-            SmtpServer.Port = _appSettings.Port;
-            SmtpServer.Credentials = new System.Net.NetworkCredential(_appSettings.Email, _appSettings.Password);
-            SmtpServer.EnableSsl = _appSettings.Ssl;
-
-            SmtpServer.Send(mail);
+            smtp.Send(email);
+            Console.WriteLine("Email sent successfully!");
         }
-        catch (Exception ex)
+        catch (SmtpException ex)
         {
-            throw ex;
+            Console.WriteLine($"Error sending email: {ex.Message}");
         }
     }
 }

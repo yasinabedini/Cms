@@ -5,7 +5,9 @@ using Cms.Domain.Models.Gallery.Entities;
 using Cms.Domain.Models.Info.Entities;
 using Cms.Domain.Models.Language.Entities;
 using Cms.Domain.Models.News.Entities;
+using Cms.Domain.Models.Sms.Entities;
 using Cms.Domain.Models.Sweeper.Entities;
+using Cms.Domain.Models.Token.Entities;
 using Cms.Domain.Models.User.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -15,7 +17,7 @@ namespace Cms.Infra.Contexts
 {
     public class CmsDbContext : DbContext
     {
-        public CmsDbContext(DbContextOptions options) : base(options)
+        public CmsDbContext(DbContextOptions<CmsDbContext> options) : base(options)
         {
         }
 
@@ -30,7 +32,10 @@ namespace Cms.Infra.Contexts
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<Domain.Models.File.Entities.File> Files { get; set; }
         public DbSet<Domain.Models.File.Entities.FileType> FileTypes { get; set; }
-
+        public DbSet<Token> Tokens { get; set; }
+        public DbSet<UserRefreshToken> RefreshTokens { get; set; }
+        public DbSet<Sms> Sms { get; set; }
+        public DbSet<Degree> Degrees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -71,7 +76,7 @@ namespace Cms.Infra.Contexts
                 }
             }
             #endregion
-            
+
             base.OnModelCreating(builder);
         }
 

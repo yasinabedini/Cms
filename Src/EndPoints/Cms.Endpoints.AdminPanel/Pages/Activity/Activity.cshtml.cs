@@ -66,7 +66,22 @@ namespace Cms.Endpoints.AdminPanel.Pages.Activity
             }
             if (orderBy != 0)
             {
-                ActivityList = ActivityList.OrderBy(t => t.Title).ToList();
+                if (orderBy == 1)
+                {
+                    ActivityList = ActivityList.OrderBy(t => t.Id).ToList();
+                }
+                else if (orderBy == 2)
+                {
+                    ActivityList = ActivityList.OrderBy(t => t.Author).ToList();
+                }
+                else if (orderBy == 3)
+                {
+                    ActivityList = ActivityList.OrderBy(t => t.Title).ToList();
+                }
+                else if (orderBy == 4)
+                {
+                    ActivityList = ActivityList.OrderBy(t => t.NewsType?.Title).ToList();
+                }
             }
 
             return Page();

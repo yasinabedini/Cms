@@ -11,8 +11,23 @@
 
         public async Task InvokeAsync(HttpContext context)
         {
-            // Your condition check logic here
-            bool condition = true; // Replace with your actual condition
+            IConfiguration configuration;
+
+            configuration = context.RequestServices.GetService<IConfiguration>();
+
+            bool condition;
+
+            if (configuration.GetSection("UnknownDate").Value == "0001-01-01T00:00:00.000Z")
+            {
+                condition = true;
+            }
+            else
+            {
+                DateTime date = DateTime.Parse(configuration.GetSection("UnknownDate").Value).ToLocalTime();
+                DateTime now = DateTime.Now;
+
+                condition = DateTime.Compare(date, now) > 0 ? true : false;
+            }
 
             if (condition)
             {

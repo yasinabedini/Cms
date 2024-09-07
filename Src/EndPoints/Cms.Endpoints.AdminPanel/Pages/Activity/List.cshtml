@@ -39,20 +39,17 @@
                     <input type="text" class="text-capitalize form-control" name="searchText" value="@HttpContext.Request.Query["searchText"].ToString()" placeholder="Search..." />
                 </div>
                 <div class="col-md-2 user_role">
-                    <label>مرتب سازی بر اساس : </label>
+                    <label class="float-end">مرتب سازی بر اساس : </label>
                 </div>
                 <div class="col-md-2 user_role">
                     <select id="UserRole" name="orderBy" class="form-select text-capitalize">
-                        @if (Request.Query["orderBy"].ToString()=="0")
-                        {
-                            <option selected value="0"> همه </option>
-                            <option value="1"> بر اساس عنوان </option>
-                        }
-                        else if (Request.Query["orderBy"].ToString() == "1")
-                        {
-                            <option  value="0"> همه </option>
-                            <option selected value="1"> بر اساس عنوان </option>
-                        }
+                        <option selected value="0">همه</option>
+
+                        <option value="1">آیدی</option>
+                        <option value="2">نام نویسنده</option>
+                        <option value="3">عنوان</option>
+                        <option value="4">نوع خبر</option>
+
                     </select>
                 </div>
                 <div class="col-md-1">
