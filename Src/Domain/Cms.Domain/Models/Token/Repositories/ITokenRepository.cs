@@ -13,5 +13,9 @@ namespace Cms.Domain.Models.Token.Repositories
         Entities.Token GenerateToken(string userName);
         Entities.Token GenerateRefreshToken(string userName);
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+
+        void AddApiToken(string access_token,string scope,string token_type, int expires_in);
+        bool ApiTokenAvailable();
+        ApiToken GetApiToken();
     }
 }

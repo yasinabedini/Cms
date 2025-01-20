@@ -52,5 +52,22 @@ namespace Cms.Infra.Models.News.Repositories
         {
             return _context.News.Include(t => t.NewsType).ToList();
         }
+
+        public List<Asnad> GetAllAsnad()
+        {
+            return _context.Asnads.ToList();
+        }
+
+        public void AddAsnad(long id, string title, string description, string imageName)
+        {
+            _context.Asnads.Add(Asnad.Create(id, title, description, imageName));
+            _context.SaveChanges();
+        }
+
+        public void DeleteAllAsnad()
+        {
+            _context.Asnads.RemoveRange(_context.Asnads);
+            _context.SaveChanges();            
+        }
     }
 }

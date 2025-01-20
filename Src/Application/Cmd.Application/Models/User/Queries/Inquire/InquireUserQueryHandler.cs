@@ -1,7 +1,10 @@
 ﻿using Cmd.Application.Common.Queries;
 using Cmd.Application.Models.User.Queries.Common;
+using Cmd.Application.Tools.Sms;
 using Cms.Domain.Models.Sms.Repositories;
+using Cms.Domain.Models.Token.Repositories;
 using Cms.Domain.Models.User.Repositories;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +17,20 @@ namespace Cmd.Application.Models.User.Queries.Inquire
     {
         private readonly IUserRepository _repository;
         private readonly ISmsRepository _smsRepository;
+        private readonly IOptions<SmsOp> _appSettings;
+        private readonly ITokenRepository _tokenRepository;
+        private readonly HttpClient _httpClient;
 
-        public InquireUserQueryHandler(IUserRepository repository, ISmsRepository smsRepository)
+        public InquireUserQueryHandler(IUserRepository repository, ISmsRepository smsRepository, IOptions<SmsOp> option, HttpClient httpClient, ITokenRepository tokenRepository)
         {
             _repository = repository;
             _smsRepository = smsRepository;
+            _appSettings = option;
+            _httpClient = httpClient;
+            _tokenRepository = tokenRepository;
         }
 
-        public Task<InquireViewModel> Handle(InquireUserQuery request, CancellationToken cancellationToken)
+        public async Task<InquireViewModel> Handle(InquireUserQuery request, CancellationToken cancellationToken)
         {
             int responseCode=200;
             bool hasAccount = false;
@@ -34,7 +43,7 @@ namespace Cmd.Application.Models.User.Queries.Inquire
 
             if (!_repository.PhoneVerified(request.Mobile))
             {
-                return Task.FromResult(new InquireViewModel
+                return await Task.FromResult(new InquireViewModel
                 {
                     Message = "شماره موبایل را به درستی وارد کنید.",
                     ResponseCode = 400
@@ -67,12 +76,13 @@ namespace Cmd.Application.Models.User.Queries.Inquire
             }
 
             string text = $". کد اعتبار سنجی شما {code} است. موزه تاریخ شهرداری اصفهان ";
+            var sender = new Tools.Sms.Model.Sms(_appSettings,_httpClient,_tokenRepository);
 
             if (request.ForceOtp)
             {
                 if (_smsRepository.BasicInquire(request.Mobile))
                 {
-                    Tools.Sms.Model.Sms.SendSms(request.Mobile, text);
+                  //await  sender.SendSmsAsync(request.Mobile, text);
                     otp.Chanel = "sms";
                     otp.WaitingTime = 120;
                     _smsRepository.Add(new Cms.Domain.Models.Sms.Entities.Sms(request.Mobile, code, text));
@@ -84,7 +94,7 @@ namespace Cmd.Application.Models.User.Queries.Inquire
 
             if (/*_smsRepository.InquireSendSms(request.Mobile)*/true)
             {
-                Tools.Sms.Model.Sms.SendSms(request.Mobile, text);
+                //await sender.SendSmsAsync(request.Mobile, text);
                 otp.Chanel = "sms";
                 otp.WaitingTime = 120;
                 _smsRepository.Add(new Cms.Domain.Models.Sms.Entities.Sms(request.Mobile, code, text));
@@ -94,7 +104,7 @@ namespace Cmd.Application.Models.User.Queries.Inquire
             else { message = "شما هر دو دقیقه یک بار مجار به ارسال مجدد پیامک هستید."; responseCode = 400; }
 
 
-            return Task.FromResult(new InquireViewModel
+            return await Task.FromResult(new InquireViewModel
             {
                 HasAccount = hasAccount,
                 HasPassword = hasPassword,

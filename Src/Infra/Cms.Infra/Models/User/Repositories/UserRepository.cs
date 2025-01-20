@@ -40,10 +40,7 @@ namespace Cms.Infra.Models.User.Repositories
             }
             return result;
         }
-        public List<Domain.Models.User.Entities.User> GetList()
-        {
-            throw new NotImplementedException();
-        }
+
         public Domain.Models.User.Entities.User GetUserByPhoneNumber(string phoneNumber)
         {
             return _context.Users.FirstOrDefault(t => t.PhoneNumber == new Domain.Common.ValueObjects.PhoneNumber(phoneNumber));

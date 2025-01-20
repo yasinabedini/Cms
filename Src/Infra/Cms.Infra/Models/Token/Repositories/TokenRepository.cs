@@ -2,6 +2,7 @@
 using Cms.Domain.Models.Token.Repositories;
 using Cms.Domain.Models.User.Repositories;
 using Cms.Infra.Common.Auth;
+using Cms.Infra.Contexts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -21,11 +22,13 @@ namespace Cms.Infra.Models.Token.Repositories
     {
         private readonly JwtOptions _appSettings;
         private readonly IUserRepository _repository;
+        private readonly CmsDbContext _context;
 
-        public TokenRepository(IOptions<JwtOptions> appSettings, IUserRepository repository)
+        public TokenRepository(IOptions<JwtOptions> appSettings, IUserRepository repository, CmsDbContext context)
         {
             _appSettings = appSettings.Value;
             _repository = repository;
+            _context = context;
         }
 
         public Domain.Models.Token.Entities.Token GenerateToken(string userName)
@@ -57,7 +60,7 @@ new Claim(ClaimTypes.Name, userName)
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var refreshToken = GenerateRefreshToken();
                 return new Domain.Models.Token.Entities.Token("Bearer", tokenHandler.WriteToken(token), 54600, refreshToken);
-             
+
             }
             catch (Exception ex)
             {
@@ -98,6 +101,51 @@ new Claim(ClaimTypes.Name, userName)
             }
 
             return principal;
+        }
+
+        public void AddApiToken(string access_token, string scope, string token_type, int expires_in)
+        {
+            _context.ApiTokens.Add(new ApiToken
+            {
+                access_token = access_token,
+                expires_in = expires_in,
+                scope = scope,
+                token_type = token_type,
+                CreateAt = DateTime.Now,
+                IsDelete = false,
+                IsEnable = true
+            });
+            _context.SaveChanges();
+        }
+
+        public bool ApiTokenAvailable()
+        {
+            var token = _context.ApiTokens.OrderBy(t => t.CreateAt).LastOrDefault();
+
+            if (token is null)
+            {
+                return false;
+            }
+
+            var expireDate = token.CreateAt.AddSeconds(token.expires_in);
+
+            if (expireDate <= DateTime.Now)
+            {
+                return false;
+            }
+            else if (expireDate > DateTime.Now)
+            {
+                return true;
+            }
+            else
+            {
+                return true;
+            }            
+        }
+
+        public ApiToken GetApiToken()
+        {
+            return _context.ApiTokens.OrderBy(t => t.CreateAt).Last();
         }
     }
 }

@@ -14,6 +14,9 @@ using Microsoft.Net.Http.Headers;
 using Item = Cms.Endpoints.Site.Proxy.Archive.Item;
 using Microsoft.AspNetCore.Authorization;
 using Cms.Endpoints.Site.Atteribute;
+using MediatR;
+using Cmd.Application.Models.News.Commands.AddAsnad;
+using Cmd.Application.Models.News.Queries.GetAllAsnad;
 
 namespace Cms.Endpoints.Site.Controllers;
 
@@ -24,11 +27,13 @@ public class MediaController : ControllerBase
 {
     private readonly HttpClient _httpClient;
     private readonly HttpClient _archiveClient;
+    private readonly ISender sender;
 
-    public MediaController(IHttpClientFactory factory)
+    public MediaController(IHttpClientFactory factory, ISender sender)
     {
         _httpClient = factory.CreateClient("Asnad");
         _archiveClient = factory.CreateClient("Archive");
+        this.sender = sender;
     }
 
 
@@ -426,7 +431,21 @@ public class MediaController : ControllerBase
     [HttpPost("GetArchive")]
     public async Task<IActionResult> GetArchive(Request request)
     {
-        var data = new { limit = request.Limit, offset = request.Offset, key = request.Key, value = request.Value, @operator = request.Operator };
+        var data = new
+        {
+            limit = request.Limit,
+            offset = request.Offset,
+            MainValues = new[]
+    {
+        new
+        {
+            key = request.Key,
+            value = request.Value,
+            @operator = request.Operator
+        }
+    }
+        };
+
         var jsonInString = JsonConvert.SerializeObject(data);
         var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
 
@@ -481,24 +500,19 @@ public class MediaController : ControllerBase
     [HttpGet("GetTopArchive")]
     public async Task<IActionResult> GetTopArchive(int count)
     {
-        var data = new { limit = 100, offset = 1, key = "title", value = "اصفهان", @operator = "OR" };
-        var jsonInString = JsonConvert.SerializeObject(data);
-        var content = new StringContent(jsonInString, Encoding.UTF8, "application/json");
-
 
         var requestData = new HttpRequestMessage
         {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri($"{_archiveClient.BaseAddress.AbsoluteUri}api/content/file-list"),
+            Method = HttpMethod.Get,
+            RequestUri = new Uri($"{_archiveClient.BaseAddress.AbsoluteUri}api/content/favorite-list"),
             Headers =
                 {
                     { "Accept", "application/json, text/plain, */*" },
                     { "Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7" },
-                    { "Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcmltYXJ5U2lkIjoiMSIsIkd1aWQiOiIzNzE0ZmVmNy02MjgxLTQyYWUtYjBhMC0yMWJjYzBmNGVhMDQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTg3MjUzMjM5M30.cfe23flH9STpd3UHARGZznEjSSJTCCK_nToUGkyuxUQ" },
+                    { "token", "628966cb-42b3-4467-99ff-a8d169644123" },
                     { "Connection", "keep-alive" },
                     { "Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1" },
                     { "Language", "fa" },
-                    { "Token", "91b8011e-c5ed-4b7a-bd1c-2e00cad8adc6" },
                     { "Referer", $"{_archiveClient.BaseAddress.AbsoluteUri}" },
                     { "Sec-Fetch-Dest", "empty" },
                     { "Sec-Fetch-Mode", "cors" },
@@ -507,8 +521,7 @@ public class MediaController : ControllerBase
                     { "sec-ch-ua", "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"" },
                     { "sec-ch-ua-mobile", "?0" },
                     { "sec-ch-ua-platform", "Windows" },
-                },
-            Content = content
+                }
         };
 
         using (var response = await _archiveClient.SendAsync(requestData))
@@ -520,10 +533,9 @@ public class MediaController : ControllerBase
 
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync();
-            var model = JsonConvert.DeserializeObject<Proxy.Archive.Data>(body);
-
-            model.list = model.list.Take(count).ToList();
-
+            var model = JsonConvert.DeserializeObject<TopArchive>(body);
+            model.VideoFile = model.VideoFile.OrderByDescending(t => t.PkFileContent).Take(count).ToList()
+                ;
             return Ok(model);
         }
     }
@@ -543,35 +555,98 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet("AlphabeticalSearch")]
-    public async Task<IActionResult> AlphabeticalSearch(string alphabet)
+    public async Task<IActionResult> AlphabeticalSearch(string alphabet, int count, int offset)
     {
-        var request = new HttpRequestMessage
+        var query = new GetAllAsnadQuery
         {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}api/Mediamanagement/GetPagedMediaItemsForView?offset=0&count=480"),
-            Headers =
-            {
-                { "Accept", "application/json, text/plain, */*" },
-                { "Accept-Language", "fa-IR,fa;q=0.9,en-US;q=0.8,en;q=0.7" },
-                { "Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzOGM3MTljNy0wYTRlLTE5MTItMzI4ZC0wMDdiMTgzZmRiYTMiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxLyIsImlhdCI6MTcwMDExNTg3MiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Ik5pa2FuIiwiRGlzcGxheU5hbWUiOiLZhdiv24zYsduM2Kog2b7amNmI2YfYtNiMINiu2YTYp9mC24zYqiDZiCDZgdmG2KfZiNix24zigIzZh9in24wg2YbZiNuM2YYiLCJyZWplY3REZXNyaXB0aW9uIjoiIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9zZXJpYWxudW1iZXIiOiI0OGFhNDcyNDY3MTg0YjliOGRhZTNlZDY2NzRjNjM2NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvdXNlcmRhdGEiOiIxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjpbIkFkbWluIiwiQ2l0aXplbiIsIkNvbXBhbnkiLCJHdWFyZCIsIlVzZXIiXSwibmJmIjoxNzAwMTE1ODcyLCJleHAiOjE3MDAxMTYxNzIsImF1ZCI6IkFueSJ9.Yx7wJly8u9DStfOYDKUrnVsTKj2JezOpwdFuNtqXLVE" },
-                { "Connection", "keep-alive" },
-                { "Cookie", "_ga_H8YK9ZGSZF=GS1.1.1659516470.5.0.1659516470.0; cookiesession1=678B289D73DD25B62A4FCFF05E9774D1" },
-                { "Language", "fa" },                
-            },
+            Alephbatic = alphabet,
+            PageNumber = offset + 1,
+            PageSize = count
         };
 
-        using (var response = await _httpClient.SendAsync(request))
+        var result = await sender.Send(query);
+
+        var resultView = new Root<Cms.Endpoints.Site.Proxy.Asnad.Data>
         {
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
-            body = body.Replace("null", "0");
+            data = new Proxy.Asnad.Data
+            {
+                items = result.QueryResult.Select(t => new Proxy.Asnad.Item
+                {
+                    id = t.Id,
+                    title = t.Title,
+                    details = t.Description,
+                    thumbnailUrl = t.ImageName,
+                    accessNumber = 0,
+                    actors = 0,
+                    appendicesMedia = 0,
+                    attachmentCount = 0,
+                    attachmentGroup = "",
+                    author = 0,
+                    body = "",
+                    cameraMan = 0,
+                    cameraModel = 0,
+                    clicks = 0,
+                    commentIsActive = true,
+                    compositor = 0,
+                    countPage = 0,
+                    createdByUser = 0,
+                    createdOnDate = DateTime.Now,
+                    dateOfDocumentDescription = DateTime.Now,
+                    director = 0,
+                    editor = 0,
+                    @event = 0,
+                    eventId = 0,
+                    favoriteDescription = "",
+                    historicalPeriod = 0,
+                    historicalPeriodId = 0,
+                    imageUrl = "",
+                    isActive = true,
+                    isFavorite = true,
+                    locations = "",
+                    manufactureDate = DateTime.Now,
+                    mediaAccessType = 0,
+                    mediaLanguage = 0,
+                    mediaLanguageId = 0,
+                    mediaSource = 0,
+                    mediaSourceId = 0,
+                    mediaStructure = 0,
+                    mediaStructureId = 0,
+                    mediaTypes = 0,
+                    meidaFields = 0,
+                    numberOfRowsAndArchive = "",
+                    orator = 0,
+                    personnel = 0,
+                    personnelIDs = 0,
+                    personnels = 0,
+                    photographer = 0,
+                    producer = 0,
+                    rate = 0,
+                    relatedMedia = 0,
+                    relatedMediaId = 0,
+                    studio = 0,
+                    tags = "",
+                    thematicCategories = 0,
+                    typeWritingLine = 0,
+                    typeWritingLineId = 0,
+                    waterMarkImage = 0,
+                    waterMarkImageId = 0
+                }).ToList(),
+                totalItems = 0
+            },
+            isSuccess = true,
+            messages = "عملیات با موفقیت انجام شد",
+            statusCode = 200,
+            errors = ""
+        };
 
-            var model = JsonConvert.DeserializeObject<Root<Proxy.Asnad.Data>>(body);
+        return Ok(resultView);
+    }
 
-            model.data.items = model.data.items.Where(t => t.title.StartsWith(alphabet)).ToList();
-            model.data.totalItems = model.data.items.Count;
+    [HttpGet("UpdateAsnad")]
+    public async Task<IActionResult> UpdateAsnad()
+    {
+        await sender.Send(new AddAsnadCommand());
 
-            return Ok(model);
-        }
+        return Ok("Update successfully.");
     }
 }

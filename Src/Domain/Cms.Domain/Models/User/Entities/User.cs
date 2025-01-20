@@ -22,7 +22,7 @@ namespace Cms.Domain.Models.User.Entities
         public string VerificationCode { get; private set; }
         public DateTime? LastLoginDate { get; private set; }
         public string? Study { get; set; }
-        public long? DegreeId { get;private set; }
+        public long? DegreeId { get; private set; }
 
         public Degree Degree { get; set; }
         #endregion
@@ -42,9 +42,9 @@ namespace Cms.Domain.Models.User.Entities
             DegreeId = degreeId;
             Study = study;
         }
-        public static User Create(Name? firstName, Name? lastName, PhoneNumber phoneNumber, string email,long? degreeId,string? study)
+        public static User Create(Name? firstName, Name? lastName, PhoneNumber phoneNumber, string email, long? degreeId, string? study)
         {
-            return new User(firstName, lastName, phoneNumber, email,degreeId,study);
+            return new User(firstName, lastName, phoneNumber, email, degreeId, study);
         }
         #endregion
 
@@ -66,7 +66,7 @@ namespace Cms.Domain.Models.User.Entities
         }
 
         public void ChangeEmail(string email) { Email = email; Modified(); }
- 
+
 
         public string GetNewVerificationCode()
         {
@@ -102,6 +102,13 @@ namespace Cms.Domain.Models.User.Entities
                 return true;
             }
             else return false;
+        }
+
+        public bool Login()
+        {
+
+            LastLoginDate = DateTime.Now;
+            return true;
         }
         public void ConfirmPhoneNumber()
         {

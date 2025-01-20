@@ -2,7 +2,7 @@
 {
     public class Item
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public int mediaAccessType { get; set; }
         public string title { get; set; }
         public string numberOfRowsAndArchive { get; set; }

@@ -26,7 +26,7 @@ namespace Cmd.Application.Models.User.Queries.GetAll
 
             return Task.FromResult(new PagedData<UserViewModel>
             {
-             
+                QueryResult = user.Select(t => new UserViewModel(t.Id, t.FirstName.Value, t.LastName.Value, t.PhoneNumber.Value, t.PhoneConfirmed, t.IsBlocked, t.LastLoginDate)).ToList(),
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
                 TotalCount = user.Count,

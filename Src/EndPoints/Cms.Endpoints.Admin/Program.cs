@@ -3,6 +3,7 @@ using Cmd.Application;
 using Cms.Endpoints.Admin;
 using Cms.Endpoints.Admin.Token;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
@@ -43,9 +44,21 @@ try
 
     builder.Services.AddEndpoints();
 
+    builder.WebHost.ConfigureKestrel(serverOptions =>
+    {
+        serverOptions.Limits.MaxRequestBodySize = 104857600; // 100 MB
+    });
+    
+    builder.Services.Configure<FormOptions>(options =>
+    {
+        options.MultipartBodyLengthLimit = 52428800; // 50 ???????
+    });
+
+
     builder.Services.AddHttpClient("FileManager", t =>
     {
         t.BaseAddress = new Uri(builder.Configuration["FileManagerUrl"]);
+        t.Timeout = TimeSpan.FromMinutes(10);
     });
 
 

@@ -23,9 +23,16 @@ namespace Cms.Endpoints.Site.Controllers
         }
 
         [HttpGet("GetImage")]
-        public async Task<IActionResult> GetImage(string imageName, string folder)
+        public async Task<IActionResult> GetImage(string imageName, string folder)  
         {
             imageName = InputSanitizer.SanitizeInput(imageName);
+
+            if (imageName.Contains(":") || imageName.Contains("..") || imageName.Contains("/") || imageName.Contains("\\"))
+            {
+                return Ok("Bad Input......");
+            }
+
+
             var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetImage?imageName={imageName}&&folder={folder}");
             byte[] imageBytes = response;
 
@@ -36,6 +43,11 @@ namespace Cms.Endpoints.Site.Controllers
         public async  Task<IActionResult> GetFile(string fileName, int type)
         {
             fileName = InputSanitizer.SanitizeInput(fileName);
+
+            if (fileName.Contains(":") || fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
+            {
+                return Ok("Bad Input......");
+            }
 
             var response = await _FileManager.GetByteArrayAsync($"api/fileManager/GetFile?fileName={fileName}&&type={type}");
             byte[] imageBytes = response;

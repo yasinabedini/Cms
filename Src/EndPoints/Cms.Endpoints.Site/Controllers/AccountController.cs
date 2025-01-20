@@ -132,12 +132,12 @@ namespace Cms.Endpoints.Site.Controllers
         }
 
         [HttpGet("GetAllDegree")]
-        public async Task<IActionResult> GetAllDegree(GetAllDegreeQuery query)
+        public async Task<IActionResult> GetAllDegree()
         {
-            var result = await _sender.Send(query);
+            var result = await _sender.Send(new GetAllDegreeQuery());
             if (!result.QueryResult.Any())
             {
-                return NotFound("هیچ مدرک تحصیلی یافن نشد");
+                return NotFound("هیچ مدرک تحصیلی یافت نشد");
             }
 
             return Ok(result);

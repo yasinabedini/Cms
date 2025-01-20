@@ -5,7 +5,6 @@
 @{
     ViewData["Title"] = "کاربران سایت - لیست";
 }
-
 @section VendorStyles {
     <link rel="stylesheet" href="~/vendor/libs/datatables-bs5/datatables.bootstrap5.dist.css">
     <link rel="stylesheet" href="~/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.dist.css">
@@ -35,128 +34,94 @@
     <script src="~/js/delete-model.js"></script>
 }
 
-@* ************** Content ************** *@
+<h4 class="py-3 mb-0">
+    <span class="text-muted fw-light">کاربران / </span><span class="fw-medium">لیست کاربران سایت</span>
+</h4>
+
 <!-- Users List Table -->
 <div class="card ">
 
-    <form method="get">
-        <div class="card-header border-bottom">
-            <h5 class="card-title mb-3">Search Filter</h5>
-            <div class="d-flex justify-content-around align-items-center row pb-2 gap-3 gap-md-0">
-                <div class="col-md-3 user_role">
-                    <input type="text" value="@HttpContext.Request.Query["searchText"].ToString()" name="searchText" class="text-capitalize form-control" placeholder="Search..." />
-                </div>          
-                <div class="col-md-1">
-                    <button type="submit" class="btn btn-success align-content-center">جستجو</button>
-                </div>
-            </div>
-        </div>
-    </form>
 
     <div class="card-datatable table-responsive">
 
-        <div class="row m-2 card-header d-flex justify-content-between  rounded-0 flex-wrap py-2">
-            <div class="col-md-10">
-                <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-start flex-md-row flex-column mb-3 mb-md-0">
-                    <div class="dt-buttons">
-                        <a href="/" class="dt-button add-new btn btn-secondary">
-                            <span>
-                                <i class="ti ti-ret me-0 me-sm-1 ti-xs"></i>
-                                <span class="d-none d-sm-inline-block">بازگشت</span>
-                            </span>
-                        </a>
-                        <button class="dt-button buttons-collection dropdown-toggle btn btn-label-secondary mx-3" tabindex="0" aria-controls="DataTables_Table_0" type="button" aria-haspopup="dialog" aria-expanded="false">
-                            <span>
-                                <i class="ti ti-screen-share me-1 ti-xs"></i>
-                                Export
-                            </span>
-                            <span class="dt-down-arrow">▼</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <table class=" table">
             <thead class="border-top">
                 <tr>
-                    <th>#</th>
-                    <th>نام</th>
+                    <th>نام کاربر</th>
+                    <th>نقش کاربری</th>
                     <th>شماره موبایل</th>
-                    <th>تایید شماره موبایل</th>
-                    <th>آخرین ورود</th>                    
+                    <th>وضعیت</th>
+                    <th>آخرین ورود</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var user in Model.Users.QueryResult)
                 {
                     <tr>
-                        <td class="  control" style="display: none;" tabindex="0"></td>
-                        <td class="sorting_1">
-                            <div class="d-flex justify-content-start align-items-center user-name">
-
-                                <div class="d-flex flex-column">
-                                    <a href="/Users/details/@user.Id" class="text-body text-truncate">
-                                        <span class="fw-medium">@user?.FirstName @user?.LastName</span>
-                                    </a>                                    
-                                </div>
-                            </div>
-                        </td>
-                        <td>@user.PhoneNumber</td>                        
+                        <td class="m-3" style="display: none;" tabindex="0"></td>
+                        <td>@(user.FirstName + " " + user.LastName)</td>
+                        <td>کاربر سایت</td>
                         <td>@user.PhoneNumber</td>
                         <td>
-                            @if (user.PhoneConfirmed)
+                            @if (!user.IsBlocked)
                             {
-                                <span class="badge bg-label-success" text-capitalized="">تایید شده</span>
+                                <span class="badge bg-label-success" text-capitalized="">مجاز</span>
                             }
                             else
                             {
-                                <span class="badge bg-label-danger" text-capitalized="">تایید نشده</span>
+                                <span class="badge bg-label-danger" text-capitalized="">مسدود</span>
                             }
                         </td>
-                        <td>
-                            @user.LastLoginDate?.ToShamsi()
-                        </td>                        
+                        @if (user.LastLoginDate.HasValue)
+                        {
+                            <td>@user.LastLoginDate.Value.ToShamsi()</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
                         <td></td>
                     </tr>
                 }
             </tbody>
         </table>
-    </div>
-    <hr class="p-2" />
-    <nav aria-label="Page navigation" class="d-flex align-items-center justify-content-center">
-        @{
-            int currentPageNumber = 1;
-            bool success = int.TryParse(HttpContext.Request.Query["pageNumber"].ToString(), out currentPageNumber);
-            if (!success) currentPageNumber = 1;
-            string searchText = HttpContext.Request.Query["searchText"].ToString();
-            string role = HttpContext.Request.Query["role"].ToString();
-            int statusId = 1;
-            success = int.TryParse(HttpContext.Request.Query["statusId"].ToString(), out statusId);
-            if (!success) statusId = 0;
-        }
-        <ul class="pagination">
-            <li class="page-item prev">
-                <a class="page-link" asp-page="list" asp-route-searchText="@searchText" asp-route-role="@role" asp-route-statusId="@statusId" asp-route-pageNumber="@((currentPageNumber>1)?$"{currentPageNumber-1}":$"{currentPageNumber}")"><i class="ti ti-chevron-left ti-xs scaleX-n1-rtl"></i></a>
-            </li>
-            @for (int i = 1; i <= Model.Users.calculatePageCount(); i++)
-            {
-                @if (HttpContext.Request.Query["pageNumber"].ToString() == "" && i == 1)
-                {
-                    <li class="page-item active">
-                        <a class="page-link" asp-page="list" asp-route-pageNumber="@i">1</a>
-                    </li>
+    </div>    
 
-                    continue;
-                }
-                <li class="page-item @((HttpContext.Request.Query["pageNumber"].ToString()==i.ToString())?"active":"")">
-                    <a class="page-link" asp-page="list" asp-route-pageNumber="@i">@i</a>
-                </li>
-            }
-            <li class="page-item next">
-                <a class="page-link" asp-page="list" asp-route-searchText="@searchText" asp-route-role="@role" asp-route-statusId="@statusId" asp-route-pageNumber="@((Model.Users.calculatePageCount()>currentPageNumber)?$"{currentPageNumber+1}":$"{currentPageNumber}")"><i class="ti ti-chevron-right ti-xs scaleX-n1-rtl"></i></a>
-            </li>
-        </ul>
-    </nav>
+    @* <nav aria-label="Page navigation" class="d-flex align-items-center justify-content-center">
+    @{
+    int currentPageNumber = 1;
+    bool success = int.TryParse(HttpContext.Request.Query["pageNumber"].ToString(), out currentPageNumber);
+    if (!success) currentPageNumber = 1;
+    string searchText = HttpContext.Request.Query["searchText"].ToString();
+    string role = HttpContext.Request.Query["role"].ToString();
+    int statusId = 1;
+    success = int.TryParse(HttpContext.Request.Query["statusId"].ToString(), out statusId);
+    if (!success) statusId = 0;
+    }
+    <ul class="pagination">
+    <li class="page-item prev">
+    <a class="page-link" asp-page="list" asp-route-searchText="@searchText" asp-route-role="@role" asp-route-statusId="@statusId" asp-route-pageNumber="@((currentPageNumber>1)?$"{currentPageNumber-1}":$"{currentPageNumber}")"><i class="ti ti-chevron-left ti-xs scaleX-n1-rtl"></i></a>
+    </li>
+    @for (int i = 1; i <= Model.Users.calculatePageCount(); i++)
+    {
+    @if (HttpContext.Request.Query["pageNumber"].ToString() == "" && i == 1)
+    {
+    <li class="page-item active">
+    <a class="page-link" asp-page="list" asp-route-pageNumber="@i">1</a>
+    </li>
+
+    continue;
+    }
+    <li class="page-item @((HttpContext.Request.Query["pageNumber"].ToString()==i.ToString())?"active":"")">
+    <a class="page-link" asp-page="list" asp-route-pageNumber="@i">@i</a>
+    </li>
+    }
+    <li class="page-item next">
+    <a class="page-link" asp-page="list" asp-route-searchText="@searchText" asp-route-role="@role" asp-route-statusId="@statusId" asp-route-pageNumber="@((Model.Users.calculatePageCount()>currentPageNumber)?$"{currentPageNumber+1}":$"{currentPageNumber}")"><i class="ti ti-chevron-right ti-xs scaleX-n1-rtl"></i></a>
+    </li>
+    </ul>
+    </nav> *@
 
 </div>

@@ -530,6 +530,7 @@ namespace Cms.Endpoints.AdminPanel.Pages.News
             return Page();
         }
 
+        [RequestSizeLimit(52428800)]
         public async Task<IActionResult> OnPost()
         {
             _httpClient.SetBearerToken(Token.GetTokenResponse(_httpClient, HttpContext).Result);

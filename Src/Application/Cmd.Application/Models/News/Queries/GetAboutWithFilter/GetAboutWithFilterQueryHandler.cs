@@ -44,56 +44,53 @@ namespace Cmd.Application.Models.News.Queries.GetAboutWithFilter
                 long id = long.Parse(item);
                 var about = allNews.FirstOrDefault(t => t.NewsTypeId == id);
 
-                if (_typeRepository.GetById(id).LanguageId == request.LanguageId)
+                if (about is not null && about.IsEnable)
                 {
-                    if (about is not null && about.IsEnable)
+                    var aboutGalleries = _galleryRepository.GetNewsGalleries(about.Id);
+
+                    var newsModel = new NewsViewModel
                     {
-                        var aboutGalleries = _galleryRepository.GetNewsGalleries(about.Id);                     
+                        Id = about.Id,
+                        Title = about.Title.Value,
+                        Introduction = about.Introduction.Value,
+                        LanguageId = about.LanguageId,
+                        NewsTypeId = about.NewsTypeId,
+                        PublishDate = DateTime.Parse(about.PublishDate).ToShamsi(),
+                        Text = about.Text,
+                        MainImageName = about.MainImageName.Value,
+                        SecondImage = about.SecondImage?.Value,
+                        ThirdImage = about.ThirdImage?.Value,
+                        Author = about.Author,
+                        NewsType = new NewsTypeViewModel(about.NewsType.Id, about.NewsType.Title.Value, about.NewsType.Name.Value, about.NewsType.IsPage, about.NewsType.IsEnable, (int)about.NewsType.LanguageId),
+                        IsEnable = about.IsEnable
+                    };
 
-                        var newsModel  = new NewsViewModel
-                        {
-                            Id = about.Id,
-                            Title = about.Title.Value,
-                            Introduction = about.Introduction.Value,
-                            LanguageId = about.LanguageId,
-                            NewsTypeId = about.NewsTypeId,
-                            PublishDate = DateTime.Parse(about.PublishDate).ToShamsi(),
-                            Text = about.Text,
-                            MainImageName = about.MainImageName.Value,
-                            SecondImage = about.SecondImage?.Value,
-                            ThirdImage = about.ThirdImage?.Value,
-                            Author = about.Author,
-                            NewsType = new NewsTypeViewModel(about.NewsType.Id, about.NewsType.Title.Value, about.NewsType.Name.Value, about.NewsType.IsPage, about.NewsType.IsEnable, (int)about.NewsType.LanguageId),
-                            IsEnable = about.IsEnable
-                        };
+                    var model = new AboutMuseumViewModel
+                    {
+                        TypeId = (int)id,
+                        TypeTitle = allNews.FirstOrDefault(t => t.NewsTypeId == id).NewsType.Title.Value,
+                        NewsViewModel = newsModel
+                    };
 
-                        var model = new AboutMuseumViewModel
-                        {
-                            TypeId = (int)id,
-                            TypeTitle = allNews.FirstOrDefault(t => t.NewsTypeId == id).NewsType.Title.Value,
-                            NewsViewModel = newsModel
-                        };
-
-                        var galleries = aboutGalleries.Select(t => new Gallery.Queries.Common.GalleryViewModel
-                        {
-                            NewsId = t.NewsId,
-                            Title = t.Title,
-                            Type = t.Type,
-                            Files = t.Files.Where(t => t.IsEnable).Select(f => new File.Queries.Common.FileViewModel(f.Name, f.GalleryId, f.Length, f.Extension, f.TypeId, f.DisplayName)).ToList()
-                        }).ToList();
-                        if (galleries.Any(t=>t.Files.Any()))
-                        {
-                            newsModel.Galleries = galleries;
-                        }
-                        else
-                        {
-                            newsModel.Galleries = new List<Gallery.Queries.Common.GalleryViewModel>();
-                        }
-
-                        model.NewsViewModel = newsModel;
-
-                        aboutList.Add(model);
+                    var galleries = aboutGalleries.Select(t => new Gallery.Queries.Common.GalleryViewModel
+                    {
+                        NewsId = t.NewsId,
+                        Title = t.Title,
+                        Type = t.Type,
+                        Files = t.Files.Where(t => t.IsEnable).Select(f => new File.Queries.Common.FileViewModel(f.Name, f.GalleryId, f.Length, f.Extension, f.TypeId, f.DisplayName)).ToList()
+                    }).ToList();
+                    if (galleries.Any(t => t.Files.Any()))
+                    {
+                        newsModel.Galleries = galleries;
                     }
+                    else
+                    {
+                        newsModel.Galleries = new List<Gallery.Queries.Common.GalleryViewModel>();
+                    }
+
+                    model.NewsViewModel = newsModel;
+
+                    aboutList.Add(model);
                 }
             }
             return Task.FromResult(aboutList);

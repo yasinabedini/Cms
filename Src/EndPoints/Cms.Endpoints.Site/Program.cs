@@ -1,5 +1,6 @@
 using Cmd.Application;
 using Cmd.Application.Tools.Email;
+using Cmd.Application.Tools.Sms;
 using Cms.Endpoints.Site;
 using Cms.Endpoints.Site.Proxy.Common;
 using DotNet8WebAPI.Helpers;
@@ -24,16 +25,15 @@ try
 
 
     builder.Services.AddOptions();
+
     builder.Services.Configure<EmailOp>(
         builder.Configuration.GetSection("MailSettings"));
+    
+    builder.Services.Configure<SmsOp>(
+        builder.Configuration.GetSection("SmsSetting"));
 
     builder.Services.Configure<Cms.Infra.Common.Auth.JwtOptions>(
-      builder.Configuration.GetSection("Jwt"));
-
-
-    builder.Services.Configure<Cmd.Application.Security.Auth.JwtOptions>(
-      builder.Configuration.GetSection("Jwt"));
-
+      builder.Configuration.GetSection("Jwt"));    
 
     builder.Services.AddHttpClient("FileManager", t =>
     {

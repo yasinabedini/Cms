@@ -56,6 +56,10 @@ namespace Cmd.Application.Models.User.Commands.Authenticate
 
             _repository.AddUserRefreshTokens(new UserRefreshToken(user.PhoneNumber.Value, token.RefreshToken));
 
+            user.Login();
+            _repository.Update(user);
+            _repository.Save();
+
             return await Task.FromResult(new TokenViewModel
             {
                 AccessToken = token.AccessToken,

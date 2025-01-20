@@ -25,7 +25,7 @@ namespace FileManager.Controllers
                 return BadRequest("Invalid Folder Name.");
             }
 
-            int maxLength = 5 * 1024 * 1025;
+            int maxLength = 104857600;
             if (file.Length > maxLength)
             {
                 return BadRequest("the max of image size is 5 MG.");

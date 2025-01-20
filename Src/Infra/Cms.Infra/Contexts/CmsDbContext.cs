@@ -21,13 +21,15 @@ namespace Cms.Infra.Contexts
         {
         }
 
+        public DbSet<Asnad> Asnads { get; set; }
+        public DbSet<ApiToken> ApiTokens { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Sweeper> Sweepers { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<NewsType> NewsTypes { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-        public DbSet<Info> Info { get; set; }
+        public DbSet<Info> Info { get; set; }        
         public DbSet<InfoLink> InfoLink { get; set; }
         public DbSet<Gallery> Galleries { get; set; }
         public DbSet<Domain.Models.File.Entities.File> Files { get; set; }

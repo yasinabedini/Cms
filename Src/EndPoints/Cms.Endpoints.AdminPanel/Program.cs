@@ -1,9 +1,12 @@
 using Cms.Endpoints.AdminPanel.Auth;
 using Cms.Endpoints.AdminPanel.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -13,17 +16,30 @@ builder.Services.AddRazorPages(t =>
     t.Conventions.AddPageRoute("/Dashboard/Analytics", "");    
 });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = 104857600; // 100 MB
+});
+
+
 builder.Services.AddMvc();
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 52428800; // 50 ???????
+});
 
 #region APIs
 builder.Services.AddHttpClient("AdminApi", option =>
 {
     option.BaseAddress = new Uri(builder.Configuration.GetSection("ApiUrl").Value);
+    option.Timeout = TimeSpan.FromMinutes(20);
 });
 
 builder.Services.AddHttpClient("FileManager", option =>
 {
     option.BaseAddress = new Uri(builder.Configuration.GetSection("FileManagerUrl").Value);
+    option.Timeout =  TimeSpan.FromMinutes(20);
 });
 #endregion
 

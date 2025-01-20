@@ -1,4 +1,5 @@
-﻿using Cms.Infra;
+﻿using Cmd.Application.Tools.Sms;
+using Cms.Infra;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,7 @@ public static class DependencyInjection
 
         services.AddMediatR(configuration =>
         configuration.RegisterServicesFromAssemblies(assembly));
+        
 
         return services;
     }
