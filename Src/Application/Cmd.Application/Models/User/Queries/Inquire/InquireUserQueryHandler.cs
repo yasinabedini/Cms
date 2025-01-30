@@ -82,7 +82,7 @@ namespace Cmd.Application.Models.User.Queries.Inquire
             {
                 if (_smsRepository.BasicInquire(request.Mobile))
                 {
-                  //await  sender.SendSmsAsync(request.Mobile, text);
+                  await  sender.SendSmsAsync(request.Mobile, text);
                     otp.Chanel = "sms";
                     otp.WaitingTime = 120;
                     _smsRepository.Add(new Cms.Domain.Models.Sms.Entities.Sms(request.Mobile, code, text));
@@ -92,9 +92,9 @@ namespace Cmd.Application.Models.User.Queries.Inquire
                 else { message = "شما مجاز به ارسال 3 پیامک در هر دودقیقه هستید!"; responseCode = 400; }
             }
 
-            if (/*_smsRepository.InquireSendSms(request.Mobile)*/true)
+            if (_smsRepository.InquireSendSms(request.Mobile))
             {
-                //await sender.SendSmsAsync(request.Mobile, text);
+                await sender.SendSmsAsync(request.Mobile, text);
                 otp.Chanel = "sms";
                 otp.WaitingTime = 120;
                 _smsRepository.Add(new Cms.Domain.Models.Sms.Entities.Sms(request.Mobile, code, text));

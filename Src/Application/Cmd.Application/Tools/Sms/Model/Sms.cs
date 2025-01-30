@@ -61,45 +61,45 @@ namespace Cmd.Application.Tools.Sms.Model
             HttpResponseMessage response;
             String responseBody;
 
-            //if (_tokenRepository.ApiTokenAvailable())
-            //{
-            //    var tokenModel = _tokenRepository.GetApiToken();
-            //    token = new APIMToken
-            //    {
-            //        access_token = tokenModel.access_token,
-            //        expires_in = tokenModel.expires_in,
-            //        scope = tokenModel.scope,
-            //        token_type = tokenModel.token_type
-            //    };
-            //}
-            //else
-            //{
-            //    var request = new HttpRequestMessage(HttpMethod.Post, "https://api.isfahan.ir/apim/oauth2/token");
+            if (_tokenRepository.ApiTokenAvailable())
+            {
+                var tokenModel = _tokenRepository.GetApiToken();
+                token = new APIMToken
+                {
+                    access_token = tokenModel.access_token,
+                    expires_in = tokenModel.expires_in,
+                    scope = tokenModel.scope,
+                    token_type = tokenModel.token_type
+                };
+            }
+            else
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://api.isfahan.ir/apim/oauth2/token");
 
-            //    var authenticationString = $"1t1zQKfAgVCbgyGPejlo8Bh3LZIa:ffWu75f4oZAOwHzoq2sDrxGzTFMa";
-            //    var base64EncodedAuthenticationString = Convert.ToBase64String(Encoding.ASCII.GetBytes(authenticationString));
+                var authenticationString = $"1t1zQKfAgVCbgyGPejlo8Bh3LZIa:ffWu75f4oZAOwHzoq2sDrxGzTFMa";
+                var base64EncodedAuthenticationString = Convert.ToBase64String(Encoding.ASCII.GetBytes(authenticationString));
 
-            //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
 
-            //    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //    var content = new StringContent($"grant_type=client_credentials");
-            //    content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-            //    request.Content = content;
+                var content = new StringContent($"grant_type=client_credentials");
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                request.Content = content;
 
-            //    response = await _httpClient.SendAsync(request);
-            //    responseBody = await response.Content.ReadAsStringAsync();
-            //    token = JsonConvert.DeserializeObject<APIMToken>(responseBody);
+                response = await _httpClient.SendAsync(request);
+                responseBody = await response.Content.ReadAsStringAsync();
+                token = JsonConvert.DeserializeObject<APIMToken>(responseBody);
 
-            //    _tokenRepository.AddApiToken(token.access_token,token.scope,token.token_type,token.expires_in);
-            //}
+                _tokenRepository.AddApiToken(token.access_token, token.scope, token.token_type, token.expires_in);
+            }
 
-            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.access_token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.access_token);
 
-            //var smsRequest = new HttpRequestMessage(HttpMethod.Get, $"https://api.isfahan.ir/apim/services/t/fava.isf/kavenegar/1.0/v1/47657152613466776F353273357145637249456F3665475964446B75756345527449466A644879592F6F4D3D/sms/send.json?sender=10006000330033&receptor={phoneNumber}&message={text}");
+            var smsRequest = new HttpRequestMessage(HttpMethod.Get, $"https://api.isfahan.ir/apim/services/t/fava.isf/kavenegar/1.0/v1/47657152613466776F353273357145637249456F3665475964446B75756345527449466A644879592F6F4D3D/sms/send.json?sender=10006000330033&receptor={phoneNumber}&message={text}");
 
-            //response = await _httpClient.SendAsync(smsRequest);
-            //responseBody = await response.Content.ReadAsStringAsync();
+            response = await _httpClient.SendAsync(smsRequest);
+            responseBody = await response.Content.ReadAsStringAsync();
         }
     }
 }
