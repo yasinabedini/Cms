@@ -92,7 +92,7 @@ namespace Cmd.Application.Models.User.Queries.Inquire
                 else { message = "شما مجاز به ارسال 3 پیامک در هر دودقیقه هستید!"; responseCode = 400; }
             }
 
-            if (_smsRepository.InquireSendSms(request.Mobile))
+            else if (_smsRepository.InquireSendSms(request.Mobile))
             {
                 await sender.SendSmsAsync(request.Mobile, text);
                 otp.Chanel = "sms";
@@ -101,6 +101,7 @@ namespace Cmd.Application.Models.User.Queries.Inquire
                 _smsRepository.Save();
                 message = "پیامک برای شما ارسال گردید.";
             }
+
             else { message = "شما هر دو دقیقه یک بار مجار به ارسال مجدد پیامک هستید."; responseCode = 400; }
 
 
