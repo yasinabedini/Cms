@@ -49,19 +49,21 @@ namespace Cms.Infra.Models.Sms.Repositories
             throw new NotImplementedException();
         }
 
-        public bool CheckCode(string phoneNumber, string code) 
+        public bool CheckCode(string phoneNumber, string code)
         {
             var sms = GetLastSms(phoneNumber);
-            var result = sms?.Code == "1111";
+            var result =false;
+            
+            if (sms.Code == code) result = true;
 
-            if (sms is not null&&result) 
+            if (sms is not null && result)
             {
                 sms.IsDelete = true;
                 Update(sms);
                 Save();
             }
 
-            return code=="1111";
+            return result;
         }
     }
 }
